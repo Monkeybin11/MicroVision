@@ -20,18 +20,18 @@
 					<ad:LayoutPanel Orientation="Horizontal" DockHeight="5*">
 						<ad:LayoutAnchorablePane DockWidth="1*">
 							<ad:LayoutAnchorable Title="Status" CanHide="False" CanClose="False">
-								<Grid prism:RegionManager.RegionName="StatusPanel"></Grid>
+								<ContentControl prism:RegionManager.RegionName="StatusPanel"></ContentControl>
 							</ad:LayoutAnchorable>
 						</ad:LayoutAnchorablePane>
 						<ad:LayoutAnchorablePane DockWidth="4*">
 							<ad:LayoutAnchorable Title="Capture" CanHide="False" CanClose="False">
-								<Grid prism:RegionManager.RegionName="CapturePanel"></Grid>
+								<ContentControl prism:RegionManager.RegionName="CapturePanel"></ContentControl>
 							</ad:LayoutAnchorable>
 						</ad:LayoutAnchorablePane>
 					</ad:LayoutPanel>
 					<ad:LayoutAnchorablePane DockHeight="2*">
 						<ad:LayoutAnchorable Title="Parameters">
-							<Grid prism:RegionManager.RegionName="ParameterPanel"></Grid>
+							<ContentControl prism:RegionManager.RegionName="ParameterPanel"></ContentControl>
 						</ad:LayoutAnchorable>
 					</ad:LayoutAnchorablePane>
 				</ad:LayoutPanel>

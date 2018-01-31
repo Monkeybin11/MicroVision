@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroVision", "MicroVision\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParameterPanelModule", "ParameterPanelModule\ParameterPanelModule.csproj", "{0ED49C2F-5715-49CE-A939-98F7C52C4EBA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroVision.Services", "MicroVision.Services\MicroVision.Services.csproj", "{C2AB6A15-51B1-41FE-8FE5-D61F1DAFBE90}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{0ED49C2F-5715-49CE-A939-98F7C52C4EBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0ED49C2F-5715-49CE-A939-98F7C52C4EBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0ED49C2F-5715-49CE-A939-98F7C52C4EBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2AB6A15-51B1-41FE-8FE5-D61F1DAFBE90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2AB6A15-51B1-41FE-8FE5-D61F1DAFBE90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2AB6A15-51B1-41FE-8FE5-D61F1DAFBE90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2AB6A15-51B1-41FE-8FE5-D61F1DAFBE90}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

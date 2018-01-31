@@ -1,6 +1,11 @@
-﻿using Microsoft.Practices.Unity;
+﻿using System.Runtime.InteropServices;
+using Microsoft.Practices.Unity;
 using Prism.Unity;
 using System.Windows;
+using MicroVision.Services;
+/*
+using MicroVision.Services;
+*/
 using MicroVision.Views;
 
 namespace MicroVision
@@ -15,6 +20,14 @@ namespace MicroVision
         {
             if (Application.Current.MainWindow != null)
                 Application.Current.MainWindow.Show();
+        }
+
+        protected override void ConfigureContainer()
+        {
+            base.ConfigureContainer();
+
+            Container.RegisterType<IServices, Services.Services>(new InjectionConstructor(typeof(string)));
+
         }
     }
 }
