@@ -12,12 +12,12 @@ namespace MicroVision.ViewModels
     
     class MainWindowViewModel: BindableBase
     {
-        private readonly IServices _services;
+        private readonly ILogService _logService;
 
-        public MainWindowViewModel(IUnityContainer container)
+        public MainWindowViewModel(ILogService logservice)
         {
-            _services = container.Resolve<IServices>(new ParameterOverride("moduleName", "MainWindow"));
-            _services.Logger.Info("Test!");
+            _logService = logservice;
+            _logService.ConfigureLogger(this.GetType().Name);
         }
 
         public string Title { get; set; } = "MicroVision";

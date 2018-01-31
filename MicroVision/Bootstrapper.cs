@@ -26,7 +26,8 @@ namespace MicroVision
         {
             base.ConfigureContainer();
 
-            Container.RegisterType<IServices, Services.Services>(new InjectionConstructor(typeof(string)));
+            //Container.RegisterType<IServices, Services.Services>(new InjectionConstructor(typeof(string)));
+            Container.RegisterType<ILogService, LogService>(new PerResolveLifetimeManager());
 
         }
     }
