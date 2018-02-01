@@ -3,6 +3,8 @@ using Microsoft.Practices.Unity;
 using Prism.Unity;
 using System.Windows;
 using MicroVision.Modules.ParameterPanel;
+using MicroVision.Modules.StatusPanel;
+using MicroVision.Modules.StatusPanel.Views;
 using MicroVision.Services;
 
 /*
@@ -40,6 +42,7 @@ namespace MicroVision
 
             var catalog = (ModuleCatalog)ModuleCatalog;
             catalog.AddModule(typeof(ParameterPanel));
+            catalog.AddModule(typeof(StatusPanelModule));
         }
     }
 }

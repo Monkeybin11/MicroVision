@@ -146,6 +146,10 @@
       <Project>{7BE9E51B-C04F-46E8-BC02-6CC60E6AE06F}</Project>
       <Name>MicroVision.Modules.ParameterPanel</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MicroVision.Modules.StatusPanel\MicroVision.Modules.StatusPanel.csproj">
+      <Project>{FF786C60-F2CA-4B7A-9EE8-F7097734A572}</Project>
+      <Name>MicroVision.Modules.StatusPanel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MicroVision.Services\MicroVision.Services.csproj">
       <Project>{C2AB6A15-51B1-41FE-8FE5-D61F1DAFBE90}</Project>
       <Name>MicroVision.Services</Name>

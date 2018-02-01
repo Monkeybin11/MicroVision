@@ -1,11 +1,7 @@
-﻿using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using Prism.Mvvm;
 
-namespace MicroVision.Modules.ParameterPanel.Models
+namespace MicroVision.Services.Models
 {
     public class BaseParameter<T> : BindableBase where T : IComparable
     {
@@ -39,7 +35,7 @@ namespace MicroVision.Modules.ParameterPanel.Models
     {
         public ExposureTime()
         {
-            Label = "Exposure time:";
+            Label = "Exposure time (us):";
             Value = 44;
             Minimum = 44;
             Maximum = 1000000;
@@ -57,6 +53,27 @@ namespace MicroVision.Modules.ParameterPanel.Models
         }
     }
 
+    public class LaserDuration : BaseParameter<int>
+    {
+        public LaserDuration()
+        {
+            Label = "Laser Duration (us):";
+            Value = 20;
+            Minimum = 0;
+            Maximum = 10000;
+        }
+    }
+
+    public class CaptureInterval : BaseParameter<int>
+    {
+        public CaptureInterval()
+        {
+            Label = "Capture Interval (ms):";
+            Value = 500;
+            Minimum = 0;
+            Maximum = 100000;
+        }
+    }
     public class OutputDirectory : BaseParameter<string>
     {
         public OutputDirectory()

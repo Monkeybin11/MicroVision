@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MicroVision.Modules.ParameterPanel.Models;
+using MicroVision.Services.Models;
 
 namespace MicroVision.Services
 {
@@ -12,6 +12,8 @@ namespace MicroVision.Services
     {
         ExposureTime ExposureTime { get; }
         Gain Gain { get; }
+        LaserDuration LaserDuration { get; }
+        CaptureInterval CaptureInterval { get; }
         OutputDirectory OutputDirectory { get; }
     }
 
@@ -23,6 +25,8 @@ namespace MicroVision.Services
 
         public ExposureTime ExposureTime { get; } = new ExposureTime();
         public Gain Gain { get; } = new Gain();
+        public LaserDuration LaserDuration { get; } = new LaserDuration();
+        public CaptureInterval CaptureInterval { get; } = new CaptureInterval();
         public OutputDirectory OutputDirectory { get; } = new OutputDirectory();
     }
 }
