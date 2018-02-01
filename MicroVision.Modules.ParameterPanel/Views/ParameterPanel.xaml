@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:MicroVision.Modules.ParameterPanel.Views"
              xmlns:prism="http://prismlibrary.com/"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:models="clr-namespace:MicroVision.Modules.ParameterPanel.Models;assembly=MicroVision.Services"
              mc:Ignorable="d"
              prism:ViewModelLocator.AutoWireViewModel="True"
              d:DesignHeight="150" d:DesignWidth="800">
@@ -41,7 +42,7 @@
     <!-- Body -->
     <DockPanel LastChildFill="True">
         <!-- Big connection button -->
-        <Button Command="{Binding Command}" DockPanel.Dock="Right" Width="100"  Margin="10">Start Capture</Button>
+        <Button Command="{Binding TestCommand}" DockPanel.Dock="Right" Width="100"  Margin="10">Start Capture</Button>
 
         <TabControl Margin="0,5,0,10">
 
@@ -87,12 +88,15 @@
                             <DataTemplate x:Key="ParameterControlTemplate">
                                 <DockPanel Style="{StaticResource DockPanelStyle}">
                                     <Label Style="{StaticResource LabelStyle}" Content="{Binding Label}"/>
+                                    
                                     <TextBox Text="{Binding Value}" />
                                 </DockPanel>
                             </DataTemplate>
                         </WrapPanel.Resources>
 
-                        <ContentControl ContentTemplate="{StaticResource ParameterControlTemplate}" Content="{Binding ExposureTime}"/>
+                        <ContentControl ContentTemplate="{StaticResource ParameterControlTemplate}" Content="{Binding Parameter.ExposureTime}"/>
+                        <ContentControl ContentTemplate="{StaticResource ParameterControlTemplate}" Content="{Binding Parameter.Gain}"/>
+                        <ContentControl ContentTemplate="{StaticResource ParameterControlTemplate}" Content="{Binding Parameter.OutputDirectory}"/>
 
                     </WrapPanel>
                 </ScrollViewer>

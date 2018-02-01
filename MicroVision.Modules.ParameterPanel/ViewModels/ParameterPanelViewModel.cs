@@ -8,30 +8,28 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Collections.ObjectModel;
+using System.Windows;
+using MicroVision.Services;
 
 namespace MicroVision.Modules.ParameterPanel.ViewModels
 {
     public class ParameterPanelViewModel : BindableBase
     {
-        //private ExposureTimeParameter exposureTimeParameter = new ExposureTimeParameter();
-        //public ExposureTimeParameter ExposureTime
-        //{
-        //    get => exposureTimeParameter;
-        //    set
-        //    {
-        //        SetProperty(ref exposureTimeParameter, value);
-        //    }
-        //}
-        public ExposureTimeParameter ExposureTime { get; } = new ExposureTimeParameter();
-        public DelegateCommand Command { get; }
-        public ParameterPanelViewModel()
+        public IParameterService Parameter { get; private set; }
+
+        private DelegateCommand _testCommand;
+        public DelegateCommand TestCommand =>
+            _testCommand ?? (_testCommand = new DelegateCommand(ExecuteTestCommand));
+
+        void ExecuteTestCommand()
         {
-            Command = new DelegateCommand(Executed);
+            Parameter.ExposureTime.Value -= 10;
+        }
+        public ParameterPanelViewModel(IParameterService param)
+        {
+            Parameter = param;
         }
 
-        private void Executed()
-        {
-            ExposureTime.Value++;
-        }
+
     }
 }
