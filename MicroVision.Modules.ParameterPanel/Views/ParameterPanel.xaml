@@ -5,20 +5,99 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:MicroVision.Modules.ParameterPanel.Views"
              xmlns:prism="http://prismlibrary.com/"
-             xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d"
-             d:DesignHeight="200" d:DesignWidth="800">
+             d:DesignHeight="150" d:DesignWidth="800">
     <UserControl.Resources>
-        <Style x:Key="DockPanelStyle" TargetType="DockPanel">
-            <Setter Property="Width" Value="200"></Setter>
-            <Setter Property="Margin" Value="5"></Setter>
-        </Style>
-        <Style x:Key="LabelStyle" TargetType="Label">
-            <Setter Property="Margin" Value="0,0,10,0"></Setter>
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Resources/ScrollbarStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <Style x:Key="DockPanelStyle" TargetType="DockPanel">
+                <Setter Property="Width" Value="180"></Setter>
+                <Setter Property="Margin" Value="5"></Setter>
+            </Style>
+            <Style x:Key="LabelStyle" TargetType="Label">
+                <Setter Property="Margin" Value="0,0,10,0"></Setter>
+            </Style>
+
+            <Style x:Key="GroupboxStyle" TargetType="GroupBox">
+                <Setter Property="Margin" Value="5"/>
+                <Setter Property="Padding" Value="5"/>
+            </Style>
+
+            <Style x:Key="ConnectionButtonStyle" TargetType="Button">
+                <Setter Property="Margin" Value="0,5,0,5"/>
+            </Style>
+
+            <Style x:Key="MastControlButtonStyle" TargetType="Button">
+                <Setter Property="Margin" Value="0,10,0,0"/>
+            </Style>
+        </ResourceDictionary>
     </UserControl.Resources>
+
+    <!-- Body -->
     <DockPanel LastChildFill="True">
-        <Button DockPanel.Dock="Right" Width="100" Margin="10">Start Capture</Button>
-		<TabControl prism:RegionManager.RegionName="ParameterTabs"></TabControl>
-	</DockPanel>
+        <!-- Big connection button -->
+        <Button DockPanel.Dock="Right" Width="100"  Margin="10">Start Capture</Button>
+
+        <TabControl Margin="0,5,0,10">
+
+            <TabItem Header="Connection">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                    <WrapPanel>
+                        <GroupBox Header="COM" Style="{StaticResource GroupboxStyle}">
+                            <StackPanel>
+                                <DockPanel Style="{StaticResource DockPanelStyle}">
+                                    <Label Style="{StaticResource LabelStyle}">COM Port:</Label>
+                                    <ComboBox></ComboBox>
+                                </DockPanel>
+                                <Button Style="{StaticResource ConnectionButtonStyle}">Connect</Button>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="Vimba" Style="{StaticResource GroupboxStyle}">
+                            <StackPanel>
+                                <DockPanel Style="{StaticResource DockPanelStyle}">
+                                    <Label Style="{StaticResource LabelStyle}">Camera Name:</Label>
+                                    <ComboBox></ComboBox>
+                                </DockPanel>
+                                <Button Style="{StaticResource ConnectionButtonStyle}">Connect</Button>
+                            </StackPanel>
+                        </GroupBox>
+
+                        <GroupBox Header="Master control" Style="{StaticResource GroupboxStyle}">
+                            <StackPanel>
+                                <StackPanel.Resources>
+                                    <Style BasedOn="{StaticResource MastControlButtonStyle}" TargetType="Button"/>
+                                </StackPanel.Resources>
+                                <Button>Connect</Button>
+                                <Button>Disconnect</Button>
+                            </StackPanel>
+                        </GroupBox>
+                    </WrapPanel>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Header="Parameters">
+                <WrapPanel Orientation="Vertical">
+                    <!--form entry start-->
+                    <DockPanel Style="{StaticResource DockPanelStyle}">
+                        <Label Style="{StaticResource LabelStyle}">Exposure time:</Label>
+                        <xctk:IntegerUpDown />
+                    </DockPanel>
+                    <!--form entry end-->
+
+                    <DockPanel Style="{StaticResource DockPanelStyle}">
+                        <Label Style="{StaticResource LabelStyle}">Gain:</Label>
+                        <xctk:DecimalUpDown Maximum="20" Minimum="0"/>
+                    </DockPanel>
+
+                    <DockPanel Style="{StaticResource DockPanelStyle}">
+                        <Label Style="{StaticResource LabelStyle}">Laser ON time:</Label>
+                        <xctk:IntegerUpDown />
+                    </DockPanel>
+                </WrapPanel>
+            </TabItem>
+            <TabItem Header="Hardware"></TabItem>
+        </TabControl>
+    </DockPanel>
 </UserControl>

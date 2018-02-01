@@ -5,6 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{7BE9E51B-C04F-46E8-BC02-6CC60E6AE06F}</ProjectGuid>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MicroVision.Modules.ParameterPanel</RootNamespace>
@@ -81,19 +82,16 @@
     <Compile Include="Views\ParameterPanel.xaml.cs">
       <DependentUpon>ParameterPanel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ParameterTab.xaml.cs">
-      <DependentUpon>ParameterTab.xaml</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Views\ParameterPanel.xaml">
+    <Resource Include="Resources\ScrollbarStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ParameterTab.xaml">
+    </Resource>
+    <Page Include="Views\ParameterPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
