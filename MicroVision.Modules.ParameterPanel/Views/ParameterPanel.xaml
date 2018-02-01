@@ -1,0 +1,41 @@
+﻿<UserControl x:Class="MicroVision.Modules.ParameterPanel.Views.ParameterPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:MicroVision.Modules.ParameterPanel.Views"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
+             mc:Ignorable="d"
+             d:DesignHeight="200" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style x:Key="DockPanelStyle" TargetType="DockPanel">
+            <Setter Property="Width" Value="200"></Setter>
+            <Setter Property="Margin" Value="5"></Setter>
+        </Style>
+        <Style x:Key="LabelStyle" TargetType="Label">
+            <Setter Property="Margin" Value="0,0,10,0"></Setter>
+        </Style>
+    </UserControl.Resources>
+    <DockPanel LastChildFill="True">
+        <Button DockPanel.Dock="Right" Width="100" Margin="10">Start Capture</Button>
+		<WrapPanel Orientation="Vertical">
+			<!--form entry start-->
+            <DockPanel Style="{StaticResource DockPanelStyle}">
+                <Label Style="{StaticResource LabelStyle}">Exposure time:</Label>
+                <toolkit:IntegerUpDown />
+            </DockPanel>
+            <!--form entry end-->
+
+		    <DockPanel Style="{StaticResource DockPanelStyle}">
+                <Label Style="{StaticResource LabelStyle}">Gain:</Label>
+		        <toolkit:DecimalUpDown Maximum="20" Minimum="0"/>
+		    </DockPanel>
+
+            <DockPanel Style="{StaticResource DockPanelStyle}">
+		        <Label Style="{StaticResource LabelStyle}">Laser ON time:</Label>
+		        <toolkit:IntegerUpDown />
+		    </DockPanel>
+        </WrapPanel>
+	</DockPanel>
+</UserControl>

@@ -2,11 +2,14 @@
 using Microsoft.Practices.Unity;
 using Prism.Unity;
 using System.Windows;
+using MicroVision.Modules.ParameterPanel;
 using MicroVision.Services;
+
 /*
 using MicroVision.Services;
 */
 using MicroVision.Views;
+using Prism.Modularity;
 
 namespace MicroVision
 {
@@ -28,7 +31,14 @@ namespace MicroVision
 
             //Container.RegisterType<IServices, Services.Services>(new InjectionConstructor(typeof(string)));
             Container.RegisterType<ILogService, LogService>(new PerResolveLifetimeManager());
+        }
 
+        protected override void ConfigureModuleCatalog()
+        {
+            base.ConfigureModuleCatalog();
+
+            var catalog = (ModuleCatalog)ModuleCatalog;
+            catalog.AddModule(typeof(ParameterPanel));
         }
     }
 }
