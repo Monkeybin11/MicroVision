@@ -77,8 +77,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\ParameterModelClasses.cs" />
     <Compile Include="ParameterPanel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\ParameterPanelViewModel.cs" />
     <Compile Include="Views\ParameterPanel.xaml.cs">
       <DependentUpon>ParameterPanel.xaml</DependentUpon>
     </Compile>
