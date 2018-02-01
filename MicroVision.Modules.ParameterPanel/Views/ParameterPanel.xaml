@@ -86,11 +86,15 @@
                     <WrapPanel Orientation="Vertical">
                         <WrapPanel.Resources>
                             <DataTemplate x:Key="ParameterControlTemplate">
-                                <DockPanel Style="{StaticResource DockPanelStyle}">
-                                    <Label Style="{StaticResource LabelStyle}" Content="{Binding Label}"/>
-                                    
-                                    <TextBox Text="{Binding Value}" />
-                                </DockPanel>
+                                <Grid Margin="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label Content="{Binding Label}" HorizontalAlignment="Right"></Label>
+                                    <TextBox Text="{Binding Value}" Grid.Column="1" Width="100" VerticalContentAlignment="Center"></TextBox>
+                                </Grid>
+                                
                             </DataTemplate>
                         </WrapPanel.Resources>
 
