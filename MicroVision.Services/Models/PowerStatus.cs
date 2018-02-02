@@ -15,35 +15,9 @@ namespace MicroVision.Services.Models
             get { return _isPowered; }
             set { SetProperty(ref _isPowered, value); }
         }
-    }
 
-    public class MasterPowerStatus : PowerStatus
-    {
-        public MasterPowerStatus()
+        public PowerStatus(string label) : base(label)
         {
-            Label = "Master";
-        }
-    }
-
-    public class FanPowerStatus : PowerStatus
-    {
-        public FanPowerStatus()
-        {
-            Label = "Fan";
-        }
-    }
-    public class LaserPowerStatus : PowerStatus
-    {
-        public LaserPowerStatus()
-        {
-            Label = "Laser";
-        }
-    }
-    public class MotorPowerStatus : PowerStatus
-    {
-        public MotorPowerStatus()
-        {
-            Label = "Motor";
         }
     }
 }

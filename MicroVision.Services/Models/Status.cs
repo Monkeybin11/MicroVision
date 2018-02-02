@@ -10,5 +10,10 @@ namespace MicroVision.Services.Models
     public class Status :BindableBase
     {
         public string Label { get; protected set; }
+
+        public Status(string label)
+        {
+            Label = label;
+        }
     }
 }

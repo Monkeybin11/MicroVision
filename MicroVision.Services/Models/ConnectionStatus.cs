@@ -45,30 +45,8 @@ namespace MicroVision.Services.Models
             ErrorMessage = "";
         }
 
-        public void Connected()
+        public ConnectionStatus(string label) : base(label)
         {
-            IsConnected = true;
-        }
-
-        public void Disconnected()
-        {
-            IsConnected = false;
-        }
-    }
-
-    public class ComConnectionStatus : ConnectionStatus
-    {
-        public ComConnectionStatus()
-        {
-            Label = "COM: ";
-        }
-    }
-
-    public class VimbaConnectionStatus : ConnectionStatus
-    {
-        public VimbaConnectionStatus()
-        {
-            Label = "Vimba: ";
         }
     }
 }

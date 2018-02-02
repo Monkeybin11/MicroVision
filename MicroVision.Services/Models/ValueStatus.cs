@@ -14,22 +14,9 @@ namespace MicroVision.Services.Models
             get { return _value; }
             set { SetProperty(ref _value, value); }
         }
-    }
 
-    public class CurrentValueStatus : ValueStatus<double>
-    {
-        public CurrentValueStatus()
+        public ValueStatus(string label) : base(label)
         {
-            Label = "Current (A)";
         }
     }
-
-    public class CameraTemperatureValueStatus : ValueStatus<double>
-    {
-        public CameraTemperatureValueStatus()
-        {
-            Label = "Temperature (C)";
-        }
-    }
-
 }

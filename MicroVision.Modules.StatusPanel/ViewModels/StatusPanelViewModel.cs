@@ -42,26 +42,26 @@ namespace MicroVision.Modules.StatusPanel.ViewModels
             
         }
 
-        public ComConnectionStatus ComConnectionStatus { get; }
-        public VimbaConnectionStatus VimbaConnectionStatus { get; }
-        public MasterPowerStatus MasterPowerStatus { get; }
-        public FanPowerStatus FanPowerStatus { get; }
-        public MotorPowerStatus MotorPowerStatus { get; }
-        public LaserPowerStatus LaserPowerStatus { get; }
-        public CurrentValueStatus CurrentValueStatus { get; }
-        public CameraTemperatureValueStatus CameraTemperatureValueStatus { get; }
+        public ConnectionStatus ComConnectionStatus { get; }
+        public ConnectionStatus VimbaConnectionStatus { get; }
+        public PowerStatus MasterPowerStatus { get; }
+        public PowerStatus FanPowerStatus { get; }
+        public PowerStatus MotorPowerStatus { get; }
+        public PowerStatus LaserPowerStatus { get; }
+        public ValueStatus<double> CurrentValueStatus { get; }
+        public ValueStatus<double> CameraTemperatureValueStatus { get; }
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             if (ComConnectionStatus.IsConnected)
             {
-                ComConnectionStatus.Disconnected();
+                ComConnectionStatus.IsConnected = false;
                 VimbaConnectionStatus.ResetError();
-                VimbaConnectionStatus.Connected();
+                VimbaConnectionStatus.IsConnected = true;
             }
             else
             {
-                ComConnectionStatus.Connected();
+                ComConnectionStatus.IsConnected = true;
                 VimbaConnectionStatus.RaiseError("Test Error!");
             }
 

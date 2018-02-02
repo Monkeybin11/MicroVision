@@ -11,28 +11,28 @@ namespace MicroVision.Services
   
     public interface IStatusServices
     {
-        VimbaConnectionStatus VimbaConnectionStatus { get; }
-        ComConnectionStatus ComConnectionStatus { get; }
-        MasterPowerStatus MasterPowerStatus { get; }
-        FanPowerStatus FanPowerStatus { get; }
-        LaserPowerStatus LaserPowerStatus { get; }
-        MotorPowerStatus MotorPowerStatus { get; }
-        CameraTemperatureValueStatus CameraTemperatureValueStatus { get; }
-        CurrentValueStatus CurrentValueStatus { get; }
+        ConnectionStatus VimbaConnectionStatus { get; }
+        ConnectionStatus ComConnectionStatus { get; }
+        PowerStatus MasterPowerStatus { get; }
+        PowerStatus FanPowerStatus { get; }
+        PowerStatus LaserPowerStatus { get; }
+        PowerStatus MotorPowerStatus { get; }
+        ValueStatus<double> CameraTemperatureValueStatus { get; }
+        ValueStatus<double> CurrentValueStatus { get; }
     }
 
     public class StatusServices : IStatusServices
     {
-        public VimbaConnectionStatus VimbaConnectionStatus { get; } = new VimbaConnectionStatus();
-        public ComConnectionStatus ComConnectionStatus { get; } = new ComConnectionStatus();
+        public ConnectionStatus VimbaConnectionStatus { get; } = new ConnectionStatus("Vimba");
+        public ConnectionStatus ComConnectionStatus { get; } = new ConnectionStatus("COM");
 
-        public MasterPowerStatus MasterPowerStatus { get; } = new MasterPowerStatus();
-        public FanPowerStatus FanPowerStatus { get; } = new FanPowerStatus();
-        public LaserPowerStatus LaserPowerStatus { get; } = new LaserPowerStatus();
-        public MotorPowerStatus MotorPowerStatus { get; } = new MotorPowerStatus();
+        public PowerStatus MasterPowerStatus { get; } = new PowerStatus("Master");
+        public PowerStatus FanPowerStatus { get; } = new PowerStatus("Fan");
+        public PowerStatus LaserPowerStatus { get; } = new PowerStatus("Laser");
+        public PowerStatus MotorPowerStatus { get; } = new PowerStatus("Motor");
 
-        public CameraTemperatureValueStatus CameraTemperatureValueStatus { get; } = new CameraTemperatureValueStatus();
-        public CurrentValueStatus CurrentValueStatus { get; } = new CurrentValueStatus();
+        public ValueStatus<double> CameraTemperatureValueStatus { get; } = new ValueStatus<double>("Temperature (C)");
+        public ValueStatus<double> CurrentValueStatus { get; } = new ValueStatus<double>("Current (A)");
 
     }
 }
