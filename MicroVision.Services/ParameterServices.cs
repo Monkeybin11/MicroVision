@@ -15,12 +15,28 @@ namespace MicroVision.Services
         FieldParameter<int> LaserDuration { get; }
         FieldParameter<int> CaptureInterval { get; }
         FieldParameter<string> OutputDirectory { get; }
+        SelectionParameter<string> ComSelection { get; }
+        SelectionParameter<string> VimbaSelection { get; }
+        CheckParameter ManualPowerCheck { get; }
+        CheckParameter MasterPowerCheck { get; }
+        CheckParameter FanPowerCheck { get; }
+        CheckParameter LaserPowerCheck { get; }
+        CheckParameter MotorPowerCheck { get; }
     }
 
     public class ParameterServices : IParameterServices
     {
         public ParameterServices()
-        { 
+        {
+            
+            // set the manual power override logic
+            ManualPowerCheck.PropertyChanged += ManualPowerCheck_PropertyChanged;
+        }
+
+        private void ManualPowerCheck_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            var senderObj = (CheckParameter) sender;
+            MasterPowerCheck.IsEnabled = FanPowerCheck.IsEnabled = LaserPowerCheck.IsEnabled = MotorPowerCheck.IsEnabled = senderObj.Value;
         }
 
         public FieldParameter<int> ExposureTime { get; } = new FieldParameter<int>(){Label="Exposure Time (us)", Value = 44, Minimum = 44, Maximum = 100000};
@@ -28,6 +44,15 @@ namespace MicroVision.Services
         public FieldParameter<int> LaserDuration { get; } = new FieldParameter<int>(){Label = "Laser duration (us)", Value = 20, Minimum = 0, Maximum = 100000};
         public FieldParameter<int> CaptureInterval { get; } = new FieldParameter<int>(){Label = "Capture Interval (ms)", Value = 1000, Minimum = 100, Maximum = 100000};
         public FieldParameter<string> OutputDirectory { get; } = new FieldParameter<string>(){Label = "Output directory", Value = @"C:\"};
+
+        public SelectionParameter<string> ComSelection { get; } =new SelectionParameter<string>("COM");
+        public SelectionParameter<string> VimbaSelection { get; } = new SelectionParameter<string>("Camera");
+
+        public CheckParameter ManualPowerCheck { get; } = new CheckParameter("Manual");
+        public CheckParameter MasterPowerCheck { get; } = new CheckParameter("Master", false);
+        public CheckParameter FanPowerCheck { get; } = new CheckParameter("Fan", false);
+        public CheckParameter LaserPowerCheck { get; } = new CheckParameter("Laser", false);
+        public CheckParameter MotorPowerCheck { get; } = new CheckParameter("Motor", false);
     }
 
 }

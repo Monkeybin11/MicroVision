@@ -21,7 +21,7 @@ namespace MicroVision.Services.Models
             set => SetProperty(ref _isEnabled, value);
         }
 
-        public Parameter(string label, bool isEnabled)
+        public Parameter(string label, bool isEnabled = true)
         {
             Label = label;
             IsEnabled = isEnabled;
@@ -88,9 +88,7 @@ namespace MicroVision.Services.Models
             set { SetProperty(ref _selected, value); }
         }
 
-        public SelectionParameter(string label, bool isEnabled) : base(label, isEnabled)
-        {
-        }
+        public SelectionParameter(string label, bool isEnabled = true) : base(label, isEnabled){}
     }
     #endregion
 
@@ -106,9 +104,8 @@ namespace MicroVision.Services.Models
             set { SetProperty(ref _value, value); }
         }
 
-        public CheckParameter(string label, bool isEnabled) : base(label, isEnabled)
-        {
-        }
+        public CheckParameter(string label) : base(label) {}
+        public CheckParameter(string label, bool isEnabled):base(label, isEnabled) { }
     }
 
     #endregion

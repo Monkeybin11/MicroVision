@@ -22,6 +22,13 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
         public FieldParameter<int> CaptureInterval { get; }
         public FieldParameter<double> Gain { get; }
         public FieldParameter<string> OutputDirectory { get; }
+        public CheckParameter MotorPowerCheck { get; }
+        public CheckParameter LaserPowerCheck { get; }
+        public CheckParameter FanPowerCheck { get; }
+        public CheckParameter MasterPowerCheck { get; }
+        public CheckParameter ManualPowerCheck { get; }
+        public SelectionParameter<string> VimbaSelection { get; set; }
+        public SelectionParameter<string> ComSelection { get; set; }
 
         public DelegateCommand TestCommand =>
             _testCommand ?? (_testCommand = new DelegateCommand(ExecuteTestCommand));
@@ -37,6 +44,15 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
             CaptureInterval = param.CaptureInterval;
             Gain = param.Gain;
             OutputDirectory = param.OutputDirectory;
+
+            ManualPowerCheck = param.ManualPowerCheck;
+            MasterPowerCheck = param.MasterPowerCheck;
+            FanPowerCheck = param.FanPowerCheck;
+            LaserPowerCheck = param.LaserPowerCheck;
+            MotorPowerCheck = param.MotorPowerCheck;
+
+            ComSelection = param.ComSelection;
+            VimbaSelection = param.VimbaSelection;
         }
 
 

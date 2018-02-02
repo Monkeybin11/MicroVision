@@ -52,7 +52,7 @@
                             <StackPanel>
                                 <DockPanel Style="{StaticResource DockPanelStyle}">
                                     <Label Style="{StaticResource LabelStyle}">COM Port:</Label>
-                                    <ComboBox></ComboBox>
+                                    <ComboBox ItemsSource="{Binding ComSelection}"></ComboBox>
                                 </DockPanel>
                                 <Button Style="{StaticResource ConnectionButtonStyle}">Connect</Button>
                             </StackPanel>
@@ -61,7 +61,7 @@
                             <StackPanel>
                                 <DockPanel Style="{StaticResource DockPanelStyle}">
                                     <Label Style="{StaticResource LabelStyle}">Camera Name:</Label>
-                                    <ComboBox></ComboBox>
+                                    <ComboBox ItemsSource="{Binding VimbaSelection}"></ComboBox>
                                 </DockPanel>
                                 <Button Style="{StaticResource ConnectionButtonStyle}">Connect</Button>
                             </StackPanel>
@@ -114,13 +114,16 @@
                                 <Style TargetType="CheckBox" >
                                     <Setter Property="Margin" Value="5,5,5,0"/>
                                 </Style>
+                                <DataTemplate x:Key="PowerCheckBoxTemplate">
+                                    <CheckBox IsChecked="{Binding Value}" IsEnabled="{Binding IsEnabled}" Content="{Binding Label}"></CheckBox>
+                                </DataTemplate>
                             </GroupBox.Resources>
                             <StackPanel>
-                                <CheckBox>Manual Override</CheckBox>
-                                <CheckBox>Master Power</CheckBox>
-                                <CheckBox>Fan</CheckBox>
-                                <CheckBox>Motor</CheckBox>
-                                <CheckBox>Laser</CheckBox>
+                                <ContentControl Content="{Binding ManualPowerCheck}" ContentTemplate="{StaticResource PowerCheckBoxTemplate}"/>
+                                <ContentControl Content="{Binding MasterPowerCheck}" ContentTemplate="{StaticResource PowerCheckBoxTemplate}"/>
+                                <ContentControl Content="{Binding FanPowerCheck}" ContentTemplate="{StaticResource PowerCheckBoxTemplate}"/>
+                                <ContentControl Content="{Binding LaserPowerCheck}" ContentTemplate="{StaticResource PowerCheckBoxTemplate}"/>
+                                <ContentControl Content="{Binding MotorPowerCheck}" ContentTemplate="{StaticResource PowerCheckBoxTemplate}"/>
                             </StackPanel>
                         </GroupBox>
 
