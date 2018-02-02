@@ -4,10 +4,11 @@
              xmlns:local="clr-namespace:MicroVision.Modules.StatusPanel.Views"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:prism="http://prismlibrary.com/"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="150"
-             xmlns:prism="http://prismlibrary.com/"
              xmlns:models="clr-namespace:MicroVision.Services.Models;assembly=MicroVision.Services"
+             xmlns:statusPanel="clr-namespace:MicroVision.Modules.StatusPanel"
              prism:ViewModelLocator.AutoWireViewModel="True" >
     <UserControl.Resources>
         <ResourceDictionary>
@@ -16,31 +17,43 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <StackPanel>
+    <StackPanel HorizontalAlignment="Stretch">
         <StackPanel.Resources>
-            <DataTemplate x:Key="StatusIndicatorTemplate" DataType="models:ConnectionStatus">
-                <Ellipse Height="10" Width="10">
-                    <Ellipse.Resources>
-                        <Style TargetType="Ellipse">
-                            <Setter Property="Fill" Value="Gray"></Setter>
+            <DataTemplate x:Key="StatusIndicatorTemplate">
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel.Resources>
+                        <Style TargetType="StackPanel">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsConnected}" Value="True">
-                                    <Setter Property="Fill" Value="Green"></Setter>
-                                </DataTrigger>
                                 <DataTrigger Binding="{Binding IsError}" Value="True">
-                                    <Setter Property="Fill" Value="Red"></Setter>
+                                    <Setter Property="ToolTip" Value="{Binding ErrorMessage}"></Setter>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </Ellipse.Resources>
-                </Ellipse>
+                    </StackPanel.Resources>
+                    <Label Width="50" Content="{Binding Label}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right"  HorizontalAlignment="Right"/>
+                    <Ellipse Height="10" Width="10" Margin="5,0,0,0">
+                        <Ellipse.Resources>
+                            <Style TargetType="Ellipse">
+                                <Setter Property="Fill" Value="Gray"></Setter>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsConnected}" Value="True">
+                                        <Setter Property="Fill" Value="Green"></Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsError}" Value="True">
+                                        <Setter Property="Fill" Value="Red"></Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Ellipse.Resources>
+                    </Ellipse>
+                </StackPanel>
             </DataTemplate>
         </StackPanel.Resources>
         <ScrollViewer>
-            <GroupBox Header="Connection">
-                <StackPanel Orientation="Horizontal">
-                    <Label>COM: </Label>
+            <GroupBox Header="Connection" Margin="5">
+                <StackPanel>
                     <ContentControl ContentTemplate="{StaticResource StatusIndicatorTemplate}" Content="{Binding StatusService.ComConnectionStatus}"></ContentControl>
+                    <ContentControl ContentTemplate="{StaticResource StatusIndicatorTemplate}" Content="{Binding StatusService.VimbaConnectionStatus}" ></ContentControl>
                 </StackPanel>
             </GroupBox>
         </ScrollViewer>

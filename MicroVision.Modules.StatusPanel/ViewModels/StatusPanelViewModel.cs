@@ -6,28 +6,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+using MicroVision.Services;
 
 namespace MicroVision.Modules.StatusPanel.ViewModels
 {
     public class StatusPanelViewModel : BindableBase
     {
-        private string _message;
-        public string Message
-        {
-            get { return _message; }
-            set { SetProperty(ref _message, value); }
-        }
+        private readonly IStatusService _statusService;
+        public IStatusService StatusService => _statusService;
 
-        private Boolean _comConnected;
-        public Boolean ComConnected
+        public StatusPanelViewModel(IStatusService statusService)
         {
-            get { return _comConnected; }
-            set { SetProperty(ref _comConnected, value); }
-        }
-
-        public StatusPanelViewModel()
-        {
-            Message = "View A from your Prism Module";
+            _statusService = statusService;
+ 
             Timer timer = new Timer();
             timer.Interval = 1000;
             timer.Elapsed += Timer_Elapsed;
@@ -37,7 +28,18 @@ namespace MicroVision.Modules.StatusPanel.ViewModels
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            ComConnected = !ComConnected;
+            if (StatusService.ComConnectionStatus.IsConnected)
+            {
+                StatusService.ComConnectionStatus.Disconnected();
+                StatusService.VimbaConnectionStatus.ResetError();
+                StatusService.VimbaConnectionStatus.Connected();
+            }
+            else
+            {
+                StatusService.ComConnectionStatus.Connected();
+                StatusService.VimbaConnectionStatus.RaiseError("Test Error!");
+            }
+
         }
     }
 }

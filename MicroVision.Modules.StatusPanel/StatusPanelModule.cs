@@ -10,21 +10,17 @@ namespace MicroVision.Modules.StatusPanel
 {
     public class StatusPanelModule : IModule
     {
-        #region private members
+
         private IRegionManager _regionManager;
         //private readonly IStatusService _statusService;
         private IUnityContainer _container;
-        #endregion
 
-        #region properties
-        public IStatusService StatusService { get; private set; }
-        #endregion
-        public StatusPanelModule(IUnityContainer container, IRegionManager regionManager, IStatusService statusService)
+        
+        public StatusPanelModule(IUnityContainer container, IRegionManager regionManager)
         {
             _container = container;
             _regionManager = regionManager;
             //_statusService = statusService;
-            StatusService = statusService;
         }
 
         public void Initialize()

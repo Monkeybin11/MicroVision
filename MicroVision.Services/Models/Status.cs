@@ -40,7 +40,7 @@ namespace MicroVision.Services.Models
             ErrorMessage = msg ?? "Error";
         }
 
-        public void resetError()
+        public void ResetError()
         {
             IsError = false;
             ErrorMessage = "";
