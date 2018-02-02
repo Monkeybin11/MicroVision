@@ -7,8 +7,8 @@ using Prism.Events;
 
 namespace MicroVision.Core.Events
 {
-    public class ComUpdateRequestEvent : PubSubEvent 
-    {
+    public class RequestComUpdateComUpdateEvent : PubSubEvent {}
+    public class ConnectComPortEvent: PubSubEvent<string> {}
 
-    }
+
 }

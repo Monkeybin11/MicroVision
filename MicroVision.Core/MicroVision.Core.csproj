@@ -38,7 +38,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Events\ComUpdateRequestEvent.cs" />
+    <Compile Include="Events\SerialEvents.cs" />
     <Compile Include="Models\ConnectionStatus.cs" />
     <Compile Include="Models\Parameters.cs" />
     <Compile Include="Models\PowerStatus.cs" />
