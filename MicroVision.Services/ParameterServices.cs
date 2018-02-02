@@ -36,7 +36,6 @@ namespace MicroVision.Services
         private void ManualPowerCheck_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             var senderObj = (CheckParameter) sender;
-            MasterPowerCheck.IsEnabled = FanPowerCheck.IsEnabled = LaserPowerCheck.IsEnabled = MotorPowerCheck.IsEnabled = senderObj.Value;
         }
 
         public FieldParameter<int> ExposureTime { get; } = new FieldParameter<int>(){Label="Exposure Time (us)", Value = 44, Minimum = 44, Maximum = 100000};

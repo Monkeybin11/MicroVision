@@ -61,8 +61,14 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
 
             // ask for list update for initial value
             _eventAggregator.GetEvent<RequestComUpdateComUpdateEvent>().Publish();
+
+            ManualPowerCheck.PropertyChanged += ManualPowerCheck_PropertyChanged;
         }
 
-
+        private void ManualPowerCheck_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            var senderObj = (CheckParameter) ManualPowerCheck;
+            MasterPowerCheck.IsEnabled = FanPowerCheck.IsEnabled = LaserPowerCheck.IsEnabled = MotorPowerCheck.IsEnabled = senderObj.Value;
+        }
     }
 }
