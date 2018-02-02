@@ -113,6 +113,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MicroVision.Core\MicroVision.Core.csproj">
+      <Project>{D282D7E2-E6BF-4208-BC87-283D836E94AD}</Project>
+      <Name>MicroVision.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MicroVision.Services\MicroVision.Services.csproj">
       <Project>{C2AB6A15-51B1-41FE-8FE5-D61F1DAFBE90}</Project>
       <Name>MicroVision.Services</Name>

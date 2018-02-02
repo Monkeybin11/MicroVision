@@ -69,12 +69,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LogService.cs" />
-    <Compile Include="Models\Parameters.cs" />
-    <Compile Include="Models\ConnectionStatus.cs" />
-    <Compile Include="Models\PowerStatus.cs" />
-    <Compile Include="Models\Status.cs" />
-    <Compile Include="Models\ValueStatus.cs" />
     <Compile Include="ParameterServices.cs" />
+    <Compile Include="SerialService.cs" />
     <Compile Include="Services.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StatusServices.cs" />
@@ -84,6 +80,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MicroVision.Core\MicroVision.Core.csproj">
+      <Project>{D282D7E2-E6BF-4208-BC87-283D836E94AD}</Project>
+      <Name>MicroVision.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
