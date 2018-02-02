@@ -52,7 +52,7 @@
                             <StackPanel>
                                 <DockPanel Style="{StaticResource DockPanelStyle}">
                                     <Label Style="{StaticResource LabelStyle}">COM Port:</Label>
-                                    <ComboBox ItemsSource="{Binding ComSelection}"></ComboBox>
+                                    <ComboBox ItemsSource="{Binding ComSelection.Value}"></ComboBox>
                                 </DockPanel>
                                 <Button Style="{StaticResource ConnectionButtonStyle}">Connect</Button>
                             </StackPanel>
@@ -61,7 +61,7 @@
                             <StackPanel>
                                 <DockPanel Style="{StaticResource DockPanelStyle}">
                                     <Label Style="{StaticResource LabelStyle}">Camera Name:</Label>
-                                    <ComboBox ItemsSource="{Binding VimbaSelection}"></ComboBox>
+                                    <ComboBox ItemsSource="{Binding VimbaSelection.Value}"></ComboBox>
                                 </DockPanel>
                                 <Button Style="{StaticResource ConnectionButtonStyle}">Connect</Button>
                             </StackPanel>

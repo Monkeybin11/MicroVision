@@ -7,7 +7,6 @@
              xmlns:prism="http://prismlibrary.com/"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="150"
-             xmlns:models="clr-namespace:MicroVision.Services.Models;assembly=MicroVision.Services"
              xmlns:statusPanel="clr-namespace:MicroVision.Modules.StatusPanel"
              prism:ViewModelLocator.AutoWireViewModel="True" >
     <UserControl.Resources>

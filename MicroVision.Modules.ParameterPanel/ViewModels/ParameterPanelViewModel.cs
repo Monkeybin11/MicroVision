@@ -8,13 +8,16 @@ using System.Threading.Tasks;
 using System.Timers;
 using System.Collections.ObjectModel;
 using System.Windows;
+using MicroVision.Core.Events;
 using MicroVision.Services;
 using MicroVision.Services.Models;
+using Prism.Events;
 
 namespace MicroVision.Modules.ParameterPanel.ViewModels
 {
     public class ParameterPanelViewModel : BindableBase
     {
+        private readonly IEventAggregator _eventAggregator;
         private DelegateCommand _testCommand;
 
         public FieldParameter<int> ExposureTime { get; }
@@ -37,8 +40,10 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
         {
             ExposureTime.Value -= 10;
         }
-        public ParameterPanelViewModel(IParameterServices param)
+        public ParameterPanelViewModel(IParameterServices param, IEventAggregator eventAggregator)
         {
+            _eventAggregator = eventAggregator;
+
             ExposureTime = param.ExposureTime;
             LaserDuration = param.LaserDuration;
             CaptureInterval = param.CaptureInterval;
@@ -53,6 +58,9 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
 
             ComSelection = param.ComSelection;
             VimbaSelection = param.VimbaSelection;
+
+            // ask for list update for initial value
+            _eventAggregator.GetEvent<ComUpdateRequestEvent>().Publish();
         }
 
 
