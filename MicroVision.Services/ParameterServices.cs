@@ -8,7 +8,7 @@ using MicroVision.Services.Models;
 
 namespace MicroVision.Services
 {
-    public interface IParameterService
+    public interface IParameterServices
     {
         ExposureTime ExposureTime { get; }
         Gain Gain { get; }
@@ -17,9 +17,9 @@ namespace MicroVision.Services
         OutputDirectory OutputDirectory { get; }
     }
 
-    public class ParameterService : IParameterService
+    public class ParameterServices : IParameterServices
     {
-        public ParameterService()
+        public ParameterServices()
         { 
         }
 

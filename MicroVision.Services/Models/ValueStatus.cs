@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MicroVision.Services.Models
 {
-    class ValueStatus<T> : Status
+    public class ValueStatus<T> : Status
     {
         private T _value;
         public T Value

@@ -74,7 +74,7 @@
     <Compile Include="Models\PowerStatus.cs" />
     <Compile Include="Models\Status.cs" />
     <Compile Include="Models\ValueStatus.cs" />
-    <Compile Include="ParameterService.cs" />
+    <Compile Include="ParameterServices.cs" />
     <Compile Include="Services.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StatusServices.cs" />

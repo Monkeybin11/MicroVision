@@ -30,7 +30,7 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
         {
             ExposureTime.Value -= 10;
         }
-        public ParameterPanelViewModel(IParameterService param)
+        public ParameterPanelViewModel(IParameterServices param)
         {
             ExposureTime = param.ExposureTime;
             LaserDuration = param.LaserDuration;

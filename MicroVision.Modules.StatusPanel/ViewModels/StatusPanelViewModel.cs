@@ -18,7 +18,7 @@ namespace MicroVision.Modules.StatusPanel.ViewModels
         private readonly ILogService _logService;
 
 
-        public StatusPanelViewModel(IUnityContainer container,IStatusService statusService, ILogService logService)
+        public StatusPanelViewModel(IUnityContainer container,IStatusServices statusService, ILogService logService)
         {
             _container = container;
             _logService = logService;
@@ -50,7 +50,7 @@ namespace MicroVision.Modules.StatusPanel.ViewModels
                 VimbaConnectionStatus.RaiseError("Test Error!");
             }
 
-            var status = (IStatusService)_container.Resolve<StatusServices>();
+            var status = (IStatusServices)_container.Resolve<StatusServices>();
             _logService.Logger.Info(status.ComConnectionStatus.IsConnected);
 
 
