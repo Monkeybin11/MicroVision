@@ -97,11 +97,11 @@
                             </DataTemplate>
                         </WrapPanel.Resources>
 
-                        <ContentControl ContentTemplate="{StaticResource ParameterControlTemplate}" Content="{Binding Parameter.ExposureTime}"/>
-                        <ContentControl ContentTemplate="{StaticResource ParameterControlTemplate}" Content="{Binding Parameter.Gain}"/>
-                        <ContentControl ContentTemplate="{StaticResource ParameterControlTemplate}" Content="{Binding Parameter.LaserDuration}"/>
-                        <ContentControl ContentTemplate="{StaticResource ParameterControlTemplate}" Content="{Binding Parameter.CaptureInterval}"/>
-                        <ContentControl ContentTemplate="{StaticResource ParameterControlTemplate}" Content="{Binding Parameter.OutputDirectory}"/>
+                        <ContentControl ContentTemplate="{StaticResource ParameterControlTemplate}" Content="{Binding ExposureTime}"/>
+                        <ContentControl ContentTemplate="{StaticResource ParameterControlTemplate}" Content="{Binding Gain}"/>
+                        <ContentControl ContentTemplate="{StaticResource ParameterControlTemplate}" Content="{Binding LaserDuration}"/>
+                        <ContentControl ContentTemplate="{StaticResource ParameterControlTemplate}" Content="{Binding CaptureInterval}"/>
+                        <ContentControl ContentTemplate="{StaticResource ParameterControlTemplate}" Content="{Binding OutputDirectory}"/>
 
                     </WrapPanel>
                 </ScrollViewer>

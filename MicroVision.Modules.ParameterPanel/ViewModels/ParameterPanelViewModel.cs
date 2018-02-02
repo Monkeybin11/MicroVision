@@ -9,24 +9,34 @@ using System.Timers;
 using System.Collections.ObjectModel;
 using System.Windows;
 using MicroVision.Services;
+using MicroVision.Services.Models;
 
 namespace MicroVision.Modules.ParameterPanel.ViewModels
 {
     public class ParameterPanelViewModel : BindableBase
     {
-        public IParameterService Parameter { get; private set; }
-
         private DelegateCommand _testCommand;
+
+        public ExposureTime ExposureTime { get; }
+        public LaserDuration LaserDuration { get; }
+        public CaptureInterval CaptureInterval { get; }
+        public Gain Gain { get; }
+        public OutputDirectory OutputDirectory { get; }
+
         public DelegateCommand TestCommand =>
             _testCommand ?? (_testCommand = new DelegateCommand(ExecuteTestCommand));
 
         void ExecuteTestCommand()
         {
-            Parameter.ExposureTime.Value -= 10;
+            ExposureTime.Value -= 10;
         }
         public ParameterPanelViewModel(IParameterService param)
         {
-            Parameter = param;
+            ExposureTime = param.ExposureTime;
+            LaserDuration = param.LaserDuration;
+            CaptureInterval = param.CaptureInterval;
+            Gain = param.Gain;
+            OutputDirectory = param.OutputDirectory;
         }
 
 

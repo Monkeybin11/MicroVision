@@ -52,8 +52,8 @@
         <ScrollViewer>
             <GroupBox Header="Connection" Margin="5">
                 <StackPanel>
-                    <ContentControl ContentTemplate="{StaticResource StatusIndicatorTemplate}" Content="{Binding StatusService.ComConnectionStatus}"></ContentControl>
-                    <ContentControl ContentTemplate="{StaticResource StatusIndicatorTemplate}" Content="{Binding StatusService.VimbaConnectionStatus}" ></ContentControl>
+                    <ContentControl ContentTemplate="{StaticResource StatusIndicatorTemplate}" Content="{Binding ComConnectionStatus}"></ContentControl>
+                    <ContentControl ContentTemplate="{StaticResource StatusIndicatorTemplate}" Content="{Binding VimbaConnectionStatus}" ></ContentControl>
                 </StackPanel>
             </GroupBox>
         </ScrollViewer>
