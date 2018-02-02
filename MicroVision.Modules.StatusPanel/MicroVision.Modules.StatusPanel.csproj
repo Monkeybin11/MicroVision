@@ -83,7 +83,12 @@
     </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\MicroVision.Services\MicroVision.Services.csproj">
+      <Project>{C2AB6A15-51B1-41FE-8FE5-D61F1DAFBE90}</Project>
+      <Name>MicroVision.Services</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Page Include="Resources\ScrollbarStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -95,6 +100,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="log4net">
+      <Version>2.0.8</Version>
+    </PackageReference>
     <PackageReference Include="Prism.Unity" Version="6.3.0" />
     <PackageReference Include="Prism.Wpf">
       <Version>6.3.0</Version>

@@ -7,6 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="150"
              xmlns:prism="http://prismlibrary.com/"
+             xmlns:models="clr-namespace:MicroVision.Services.Models;assembly=MicroVision.Services"
              prism:ViewModelLocator.AutoWireViewModel="True" >
     <UserControl.Resources>
         <ResourceDictionary>
@@ -17,17 +18,17 @@
     </UserControl.Resources>
     <StackPanel>
         <StackPanel.Resources>
-            <DataTemplate x:Key="StatusIndicatorTemplate">
+            <DataTemplate x:Key="StatusIndicatorTemplate" DataType="models:ConnectionStatus">
                 <Ellipse Height="10" Width="10">
                     <Ellipse.Resources>
                         <Style TargetType="Ellipse">
                             <Setter Property="Fill" Value="Gray"></Setter>
                             <Style.Triggers>
-                                <!--<Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Fill" Value="Red"></Setter>
-                                </Trigger>-->
-                                <DataTrigger Binding="{Binding}" Value="True">
+                                <DataTrigger Binding="{Binding IsConnected}" Value="True">
                                     <Setter Property="Fill" Value="Green"></Setter>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsError}" Value="True">
+                                    <Setter Property="Fill" Value="Red"></Setter>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -39,7 +40,7 @@
             <GroupBox Header="Connection">
                 <StackPanel Orientation="Horizontal">
                     <Label>COM: </Label>
-                    <ContentControl ContentTemplate="{StaticResource StatusIndicatorTemplate}" Content="{Binding ComConnected}"></ContentControl>
+                    <ContentControl ContentTemplate="{StaticResource StatusIndicatorTemplate}" Content="{Binding StatusService.ComConnectionStatus}"></ContentControl>
                 </StackPanel>
             </GroupBox>
         </ScrollViewer>

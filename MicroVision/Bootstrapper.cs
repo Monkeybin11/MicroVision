@@ -34,6 +34,7 @@ namespace MicroVision
             //Container.RegisterType<IServices, Services.Services>(new InjectionConstructor(typeof(string)));
             Container.RegisterType<ILogService, LogService>(new PerResolveLifetimeManager());
             Container.RegisterType<IParameterService, ParameterService>(new ContainerControlledLifetimeManager());
+            Container.RegisterType<IStatusService, StatusServices>(new ContainerControlledLifetimeManager());
         }
 
         protected override void ConfigureModuleCatalog()
