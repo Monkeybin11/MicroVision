@@ -26,6 +26,15 @@ namespace MicroVision.Modules.StatusPanel.ViewModels
 
             ComConnectionStatus = statusService.ComConnectionStatus;
             VimbaConnectionStatus = statusService.VimbaConnectionStatus;
+
+            MasterPowerStatus = statusService.MasterPowerStatus;
+            FanPowerStatus = statusService.FanPowerStatus;
+            MotorPowerStatus = statusService.MotorPowerStatus;
+            LaserPowerStatus = statusService.LaserPowerStatus;
+
+            CurrentValueStatus = statusService.CurrentValueStatus;
+            CameraTemperatureValueStatus = statusService.CameraTemperatureValueStatus;
+
             Timer timer = new Timer();
             timer.Interval = 1000;
             timer.Elapsed += Timer_Elapsed;
@@ -35,6 +44,12 @@ namespace MicroVision.Modules.StatusPanel.ViewModels
 
         public ComConnectionStatus ComConnectionStatus { get; }
         public VimbaConnectionStatus VimbaConnectionStatus { get; }
+        public MasterPowerStatus MasterPowerStatus { get; }
+        public FanPowerStatus FanPowerStatus { get; }
+        public MotorPowerStatus MotorPowerStatus { get; }
+        public LaserPowerStatus LaserPowerStatus { get; }
+        public CurrentValueStatus CurrentValueStatus { get; }
+        public CameraTemperatureValueStatus CameraTemperatureValueStatus { get; }
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
