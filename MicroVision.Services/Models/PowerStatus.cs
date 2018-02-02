@@ -7,8 +7,8 @@ using Prism.Mvvm;
 
 namespace MicroVision.Services.Models
 {
-    public class Status :BindableBase
+    class PowerStatus : BindableBase
     {
-        public string Label { get; protected set; }
+
     }
 }
