@@ -81,6 +81,8 @@
                     <ContentControl ContentTemplate="{StaticResource PowerStatusTemplate}" Content="{Binding MotorPowerStatus}"></ContentControl>
                 </StackPanel>
             </GroupBox>
+            
+
         </StackPanel>
     </ScrollViewer>
 </UserControl>

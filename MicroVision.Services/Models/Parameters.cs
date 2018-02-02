@@ -1,13 +1,33 @@
 ﻿using System;
+using System.Collections.Generic;
 using Prism.Mvvm;
 
 namespace MicroVision.Services.Models
 {
-    public class BaseParameter<T> : BindableBase where T : IComparable
+
+    /// <summary>
+    /// Base parameter class
+    /// </summary>
+    /// <typeparam name="T"> value type</typeparam>
+    public abstract class Parameter<T> : BindableBase
     {
-        public string Label { get; set; }
+        private bool _isEnabled;
+        public string Label { get; protected set; }
+        public abstract T Value { get; set; }
+
+        public bool IsEnabled
+        {
+            get => _isEnabled;
+            set => SetProperty(ref _isEnabled, value);
+        }
+    }
+
+    #region Field Parameters
+
+    public class FieldParameter<T> : Parameter<T> where T : IComparable
+    {
         private T _value;
-        public T Value
+        public override T Value
         {
             get => _value;
             set
@@ -26,12 +46,13 @@ namespace MicroVision.Services.Models
             }
             
         }
+        
         public T Minimum { get; set; }
         public T Maximum { get; set; }
 
     }
 
-    public class ExposureTime : BaseParameter<int>
+    public class ExposureTime : FieldParameter<int>
     {
         public ExposureTime()
         {
@@ -42,7 +63,7 @@ namespace MicroVision.Services.Models
         }
     }
 
-    public class Gain : BaseParameter<double>
+    public class Gain : FieldParameter<double>
     {
         public Gain()
         {
@@ -53,7 +74,7 @@ namespace MicroVision.Services.Models
         }
     }
 
-    public class LaserDuration : BaseParameter<int>
+    public class LaserDuration : FieldParameter<int>
     {
         public LaserDuration()
         {
@@ -64,7 +85,7 @@ namespace MicroVision.Services.Models
         }
     }
 
-    public class CaptureInterval : BaseParameter<int>
+    public class CaptureInterval : FieldParameter<int>
     {
         public CaptureInterval()
         {
@@ -74,7 +95,7 @@ namespace MicroVision.Services.Models
             Maximum = 100000;
         }
     }
-    public class OutputDirectory : BaseParameter<string>
+    public class OutputDirectory : FieldParameter<string>
     {
         public OutputDirectory()
         {
@@ -82,4 +103,57 @@ namespace MicroVision.Services.Models
             Value = @"C:\";
         }
     }
+
+    #endregion
+
+    #region Combobox selection
+    public class SelectionParameter<T> : Parameter<List<T>>
+    {
+        private List<T> _value;
+        private T _selected;
+
+        public override List<T> Value
+        {
+            get => _value;
+            set => SetProperty(ref _value, value);
+        }
+
+        public T Selected
+        {
+            get { return _selected; }
+            set { SetProperty(ref _selected, value); }
+        }
+    }
+
+    public class ComSelectionParameter : SelectionParameter<string>
+    {
+        public ComSelectionParameter()
+        {
+            Label = "COM";
+        }
+    }
+
+    public class VimbaSelectionParameter : SelectionParameter<string>
+    {
+        public VimbaSelectionParameter()
+        {
+            Label = "Camera";
+        }
+    }
+    #endregion
+
+    #region Check selection
+
+    public class CheckParameter : Parameter<bool>
+    {
+        private bool _value;
+
+        public override bool Value
+        {
+            get { return _value; }
+            set { SetProperty(ref _value, value); }
+        }
+    }
+
+    #endregion
 }
