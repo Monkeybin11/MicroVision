@@ -12,13 +12,19 @@ namespace MicroVision.Services.Models
     public abstract class Parameter<T> : BindableBase
     {
         private bool _isEnabled;
-        public string Label { get; protected set; }
+        public string Label { get; set; }
         public abstract T Value { get; set; }
 
         public bool IsEnabled
         {
             get => _isEnabled;
             set => SetProperty(ref _isEnabled, value);
+        }
+
+        public Parameter(string label, bool isEnabled)
+        {
+            Label = label;
+            IsEnabled = isEnabled;
         }
     }
 
@@ -50,57 +56,15 @@ namespace MicroVision.Services.Models
         public T Minimum { get; set; }
         public T Maximum { get; set; }
 
-    }
-
-    public class ExposureTime : FieldParameter<int>
-    {
-        public ExposureTime()
+        public FieldParameter(string label, T value, bool isEnabled, T minimum, T maximum) : base(label, isEnabled)
         {
-            Label = "Exposure time (us):";
-            Value = 44;
-            Minimum = 44;
-            Maximum = 1000000;
+            this.Value = value;
+            Minimum = minimum;
+            Maximum = maximum;
         }
-    }
 
-    public class Gain : FieldParameter<double>
-    {
-        public Gain()
+        public FieldParameter() : base("Field", true)
         {
-            Label = "Gain:";
-            Value = 0;
-            Minimum = 0;
-            Maximum = 20;
-        }
-    }
-
-    public class LaserDuration : FieldParameter<int>
-    {
-        public LaserDuration()
-        {
-            Label = "Laser Duration (us):";
-            Value = 20;
-            Minimum = 0;
-            Maximum = 10000;
-        }
-    }
-
-    public class CaptureInterval : FieldParameter<int>
-    {
-        public CaptureInterval()
-        {
-            Label = "Capture Interval (ms):";
-            Value = 500;
-            Minimum = 0;
-            Maximum = 100000;
-        }
-    }
-    public class OutputDirectory : FieldParameter<string>
-    {
-        public OutputDirectory()
-        {
-            Label = "Output Directory:";
-            Value = @"C:\";
         }
     }
 
@@ -123,21 +87,9 @@ namespace MicroVision.Services.Models
             get { return _selected; }
             set { SetProperty(ref _selected, value); }
         }
-    }
 
-    public class ComSelectionParameter : SelectionParameter<string>
-    {
-        public ComSelectionParameter()
+        public SelectionParameter(string label, bool isEnabled) : base(label, isEnabled)
         {
-            Label = "COM";
-        }
-    }
-
-    public class VimbaSelectionParameter : SelectionParameter<string>
-    {
-        public VimbaSelectionParameter()
-        {
-            Label = "Camera";
         }
     }
     #endregion
@@ -152,6 +104,10 @@ namespace MicroVision.Services.Models
         {
             get { return _value; }
             set { SetProperty(ref _value, value); }
+        }
+
+        public CheckParameter(string label, bool isEnabled) : base(label, isEnabled)
+        {
         }
     }
 

@@ -17,11 +17,11 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
     {
         private DelegateCommand _testCommand;
 
-        public ExposureTime ExposureTime { get; }
-        public LaserDuration LaserDuration { get; }
-        public CaptureInterval CaptureInterval { get; }
-        public Gain Gain { get; }
-        public OutputDirectory OutputDirectory { get; }
+        public FieldParameter<int> ExposureTime { get; }
+        public FieldParameter<int> LaserDuration { get; }
+        public FieldParameter<int> CaptureInterval { get; }
+        public FieldParameter<double> Gain { get; }
+        public FieldParameter<string> OutputDirectory { get; }
 
         public DelegateCommand TestCommand =>
             _testCommand ?? (_testCommand = new DelegateCommand(ExecuteTestCommand));

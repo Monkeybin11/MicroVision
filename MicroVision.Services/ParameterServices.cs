@@ -10,11 +10,11 @@ namespace MicroVision.Services
 {
     public interface IParameterServices
     {
-        ExposureTime ExposureTime { get; }
-        Gain Gain { get; }
-        LaserDuration LaserDuration { get; }
-        CaptureInterval CaptureInterval { get; }
-        OutputDirectory OutputDirectory { get; }
+        FieldParameter<int> ExposureTime { get; }
+        FieldParameter<double> Gain { get; }
+        FieldParameter<int> LaserDuration { get; }
+        FieldParameter<int> CaptureInterval { get; }
+        FieldParameter<string> OutputDirectory { get; }
     }
 
     public class ParameterServices : IParameterServices
@@ -23,10 +23,11 @@ namespace MicroVision.Services
         { 
         }
 
-        public ExposureTime ExposureTime { get; } = new ExposureTime();
-        public Gain Gain { get; } = new Gain();
-        public LaserDuration LaserDuration { get; } = new LaserDuration();
-        public CaptureInterval CaptureInterval { get; } = new CaptureInterval();
-        public OutputDirectory OutputDirectory { get; } = new OutputDirectory();
+        public FieldParameter<int> ExposureTime { get; } = new FieldParameter<int>(){Label="Exposure Time (us)", Value = 44, Minimum = 44, Maximum = 100000};
+        public FieldParameter<double> Gain { get; } = new FieldParameter<double>() {Label = "Gain", Value = 0, Minimum = 0, Maximum = 20};
+        public FieldParameter<int> LaserDuration { get; } = new FieldParameter<int>(){Label = "Laser duration (us)", Value = 20, Minimum = 0, Maximum = 100000};
+        public FieldParameter<int> CaptureInterval { get; } = new FieldParameter<int>(){Label = "Capture Interval (ms)", Value = 1000, Minimum = 100, Maximum = 100000};
+        public FieldParameter<string> OutputDirectory { get; } = new FieldParameter<string>(){Label = "Output directory", Value = @"C:\"};
     }
+
 }
