@@ -22,7 +22,7 @@ namespace MicroVision.Services
         {
             _parameterServices = parameterServices;
             _eventAggregator = eventAggregator;
-            _eventAggregator.GetEvent<RequestComUpdateComUpdateEvent>().Subscribe(UpdateComList);
+            _eventAggregator.GetEvent<ComListUpdateRequestedEvent>().Subscribe(UpdateComList);
         }
 
         private void UpdateComList()

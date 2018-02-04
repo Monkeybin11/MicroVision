@@ -60,7 +60,7 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
             VimbaSelection = param.VimbaSelection;
 
             // ask for list update for initial value
-            _eventAggregator.GetEvent<RequestComUpdateComUpdateEvent>().Publish();
+            _eventAggregator.GetEvent<ComListUpdateRequestedEvent>().Publish();
 
             ManualPowerCheck.PropertyChanged += ManualPowerCheck_PropertyChanged;
         }
