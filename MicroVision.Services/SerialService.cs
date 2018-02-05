@@ -110,6 +110,7 @@ namespace MicroVision.Services
         private void UpdateComList()
         {
             _parameterServices.ComSelection.Value = new List<string>(SerialPort.GetPortNames());
+            _parameterServices.ComSelection.Selected = _parameterServices.ComSelection.Value[0];
         }
 
         private void SendCommand(string command) { } //TODO
