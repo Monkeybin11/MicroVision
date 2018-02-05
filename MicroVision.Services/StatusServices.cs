@@ -46,14 +46,14 @@ namespace MicroVision.Services
 
         private void ComDisconnectedHandler(bool b)
         {
-            ComConnectionStatus.IsConnected = false;
-            ComConnectionStatus.IsError = false;
+            ComConnectionStatus.SetConnected(false);
+            ComConnectionStatus.ResetError();
         }
 
         private void ComConnectedHandler()
         {
-            ComConnectionStatus.IsConnected = true;
-            ComConnectionStatus.IsError = false;
+            ComConnectionStatus.SetConnected(true);
+            ComConnectionStatus.ResetError();
         }
     }
 
