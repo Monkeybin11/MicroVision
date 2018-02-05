@@ -65,9 +65,9 @@ namespace MicroVision.Services
         {
             try
             {
+                _serialDataParsingThread.Abort();
                 _sp.Close();
                 _eventAggregator.GetEvent<ComDisconnectedEvent>().Publish(true);    //intentional disconnection
-                _serialDataParsingThread.Abort();
             }
             catch (Exception e)
             {

@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:MicroVision.Modules.ParameterPanel.Views"
              xmlns:prism="http://prismlibrary.com/"
+             xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d"
              prism:ViewModelLocator.AutoWireViewModel="True"
@@ -27,7 +28,7 @@
                 <Setter Property="Padding" Value="5"/>
             </Style>
 
-            <Style x:Key="ConnectionButtonStyle" TargetType="Button">
+            <Style x:Key="ConnectionButtonStyle" TargetType="ToggleButton">
                 <Setter Property="Margin" Value="0,5,0,5"/>
             </Style>
 
@@ -52,9 +53,10 @@
                             <StackPanel>
                                 <DockPanel Style="{StaticResource DockPanelStyle}">
                                     <Label Style="{StaticResource LabelStyle}">COM Port:</Label>
-                                    <ComboBox ItemsSource="{Binding ComSelection.Value}" SelectedValue="{Binding ComSelection.Selected}"></ComboBox>
+                                    <ComboBox ItemsSource="{Binding ComSelection.Value}" SelectedValue="{Binding ComSelection.Selected}" />
                                 </DockPanel>
-                                <Button Style="{StaticResource ConnectionButtonStyle}" Command="{Binding ComConnectCommand}">Connect</Button>
+                                <ToggleButton IsChecked="{Binding ComConnectionStatus.IsConnected, Mode=OneWay}" Style="{StaticResource ConnectionButtonStyle}" Command="{Binding ComConnectToggleCommand}" Content="Connect" />
+
                             </StackPanel>
                         </GroupBox>
                         <GroupBox Header="Vimba" Style="{StaticResource GroupboxStyle}">
@@ -63,7 +65,7 @@
                                     <Label Style="{StaticResource LabelStyle}">Camera Name:</Label>
                                     <ComboBox ItemsSource="{Binding VimbaSelection.Value}"></ComboBox>
                                 </DockPanel>
-                                <Button Style="{StaticResource ConnectionButtonStyle}">Connect</Button>
+                                <ToggleButton Style="{StaticResource ConnectionButtonStyle}">Connect</ToggleButton>
                             </StackPanel>
                         </GroupBox>
 

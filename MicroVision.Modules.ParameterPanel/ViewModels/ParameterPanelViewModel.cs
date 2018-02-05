@@ -20,6 +20,8 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
         private readonly IEventAggregator _eventAggregator;
         private DelegateCommand _testCommand;
 
+        #region properties
+        #region parameter properties
         public FieldParameter<int> ExposureTime { get; }
         public FieldParameter<int> LaserDuration { get; }
         public FieldParameter<int> CaptureInterval { get; }
@@ -32,7 +34,15 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
         public CheckParameter ManualPowerCheck { get; }
         public SelectionParameter<string> VimbaSelection { get; set; }
         public SelectionParameter<string> ComSelection { get; set; }
+        #endregion
 
+        #region status properties
+        public ConnectionStatus ComConnectionStatus { get; }  
+        #endregion
+        #endregion
+
+
+        #region Commands
         public DelegateCommand TestCommand =>
             _testCommand ?? (_testCommand = new DelegateCommand(ExecuteTestCommand));
 
@@ -41,16 +51,26 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
             ExposureTime.Value -= 10;
         }
 
-        private DelegateCommand _comConnectCommand;
-        public DelegateCommand ComConnectCommand =>
-            _comConnectCommand ?? (_comConnectCommand = new DelegateCommand(ExecuteComConnectCommand));
+        private DelegateCommand _comConnectToggleCommand;
+        public DelegateCommand ComConnectToggleCommand =>
+            _comConnectToggleCommand ?? (_comConnectToggleCommand = new DelegateCommand(ExecuteComConnectToggleCommand));
 
-        void ExecuteComConnectCommand()
+        void ExecuteComConnectToggleCommand()
         {
-            _eventAggregator.GetEvent<ComConnectionRequestedEvent>().Publish();
+            if (ComConnectionStatus.IsConnected) // already connected 
+            {
+                _eventAggregator.GetEvent<ComDisconnectionRequestedEvent>().Publish();
+            }
+            else
+            {
+                _eventAggregator.GetEvent<ComConnectionRequestedEvent>().Publish();
+            }
+            
         }
 
-        public ParameterPanelViewModel(IParameterServices param, IEventAggregator eventAggregator)
+        #endregion
+
+        public ParameterPanelViewModel(IParameterServices param, IStatusServices statusService,IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
 
@@ -73,7 +93,10 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
             _eventAggregator.GetEvent<ComListUpdateRequestedEvent>().Publish();
 
             ManualPowerCheck.PropertyChanged += ManualPowerCheck_PropertyChanged;
+
+            ComConnectionStatus = statusService.ComConnectionStatus;
         }
+
 
         private void ManualPowerCheck_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {

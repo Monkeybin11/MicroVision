@@ -39,14 +39,9 @@ namespace MicroVision.Modules.StatusPanel.ViewModels
             CurrentValueStatus = statusService.CurrentValueStatus;
             CameraTemperatureValueStatus = statusService.CameraTemperatureValueStatus;
 
-            _ea.GetEvent<ComConnectedEvent>().Subscribe(ComConnectedHandler);
+
         }
 
-        private void ComConnectedHandler()
-        {
-            ComConnectionStatus.IsConnected = true;
-            ComConnectionStatus.IsError = false;
-        }
 
         public ConnectionStatus ComConnectionStatus { get; }
         public ConnectionStatus VimbaConnectionStatus { get; }
