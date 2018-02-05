@@ -40,6 +40,16 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
         {
             ExposureTime.Value -= 10;
         }
+
+        private DelegateCommand _comConnectCommand;
+        public DelegateCommand ComConnectCommand =>
+            _comConnectCommand ?? (_comConnectCommand = new DelegateCommand(ExecuteComConnectCommand));
+
+        void ExecuteComConnectCommand()
+        {
+            _eventAggregator.GetEvent<ComConnectionRequestedEvent>().Publish();
+        }
+
         public ParameterPanelViewModel(IParameterServices param, IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;

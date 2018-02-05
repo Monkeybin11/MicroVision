@@ -52,9 +52,9 @@
                             <StackPanel>
                                 <DockPanel Style="{StaticResource DockPanelStyle}">
                                     <Label Style="{StaticResource LabelStyle}">COM Port:</Label>
-                                    <ComboBox ItemsSource="{Binding ComSelection.Value}"></ComboBox>
+                                    <ComboBox ItemsSource="{Binding ComSelection.Value}" SelectedValue="{Binding ComSelection.Selected}"></ComboBox>
                                 </DockPanel>
-                                <Button Style="{StaticResource ConnectionButtonStyle}">Connect</Button>
+                                <Button Style="{StaticResource ConnectionButtonStyle}" Command="{Binding ComConnectCommand}">Connect</Button>
                             </StackPanel>
                         </GroupBox>
                         <GroupBox Header="Vimba" Style="{StaticResource GroupboxStyle}">

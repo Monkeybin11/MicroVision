@@ -7,8 +7,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using Microsoft.Practices.Unity;
+using MicroVision.Core.Events;
 using MicroVision.Services;
 using MicroVision.Services.Models;
+using Prism.Events;
 
 namespace MicroVision.Modules.StatusPanel.ViewModels
 {
@@ -16,12 +18,14 @@ namespace MicroVision.Modules.StatusPanel.ViewModels
     {
         private readonly IUnityContainer _container;
         private readonly ILogService _logService;
+        private readonly IEventAggregator _ea;
 
 
-        public StatusPanelViewModel(IUnityContainer container,IStatusServices statusService, ILogService logService)
+        public StatusPanelViewModel(IUnityContainer container,IStatusServices statusService, ILogService logService, IEventAggregator ea)
         {
             _container = container;
             _logService = logService;
+            _ea = ea;
             _logService.ConfigureLogger("StatusPanel");
 
             ComConnectionStatus = statusService.ComConnectionStatus;
@@ -35,11 +39,13 @@ namespace MicroVision.Modules.StatusPanel.ViewModels
             CurrentValueStatus = statusService.CurrentValueStatus;
             CameraTemperatureValueStatus = statusService.CameraTemperatureValueStatus;
 
-            Timer timer = new Timer();
-            timer.Interval = 1000;
-            timer.Elapsed += Timer_Elapsed;
-            timer.Enabled = true;
-            
+            _ea.GetEvent<ComConnectedEvent>().Subscribe(ComConnectedHandler);
+        }
+
+        private void ComConnectedHandler()
+        {
+            ComConnectionStatus.IsConnected = true;
+            ComConnectionStatus.IsError = false;
         }
 
         public ConnectionStatus ComConnectionStatus { get; }
@@ -49,26 +55,6 @@ namespace MicroVision.Modules.StatusPanel.ViewModels
         public PowerStatus MotorPowerStatus { get; }
         public PowerStatus LaserPowerStatus { get; }
         public ValueStatus<double> CurrentValueStatus { get; }
-        public ValueStatus<double> CameraTemperatureValueStatus { get; }
-
-        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            if (ComConnectionStatus.IsConnected)
-            {
-                ComConnectionStatus.IsConnected = false;
-                VimbaConnectionStatus.ResetError();
-                VimbaConnectionStatus.IsConnected = true;
-            }
-            else
-            {
-                ComConnectionStatus.IsConnected = true;
-                VimbaConnectionStatus.RaiseError("Test Error!");
-            }
-
-            var status = (IStatusServices)_container.Resolve<StatusServices>();
-            _logService.Logger.Info(status.ComConnectionStatus.IsConnected);
-
-
-        }
+        public ValueStatus<double> CameraTemperatureValueStatus { get; }      
     }
 }
