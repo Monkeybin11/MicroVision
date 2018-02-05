@@ -30,7 +30,6 @@ namespace MicroVision.Services
             _sp.ErrorReceived += SerialPortErrorOccured;
             _sp.DataReceived += SerialPortDataReceived;
             _sp.NewLine = "\n";
-            _serialDataParsingThread = new Thread(SerialDataParsing);
 
             _parameterServices = parameterServices;
             _log = log;
@@ -47,7 +46,15 @@ namespace MicroVision.Services
         {
             while (true)
             {
-                _log.Logger.Info(_sp.ReadLine());
+                try
+                {
+                    _log.Logger.Info(_sp.ReadLine());
+                }
+                catch (ThreadInterruptedException)
+                {
+                    // time to stop the thread
+                    return;
+                }
             }        
         }
 
@@ -61,36 +68,44 @@ namespace MicroVision.Services
             _eventAggregator.GetEvent<ComErrorOccuredEvent>().Publish(serialErrorReceivedEventArgs.EventType.ToString());
         }
 
-        private void Disconnect()
-        {
-            try
-            {
-                _serialDataParsingThread.Abort();
-                _sp.Close();
-                _eventAggregator.GetEvent<ComDisconnectedEvent>().Publish(true);    //intentional disconnection
-            }
-            catch (Exception e)
-            {
-                _log.Logger.Error("Failed to close the serial port", e);
-            }
-        }
-
         /// <summary>
         /// Connect to the serial port
         /// </summary>
         private void Connect()
         {
+            if (_sp.IsOpen || _sp.IsDisposed)
+            {
+                return;
+            }
+
             ConfigureWithParameterService();
+
             try
             {
                 _sp.Open();
                 _eventAggregator.GetEvent<ComConnectedEvent>().Publish();
+                _serialDataParsingThread = new Thread(SerialDataParsing);
                 _serialDataParsingThread.Start();
             }
             catch (Exception e)
             {
                 _log.Logger.Error("Failed to open the serial port", e);
                 _eventAggregator.GetEvent<ComErrorOccuredEvent>().Publish(e.Message);
+            }
+        }
+
+        private void Disconnect()
+        {
+            try
+            {
+                _serialDataParsingThread.Interrupt();
+                _serialDataParsingThread.Join(500);
+                _sp.Close();
+                _eventAggregator.GetEvent<ComDisconnectedEvent>().Publish(true);    //intentional disconnection
+            }
+            catch (Exception e)
+            {
+                _log.Logger.Error("Failed to close the serial port", e);
             }
         }
 
