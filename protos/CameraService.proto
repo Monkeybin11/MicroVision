@@ -1,0 +1,95 @@
+// TODO: determine whether the service support Multiple camera instance; It is current a limitation
+
+syntax = "proto3";
+
+package Services;
+
+import "google/protobuf/empty.proto";
+import "Error.proto";
+
+service Camera {
+	// Allocate or free the vimba instance
+	rpc VimbaInstanceControl (VimbaInstanceControlRequest) returns (VimbaInstanceControlResponse);
+	
+	// Get the list of camera
+	rpc RequestCameraList (CameraListRequest) returns (CameraListResponse);
+
+	// Control the connection to the camera by name
+	rpc RequestCameraConnection (CameraConnectionRequest) returns (CameraConnectionResponse);
+
+	// Read, write the parameters and prepare the frames
+	rpc RequestCameraParameters (CameraParametersRequest) returns (CameraParametersResponse);
+	
+	rpc RequestCameraAcquisition(CameraAcquisitionRequest) returns (CameraAcquisitionResponse);
+
+	rpc RequestBufferedFrames (BufferedFramesRequest) returns (BufferedFramesResponse);
+
+	// stream image transmission
+	rpc RequestFrameStream (stream CameraAcquisitionRequest) returns (stream BufferedFramesResponse);
+}
+enum ConnectionCommands {
+	READ = 0;
+	CONNECT = 1;
+	DISCONNECT = 2;
+}
+message VimbaInstanceControlRequest {
+	// true for allocating the instance and false for release the instance
+	ConnectionCommands command = 1;
+}
+message VimbaInstanceControlResponse {
+	Error error = 1;
+	bool isStarted = 2;
+}
+
+// Request camera list
+message CameraListRequest {
+
+}
+message CameraListResponse {
+	Error error = 1;
+	repeated string cameraList = 2;
+}
+
+// Request camera connection
+message CameraConnectionRequest {
+	string cameraID = 1;
+	ConnectionCommands command = 2;
+}
+message CameraConnectionResponse {
+	Error error = 1;
+	bool isConnected = 2;
+}
+
+// Request camera parameters
+message CameraParameters {
+	double exposureTime = 1;
+	double frameRate = 2;
+	double gain = 3;
+	
+	enum LineSelector {
+		Line0 = 0;
+		Line1 = 1;
+		Line2 = 2;
+		Line3 = 3;
+	}
+	LineSelector triggerLineSelector = 4;
+
+	bool triggerLineInverter = 5;
+
+	enum LineSource {
+		AcquisitionStart = 0;
+		FrameStart = 1;
+	}
+	
+	LineSource triggerLineSource = 6;
+	int32 numFrames = 7;
+}
+message CameraParametersRequest {
+	// true to write the parameters and false to read
+	bool write = 1;
+	CameraParameters params = 2;
+}
+message CameraParametersResponse {
+	Error error = 1;
+	CameraParameters params = 2;
+}
