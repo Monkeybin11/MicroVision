@@ -61,10 +61,10 @@ namespace Services {
         __Marshaller_ConnectionRequest,
         __Marshaller_ConnectionResponse);
 
-    static readonly grpc::Method<global::Services.PowerStatusRequest, global::Services.PowerStatusResponse> __Method_RequestPowerPowerStatus = new grpc::Method<global::Services.PowerStatusRequest, global::Services.PowerStatusResponse>(
+    static readonly grpc::Method<global::Services.PowerStatusRequest, global::Services.PowerStatusResponse> __Method_RequestPowerStatus = new grpc::Method<global::Services.PowerStatusRequest, global::Services.PowerStatusResponse>(
         grpc::MethodType.Unary,
         __ServiceName,
-        "RequestPowerPowerStatus",
+        "RequestPowerStatus",
         __Marshaller_PowerStatusRequest,
         __Marshaller_PowerStatusResponse);
 
@@ -162,7 +162,7 @@ namespace Services {
       /// <param name="request">The request received from the client.</param>
       /// <param name="context">The context of the server-side call handler being invoked.</param>
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
-      public virtual global::System.Threading.Tasks.Task<global::Services.PowerStatusResponse> RequestPowerPowerStatus(global::Services.PowerStatusRequest request, grpc::ServerCallContext context)
+      public virtual global::System.Threading.Tasks.Task<global::Services.PowerStatusResponse> RequestPowerStatus(global::Services.PowerStatusRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
@@ -401,9 +401,9 @@ namespace Services {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The response received from the server.</returns>
-      public virtual global::Services.PowerStatusResponse RequestPowerPowerStatus(global::Services.PowerStatusRequest request, grpc::Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      public virtual global::Services.PowerStatusResponse RequestPowerStatus(global::Services.PowerStatusRequest request, grpc::Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        return RequestPowerPowerStatus(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+        return RequestPowerStatus(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
       /// <summary>
       /// operation, R/W
@@ -411,9 +411,9 @@ namespace Services {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The response received from the server.</returns>
-      public virtual global::Services.PowerStatusResponse RequestPowerPowerStatus(global::Services.PowerStatusRequest request, grpc::CallOptions options)
+      public virtual global::Services.PowerStatusResponse RequestPowerStatus(global::Services.PowerStatusRequest request, grpc::CallOptions options)
       {
-        return CallInvoker.BlockingUnaryCall(__Method_RequestPowerPowerStatus, null, options, request);
+        return CallInvoker.BlockingUnaryCall(__Method_RequestPowerStatus, null, options, request);
       }
       /// <summary>
       /// operation, R/W
@@ -423,9 +423,9 @@ namespace Services {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The call object.</returns>
-      public virtual grpc::AsyncUnaryCall<global::Services.PowerStatusResponse> RequestPowerPowerStatusAsync(global::Services.PowerStatusRequest request, grpc::Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      public virtual grpc::AsyncUnaryCall<global::Services.PowerStatusResponse> RequestPowerStatusAsync(global::Services.PowerStatusRequest request, grpc::Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        return RequestPowerPowerStatusAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+        return RequestPowerStatusAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
       /// <summary>
       /// operation, R/W
@@ -433,9 +433,9 @@ namespace Services {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The call object.</returns>
-      public virtual grpc::AsyncUnaryCall<global::Services.PowerStatusResponse> RequestPowerPowerStatusAsync(global::Services.PowerStatusRequest request, grpc::CallOptions options)
+      public virtual grpc::AsyncUnaryCall<global::Services.PowerStatusResponse> RequestPowerStatusAsync(global::Services.PowerStatusRequest request, grpc::CallOptions options)
       {
-        return CallInvoker.AsyncUnaryCall(__Method_RequestPowerPowerStatus, null, options, request);
+        return CallInvoker.AsyncUnaryCall(__Method_RequestPowerStatus, null, options, request);
       }
       public virtual global::Services.CurrentStatusResponse RequestCurrentStatus(global::Services.CurrentStatusRequest request, grpc::Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
@@ -533,7 +533,7 @@ namespace Services {
           .AddMethod(__Method_IsConnected, serviceImpl.IsConnected)
           .AddMethod(__Method_RequestComList, serviceImpl.RequestComList)
           .AddMethod(__Method_RequestConnectToPort, serviceImpl.RequestConnectToPort)
-          .AddMethod(__Method_RequestPowerPowerStatus, serviceImpl.RequestPowerPowerStatus)
+          .AddMethod(__Method_RequestPowerStatus, serviceImpl.RequestPowerStatus)
           .AddMethod(__Method_RequestCurrentStatus, serviceImpl.RequestCurrentStatus)
           .AddMethod(__Method_RequestFocusStatus, serviceImpl.RequestFocusStatus)
           .AddMethod(__Method_RequestLaserStatus, serviceImpl.RequestLaserStatus)

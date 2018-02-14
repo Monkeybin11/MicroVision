@@ -19,7 +19,7 @@ service CameraController {
 	rpc RequestConnectToPort(ConnectionRequest) returns (ConnectionResponse);
 	
 	// operation, R/W
-	rpc RequestPowerPowerStatus(PowerStatusRequest) returns (PowerStatusResponse);
+	rpc RequestPowerStatus(PowerStatusRequest) returns (PowerStatusResponse);
 	rpc RequestCurrentStatus(CurrentStatusRequest) returns (CurrentStatusResponse);
 	rpc RequestFocusStatus(FocusStatusRequest) returns (FocusStatusResponse);
 

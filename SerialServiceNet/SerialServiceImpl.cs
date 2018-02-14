@@ -13,7 +13,7 @@ using static Services.Error.Types.Level;
 
 namespace SerialServiceNet
 {
-    public class SerialSericeImpl : CameraController.CameraControllerBase
+    public partial class SerialSericeImpl : CameraController.CameraControllerBase
     {
         private SerialPortStream _serialPort;
         private ConsoleLogger _logger;
@@ -85,19 +85,31 @@ namespace SerialServiceNet
             _log(e, level);
             return new Error() {Level = level, Message = e.Message, Timestamp = Timestamp.FromDateTime(DateTime.UtcNow) };
         }
-
         private Error BuildError(string message, Level level)
         {
             _log(message, level);
             return new Error() {Level = level, Message = message, Timestamp = Timestamp.FromDateTime(DateTime.UtcNow)};
         }
 
+
+        /// <summary>
+        /// Get version info
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public override Task<Services.VersionInfo> GetInfo(Empty request, ServerCallContext context)
         {
             var version = new Services.VersionInfo(){FirmwareVersion = FirmwareVersion, HardwareVersion = HardwareVersion, ServiceVersion = ServiceVersion};
             return Task.FromResult(version);
         }
 
+        /// <summary>
+        /// Check if the com port has been connected
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public override Task<ConnectionResponse> IsConnected(Empty request, ServerCallContext context)
         {
             var connectionResponse = new ConnectionResponse();
@@ -111,6 +123,7 @@ namespace SerialServiceNet
             }
             return Task.FromResult<ConnectionResponse>(connectionResponse);
         }
+
 
         public override Task<ArmTriggerResponse> RequestArmTrigger(ArmTriggerRequest request, ServerCallContext context)
         {
@@ -155,19 +168,19 @@ namespace SerialServiceNet
                 {
                     // The serial port is not open
                     connectionResponse.Error = BuildError("The serial port is not opened", Warning);
+                    return Task.FromResult<ConnectionResponse>(connectionResponse);
                 }
-                else
+
+                // The serial port is opened and ready to be closed
+                try
                 {
-                    // The serial port is opened and ready to be closed
-                    try
-                    {
-                        _serialPort.Close();
-                        connectionResponse.IsConnected = false;
-                    }
-                    catch (Exception e)
-                    {
-                        connectionResponse.Error = BuildError(e, Level.Error);
-                    }
+                    _serialPort.Close();
+                    connectionResponse.IsConnected = false;
+                }
+                catch (Exception e)
+                {
+                    connectionResponse.Error = BuildError(e, Level.Error);
+                    return Task.FromResult(connectionResponse);
                 }
             }
             else
@@ -177,32 +190,54 @@ namespace SerialServiceNet
                 {
                     // Argument is invalid
                     connectionResponse.Error = BuildError("ComPort is invalid", Level.Error);
+                    return Task.FromResult(connectionResponse);
                 }
-                else
+
+                try
                 {
-                    try
-                    {
-                        _serialPort.PortName = request.ComPort;
-                        _serialPort.BaudRate = 115200;
-                        _serialPort.Open();
-                        connectionResponse.IsConnected = true;
-                    }
-                    catch (Exception e)
-                    {
-                        connectionResponse.Error = BuildError(e, Level.Error);
-                    }
+                    _serialPort.PortName = request.ComPort;
+                    _serialPort.BaudRate = 115200;
+                    _serialPort.Open();
+                    connectionResponse.IsConnected = true;
+                }
+                catch (Exception e)
+                {
+                    connectionResponse.Error = BuildError(e, Level.Error);
+                    return Task.FromResult(connectionResponse);
                 }
             }
-            
             return Task.FromResult(connectionResponse);
         }
 
+        /// <summary>
+        /// Get current reading
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public override Task<CurrentStatusResponse> RequestCurrentStatus(CurrentStatusRequest request, ServerCallContext context)
         {
-            return base.RequestCurrentStatus(request, context);
+            var currentResponse = new CurrentStatusResponse();
+            string result = "";
+            currentResponse.Error = InvokeCommandWithResponse("i", null, ref result);
+            if (currentResponse.Error != null)
+            {
+                return Task.FromResult(currentResponse);
+            }
+            try
+            {
+                currentResponse.Current = Int32.Parse(result);
+            }
+            catch (Exception e)
+            {
+                currentResponse.Error = BuildError(e, Level.Error);
+                return Task.FromResult(currentResponse);
+            }
+
+            return Task.FromResult(currentResponse);
         }
 
-        public override Task<FocusStatusResponse> RequestFocusStatus(FocusStatusRequest request, ServerCallContext context)
+public override Task<FocusStatusResponse> RequestFocusStatus(FocusStatusRequest request, ServerCallContext context)
         {
             return base.RequestFocusStatus(request, context);
         }
@@ -211,20 +246,53 @@ namespace SerialServiceNet
         {
             return base.RequestHardwareReset(request, context);
         }
-
+        
         public override Task<LaserStatusResponse> RequestLaserStatus(LaserStatusRequest request, ServerCallContext context)
         {
             return base.RequestLaserStatus(request, context);
         }
 
-        public override Task<PowerStatusResponse> RequestPowerPowerStatus(PowerStatusRequest request, ServerCallContext context)
+        /// <summary>
+        /// Control the power configuration.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public override Task<PowerStatusResponse> RequestPowerStatus(PowerStatusRequest request, ServerCallContext context)
         {
-            return base.RequestPowerPowerStatus(request, context);
-        }
+            var powerStatusResponse = new PowerStatusResponse();
 
-        public override string ToString()
-        {
-            return base.ToString();
+            if (request.Write)
+            {
+                // change the power configuration (Write mode)
+                if (request.PowerCode < 0 || request.PowerCode > 15)
+                {
+                    powerStatusResponse.Error = BuildError("Power code is invalid", Level.Error);
+                    return Task.FromResult<PowerStatusResponse>(powerStatusResponse);
+                }
+
+                powerStatusResponse.Error = InvokeCommand("R", new string[] {request.PowerCode.ToString()});
+                powerStatusResponse.PowerCode = request.PowerCode;
+                return Task.FromResult(powerStatusResponse);
+            }
+            else
+            {
+                // Read mode
+                string outputValue = "";
+                powerStatusResponse.Error = InvokeCommandWithResponse("r", null, ref outputValue, 1000);
+
+                try
+                {
+                    powerStatusResponse.PowerCode = Int32.Parse(outputValue);
+                }
+                catch (Exception e)
+                {
+                    powerStatusResponse.Error = BuildError(e, Level.Error);
+                    return Task.FromResult(powerStatusResponse);
+                }
+            }
+
+            return Task.FromResult(powerStatusResponse);
         }
     }
 }

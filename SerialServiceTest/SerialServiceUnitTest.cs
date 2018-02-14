@@ -9,7 +9,6 @@ using Services;
 namespace SerialServiceTest
 {
     [TestFixture]
-    [SingleThreaded]
     public class SerialServiceBasicUnitTest
     {
         private string Uri = "localhost";
@@ -32,6 +31,7 @@ namespace SerialServiceTest
         {
             channel = new Channel(Uri, Port, ChannelCredentials.Insecure);
             client = new CameraController.CameraControllerClient(channel);
+            Console.SetOut(TestContext.Progress);
         }
 
         [Category("Basic")]
@@ -99,7 +99,47 @@ namespace SerialServiceTest
             TestContext.WriteLine($"When you try to reopen the COM port, it should give {connect.Error}");
         }
 
+        [Category("Basic")]
+        [Description("Read power code, write, and read again")]
+        [Test]
+        public async Task TestPowerConfiguration()
+        {
+            const int delay = 2000;
+            var writer = TestContext.Out;
+            int powerCode = 9;
 
+            var connect = client.RequestConnectToPort(new ConnectionRequest() { ComPort = _comPort, Connect = true });
+            Assert.IsNull(connect.Error, "The connection should not fail");
+
+            var powerStatusResponse = client.RequestPowerStatus(new PowerStatusRequest() {Write = false});
+            Assert.IsNull(powerStatusResponse.Error, "Error when read the power status");
+            writer.WriteLine($"Initial power code is {powerStatusResponse.PowerCode}");
+
+            await Task.Delay(delay);
+            powerStatusResponse = client.RequestPowerStatus(new PowerStatusRequest() { Write = true, PowerCode = powerCode });
+            Assert.IsNull(powerStatusResponse.Error, "Error when read the power status");
+            Assert.AreEqual(powerStatusResponse.PowerCode, powerCode);
+            writer.WriteLine($"After write, power code is {powerStatusResponse.PowerCode}");
+
+            await Task.Delay(delay);
+            powerStatusResponse = client.RequestPowerStatus(new PowerStatusRequest() { Write = false });
+            Assert.IsNull(powerStatusResponse.Error, "Error when read the power status");
+            Assert.AreEqual(powerStatusResponse.PowerCode, powerCode);
+            writer.WriteLine($"Read again, power code is {powerStatusResponse.PowerCode}");
+
+            await Task.Delay(delay);
+            powerStatusResponse = client.RequestPowerStatus(new PowerStatusRequest() { Write = true, PowerCode = 0});
+            Assert.IsNull(powerStatusResponse.Error, "Error when read the power status");
+            Assert.AreEqual(powerStatusResponse.PowerCode, 0);
+            writer.WriteLine($"Finally, reset the power code to 0, power code is {powerStatusResponse.PowerCode}");
+        }
+
+        [Category("Basic")]
+        [Test]
+        public Task TestReadCurrent()
+        {
+
+        }
         [TearDown]
         public void Cleanup()
         {
