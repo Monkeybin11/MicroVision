@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Runtime.Remoting.Channels;
 using System.Threading.Tasks;
 using Google.Protobuf.WellKnownTypes;
@@ -17,21 +18,22 @@ namespace SerialServiceTest
         private Channel channel;
         private CameraController.CameraControllerClient client;
         private TestContext testContextInstance;
-
-        private string _comPort = "COM23";
-
         public TestContext TestContext
         {
             get { return testContextInstance; }
             set { testContextInstance = value; }
         }
 
+        private string _comPort = "COM23";
+        private TextWriter _writer;
+
+
         [SetUp]
         public void Init()
         {
+            _writer = TestContext.Out;
             channel = new Channel(Uri, Port, ChannelCredentials.Insecure);
             client = new CameraController.CameraControllerClient(channel);
-            Console.SetOut(TestContext.Progress);
         }
 
         [Category("Basic")]
@@ -105,7 +107,7 @@ namespace SerialServiceTest
         public async Task TestPowerConfiguration()
         {
             const int delay = 2000;
-            var writer = TestContext.Out;
+            
             int powerCode = 9;
 
             var connect = client.RequestConnectToPort(new ConnectionRequest() { ComPort = _comPort, Connect = true });
@@ -113,32 +115,35 @@ namespace SerialServiceTest
 
             var powerStatusResponse = client.RequestPowerStatus(new PowerStatusRequest() {Write = false});
             Assert.IsNull(powerStatusResponse.Error, "Error when read the power status");
-            writer.WriteLine($"Initial power code is {powerStatusResponse.PowerCode}");
+            _writer.WriteLine($"Initial power code is {powerStatusResponse.PowerCode}");
 
             await Task.Delay(delay);
             powerStatusResponse = client.RequestPowerStatus(new PowerStatusRequest() { Write = true, PowerCode = powerCode });
             Assert.IsNull(powerStatusResponse.Error, "Error when read the power status");
             Assert.AreEqual(powerStatusResponse.PowerCode, powerCode);
-            writer.WriteLine($"After write, power code is {powerStatusResponse.PowerCode}");
+            _writer.WriteLine($"After write, power code is {powerStatusResponse.PowerCode}");
 
             await Task.Delay(delay);
             powerStatusResponse = client.RequestPowerStatus(new PowerStatusRequest() { Write = false });
             Assert.IsNull(powerStatusResponse.Error, "Error when read the power status");
             Assert.AreEqual(powerStatusResponse.PowerCode, powerCode);
-            writer.WriteLine($"Read again, power code is {powerStatusResponse.PowerCode}");
+            _writer.WriteLine($"Read again, power code is {powerStatusResponse.PowerCode}");
 
             await Task.Delay(delay);
             powerStatusResponse = client.RequestPowerStatus(new PowerStatusRequest() { Write = true, PowerCode = 0});
             Assert.IsNull(powerStatusResponse.Error, "Error when read the power status");
             Assert.AreEqual(powerStatusResponse.PowerCode, 0);
-            writer.WriteLine($"Finally, reset the power code to 0, power code is {powerStatusResponse.PowerCode}");
+            _writer.WriteLine($"Finally, reset the power code to 0, power code is {powerStatusResponse.PowerCode}");
         }
 
         [Category("Basic")]
         [Test]
-        public Task TestReadCurrent()
+        public void TestReadCurrent()
         {
-
+            client.RequestConnectToPort(new ConnectionRequest() {Connect = true, ComPort = _comPort});
+            var currentStatusResponse = client.RequestCurrentStatus(new CurrentStatusRequest());
+            Assert.IsNull(currentStatusResponse.Error, "Error occured in the current read process");
+            _writer.WriteLine($"The current reading is {currentStatusResponse.Current}");
         }
         [TearDown]
         public void Cleanup()
