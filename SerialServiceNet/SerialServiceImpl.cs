@@ -23,10 +23,13 @@ namespace SerialServiceNet
         private const string HardwareVersion = "0.1";
         private const string ServiceVersion = "0.1";
 
+        private FocusMotorAutoPowerRule _autoPower;
         public SerialSericeImpl()
         {
             _serialPort = new SerialPortStream();
             _logger = new ConsoleLogger();
+            _autoPower = new FocusMotorAutoPowerRule();
+            _autoPower.MotorEnable = () => InvokeCommand("V", null);
         }
         /// <summary>
         /// internal log function
@@ -237,10 +240,12 @@ namespace SerialServiceNet
             return Task.FromResult(currentResponse);
         }
 
-public override Task<FocusStatusResponse> RequestFocusStatus(FocusStatusRequest request, ServerCallContext context)
-        {
-            return base.RequestFocusStatus(request, context);
-        }
+        //public override Task<FocusStatusResponse> RequestFocusStatus(FocusStatusRequest request, ServerCallContext context)
+        //{
+        //    var focusStatusResponse = new FocusStatusResponse();
+            
+            
+        //}
 
         public override Task<HardwareResetStatus> RequestHardwareReset(Empty request, ServerCallContext context)
         {

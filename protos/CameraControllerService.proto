@@ -29,6 +29,7 @@ service CameraController {
 	rpc RequestHardwareReset (google.protobuf.Empty) returns (HardwareResetStatus);
 	
 	// events
+	rpc FocusMotionCompleted(google.protobuf.Empty) returns (stream FocusMotionCompleteEvent);
 }
 
 message VersionInfo {
@@ -135,5 +136,9 @@ message ArmTriggerResponse {
 }
 
 message HardwareResetStatus {
+	Error error = 1;
+}
+
+message FocusMotionCompleteEvent {
 	Error error = 1;
 }
