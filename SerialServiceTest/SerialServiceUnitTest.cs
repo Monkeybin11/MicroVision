@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.Remoting.Channels;
+using System.Threading;
 using System.Threading.Tasks;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
@@ -146,18 +147,9 @@ namespace SerialServiceTest
             _writer.WriteLine($"The current reading is {currentStatusResponse.Current}");
         }
 
-        [Category("Integration")]
-        [Test]
-        [TestCase(0)]
-        [TestCase(1000)]
-        [TestCase(5000)]
-        [TestCase(10000)]
-        public void TestFocusExecution(int slowdown)
+        private void FocusExecutionCommonCode(int slowdown)
         {
-            var openPortResult = client.RequestConnectToPort(new ConnectionRequest() { Connect = true, ComPort = _comPort });
-            Assert.IsNull(openPortResult.Error, "Port Open Failed");
-
-            var openPowerResult = client.RequestPowerStatus(new PowerStatusRequest() {Write = true, PowerCode = 5});
+            var openPowerResult = client.RequestPowerStatus(new PowerStatusRequest() { Write = true, PowerCode = 5 });
             Assert.IsNull(openPowerResult.Error, "Failed to switch on power");
             var response = client.RequestFocusStatus(new FocusStatusRequest()
             {
@@ -177,8 +169,48 @@ namespace SerialServiceTest
             });
             Assert.IsNull(response.Error);
             _writer.WriteLine($"After dropping command, the slow down factor is {response.SlowdownFactor}");
-
             client.RequestPowerStatus(new PowerStatusRequest() { Write = true, PowerCode = 0 });
+        }
+
+        [Category("Integration")]
+        [Test]
+        [TestCase(0)]
+        [TestCase(1000)]
+        [TestCase(5000)]
+        [TestCase(10000)]
+        public void TestFocusExecution(int slowdown)
+        {
+            var openPortResult = client.RequestConnectToPort(new ConnectionRequest() { Connect = true, ComPort = _comPort });
+            Assert.IsNull(openPortResult.Error, "Port Open Failed");
+
+            FocusExecutionCommonCode(slowdown);
+        }
+
+        [Test]
+        [Category("Integration")]
+        [TestCase(500)]
+        public void TestReadDuringExecution(int delay)
+        {
+            var openPortResult = client.RequestConnectToPort(new ConnectionRequest() { Connect = true, ComPort = _comPort });
+            Assert.IsNull(openPortResult.Error, "Port Open Failed");
+
+            var cancel = new CancellationTokenSource();
+            var currentReadingTask = Task.Factory.StartNew(() =>
+            {
+                while (!cancel.IsCancellationRequested)
+                {
+                    var currentStatusRequest = new CurrentStatusRequest();
+                    var currentStatusResponse = client.RequestCurrentStatus(currentStatusRequest);
+
+                    Assert.IsNull(currentStatusResponse.Error, "Port Open Failed");
+                    _writer.WriteLine($"Current: {currentStatusResponse.Current}");
+                    Task.Delay(delay).Wait();
+                }
+            }, cancel.Token);
+
+            FocusExecutionCommonCode(5000);
+            cancel.Cancel();
+            currentReadingTask.Wait(1000);
         }
 
         [Test]
