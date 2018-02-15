@@ -35,38 +35,41 @@ namespace Services {
             "c1Jlc3BvbnNlEh4KBWVycm9yGAEgASgLMg8uU2VydmljZXMuRXJyb3ISEQoJ",
             "cG93ZXJDb2RlGAIgASgFIhYKFEN1cnJlbnRTdGF0dXNSZXF1ZXN0IkgKFUN1",
             "cnJlbnRTdGF0dXNSZXNwb25zZRIeCgVlcnJvchgBIAEoCzIPLlNlcnZpY2Vz",
-            "LkVycm9yEg8KB2N1cnJlbnQYAiABKAEicQoSRm9jdXNTdGF0dXNSZXF1ZXN0",
+            "LkVycm9yEg8KB2N1cnJlbnQYAiABKAEiYwoSRm9jdXNTdGF0dXNSZXF1ZXN0",
             "EhEKCWF1dG9Qb3dlchgBIAEoCBITCgtkcml2ZXJQb3dlchgCIAEoCBINCgVz",
-            "dGVwcxgDIAEoERIWCg5zbG93ZG93bkZhY3RvchgEIAEoBRIMCgRzdG9wGAUg",
-            "ASgIIl4KE0ZvY3VzU3RhdHVzUmVzcG9uc2USHgoFZXJyb3IYASABKAsyDy5T",
-            "ZXJ2aWNlcy5FcnJvchITCgtkcml2ZXJQb3dlchgCIAEoCBISCgppc1N0ZXBw",
-            "aW5nGAMgASgIIlEKEkxhc2VyU3RhdHVzUmVxdWVzdBIUCgxsYXNlckRlbGF5",
-            "VXMYASABKAMSEgoKZHVyYXRpb25VcxgCIAEoAxIRCglpbnRlbnNpdHkYAyAB",
-            "KAMiNQoTTGFzZXJTdGF0dXNSZXNwb25zZRIeCgVlcnJvchgBIAEoCzIPLlNl",
-            "cnZpY2VzLkVycm9yInsKEUFybVRyaWdnZXJSZXF1ZXN0EhIKCmFybVRyaWdn",
-            "ZXIYASABKAgSGAoQbWF4VHJpZ2dlclRpbWVVcxgCIAEoAxI4ChJsYXNlckNv",
-            "bmZpZ3VyYXRpb24YAyABKAsyHC5TZXJ2aWNlcy5MYXNlclN0YXR1c1JlcXVl",
-            "c3QiUQoSQXJtVHJpZ2dlclJlc3BvbnNlEh4KBWVycm9yGAEgASgLMg8uU2Vy",
-            "dmljZXMuRXJyb3ISGwoTdHJpZ2dlckF1dG9EaXNhcm1lZBgCIAEoCCI1ChNI",
-            "YXJkd2FyZVJlc2V0U3RhdHVzEh4KBWVycm9yGAEgASgLMg8uU2VydmljZXMu",
-            "RXJyb3IylAYKEENhbWVyYUNvbnRyb2xsZXISOAoHR2V0SW5mbxIWLmdvb2ds",
-            "ZS5wcm90b2J1Zi5FbXB0eRoVLlNlcnZpY2VzLlZlcnNpb25JbmZvEkMKC0lz",
-            "Q29ubmVjdGVkEhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5GhwuU2VydmljZXMu",
-            "Q29ubmVjdGlvblJlc3BvbnNlEj0KDlJlcXVlc3RDb21MaXN0EhguU2Vydmlj",
-            "ZXMuQ29tTGlzdFJlcXVlc3QaES5TZXJ2aWNlcy5Db21MaXN0ElEKFFJlcXVl",
-            "c3RDb25uZWN0VG9Qb3J0EhsuU2VydmljZXMuQ29ubmVjdGlvblJlcXVlc3Qa",
-            "HC5TZXJ2aWNlcy5Db25uZWN0aW9uUmVzcG9uc2USUQoSUmVxdWVzdFBvd2Vy",
-            "U3RhdHVzEhwuU2VydmljZXMuUG93ZXJTdGF0dXNSZXF1ZXN0Gh0uU2Vydmlj",
-            "ZXMuUG93ZXJTdGF0dXNSZXNwb25zZRJXChRSZXF1ZXN0Q3VycmVudFN0YXR1",
-            "cxIeLlNlcnZpY2VzLkN1cnJlbnRTdGF0dXNSZXF1ZXN0Gh8uU2VydmljZXMu",
-            "Q3VycmVudFN0YXR1c1Jlc3BvbnNlElEKElJlcXVlc3RGb2N1c1N0YXR1cxIc",
-            "LlNlcnZpY2VzLkZvY3VzU3RhdHVzUmVxdWVzdBodLlNlcnZpY2VzLkZvY3Vz",
-            "U3RhdHVzUmVzcG9uc2USUQoSUmVxdWVzdExhc2VyU3RhdHVzEhwuU2Vydmlj",
-            "ZXMuTGFzZXJTdGF0dXNSZXF1ZXN0Gh0uU2VydmljZXMuTGFzZXJTdGF0dXNS",
-            "ZXNwb25zZRJOChFSZXF1ZXN0QXJtVHJpZ2dlchIbLlNlcnZpY2VzLkFybVRy",
-            "aWdnZXJSZXF1ZXN0GhwuU2VydmljZXMuQXJtVHJpZ2dlclJlc3BvbnNlEk0K",
-            "FFJlcXVlc3RIYXJkd2FyZVJlc2V0EhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5",
-            "Gh0uU2VydmljZXMuSGFyZHdhcmVSZXNldFN0YXR1c2IGcHJvdG8z"));
+            "dGVwcxgDIAEoERIWCg5zbG93ZG93bkZhY3RvchgEIAEoBSJNChNGb2N1c1N0",
+            "YXR1c1Jlc3BvbnNlEh4KBWVycm9yGAEgASgLMg8uU2VydmljZXMuRXJyb3IS",
+            "FgoOc2xvd2Rvd25GYWN0b3IYAiABKAUiUQoSTGFzZXJTdGF0dXNSZXF1ZXN0",
+            "EhQKDGxhc2VyRGVsYXlVcxgBIAEoAxISCgpkdXJhdGlvblVzGAIgASgDEhEK",
+            "CWludGVuc2l0eRgDIAEoAyI1ChNMYXNlclN0YXR1c1Jlc3BvbnNlEh4KBWVy",
+            "cm9yGAEgASgLMg8uU2VydmljZXMuRXJyb3IiewoRQXJtVHJpZ2dlclJlcXVl",
+            "c3QSEgoKYXJtVHJpZ2dlchgBIAEoCBIYChBtYXhUcmlnZ2VyVGltZVVzGAIg",
+            "ASgDEjgKEmxhc2VyQ29uZmlndXJhdGlvbhgDIAEoCzIcLlNlcnZpY2VzLkxh",
+            "c2VyU3RhdHVzUmVxdWVzdCJRChJBcm1UcmlnZ2VyUmVzcG9uc2USHgoFZXJy",
+            "b3IYASABKAsyDy5TZXJ2aWNlcy5FcnJvchIbChN0cmlnZ2VyQXV0b0Rpc2Fy",
+            "bWVkGAIgASgIIjUKE1NvZnR3YXJlUmVzZXRTdGF0dXMSHgoFZXJyb3IYASAB",
+            "KAsyDy5TZXJ2aWNlcy5FcnJvciI6ChhGb2N1c01vdGlvbkNvbXBsZXRlRXZl",
+            "bnQSHgoFZXJyb3IYASABKAsyDy5TZXJ2aWNlcy5FcnJvcjLqBgoQQ2FtZXJh",
+            "Q29udHJvbGxlchI4CgdHZXRJbmZvEhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5",
+            "GhUuU2VydmljZXMuVmVyc2lvbkluZm8SQwoLSXNDb25uZWN0ZWQSFi5nb29n",
+            "bGUucHJvdG9idWYuRW1wdHkaHC5TZXJ2aWNlcy5Db25uZWN0aW9uUmVzcG9u",
+            "c2USPQoOUmVxdWVzdENvbUxpc3QSGC5TZXJ2aWNlcy5Db21MaXN0UmVxdWVz",
+            "dBoRLlNlcnZpY2VzLkNvbUxpc3QSUQoUUmVxdWVzdENvbm5lY3RUb1BvcnQS",
+            "Gy5TZXJ2aWNlcy5Db25uZWN0aW9uUmVxdWVzdBocLlNlcnZpY2VzLkNvbm5l",
+            "Y3Rpb25SZXNwb25zZRJRChJSZXF1ZXN0UG93ZXJTdGF0dXMSHC5TZXJ2aWNl",
+            "cy5Qb3dlclN0YXR1c1JlcXVlc3QaHS5TZXJ2aWNlcy5Qb3dlclN0YXR1c1Jl",
+            "c3BvbnNlElcKFFJlcXVlc3RDdXJyZW50U3RhdHVzEh4uU2VydmljZXMuQ3Vy",
+            "cmVudFN0YXR1c1JlcXVlc3QaHy5TZXJ2aWNlcy5DdXJyZW50U3RhdHVzUmVz",
+            "cG9uc2USUQoSUmVxdWVzdEZvY3VzU3RhdHVzEhwuU2VydmljZXMuRm9jdXNT",
+            "dGF0dXNSZXF1ZXN0Gh0uU2VydmljZXMuRm9jdXNTdGF0dXNSZXNwb25zZRJR",
+            "ChJSZXF1ZXN0TGFzZXJTdGF0dXMSHC5TZXJ2aWNlcy5MYXNlclN0YXR1c1Jl",
+            "cXVlc3QaHS5TZXJ2aWNlcy5MYXNlclN0YXR1c1Jlc3BvbnNlEk4KEVJlcXVl",
+            "c3RBcm1UcmlnZ2VyEhsuU2VydmljZXMuQXJtVHJpZ2dlclJlcXVlc3QaHC5T",
+            "ZXJ2aWNlcy5Bcm1UcmlnZ2VyUmVzcG9uc2USTQoUUmVxdWVzdFNvZnR3YXJl",
+            "UmVzZXQSFi5nb29nbGUucHJvdG9idWYuRW1wdHkaHS5TZXJ2aWNlcy5Tb2Z0",
+            "d2FyZVJlc2V0U3RhdHVzElQKFEZvY3VzTW90aW9uQ29tcGxldGVkEhYuZ29v",
+            "Z2xlLnByb3RvYnVmLkVtcHR5GiIuU2VydmljZXMuRm9jdXNNb3Rpb25Db21w",
+            "bGV0ZUV2ZW50MAFiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.EmptyReflection.Descriptor, global::Services.ErrorReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
@@ -79,13 +82,14 @@ namespace Services {
             new pbr::GeneratedClrTypeInfo(typeof(global::Services.PowerStatusResponse), global::Services.PowerStatusResponse.Parser, new[]{ "Error", "PowerCode" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Services.CurrentStatusRequest), global::Services.CurrentStatusRequest.Parser, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Services.CurrentStatusResponse), global::Services.CurrentStatusResponse.Parser, new[]{ "Error", "Current" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Services.FocusStatusRequest), global::Services.FocusStatusRequest.Parser, new[]{ "AutoPower", "DriverPower", "Steps", "SlowdownFactor", "Stop" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Services.FocusStatusResponse), global::Services.FocusStatusResponse.Parser, new[]{ "Error", "DriverPower", "IsStepping" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Services.FocusStatusRequest), global::Services.FocusStatusRequest.Parser, new[]{ "AutoPower", "DriverPower", "Steps", "SlowdownFactor" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Services.FocusStatusResponse), global::Services.FocusStatusResponse.Parser, new[]{ "Error", "SlowdownFactor" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Services.LaserStatusRequest), global::Services.LaserStatusRequest.Parser, new[]{ "LaserDelayUs", "DurationUs", "Intensity" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Services.LaserStatusResponse), global::Services.LaserStatusResponse.Parser, new[]{ "Error" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Services.ArmTriggerRequest), global::Services.ArmTriggerRequest.Parser, new[]{ "ArmTrigger", "MaxTriggerTimeUs", "LaserConfiguration" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Services.ArmTriggerResponse), global::Services.ArmTriggerResponse.Parser, new[]{ "Error", "TriggerAutoDisarmed" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Services.HardwareResetStatus), global::Services.HardwareResetStatus.Parser, new[]{ "Error" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Services.SoftwareResetStatus), global::Services.SoftwareResetStatus.Parser, new[]{ "Error" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Services.FocusMotionCompleteEvent), global::Services.FocusMotionCompleteEvent.Parser, new[]{ "Error" }, null, null, null)
           }));
     }
     #endregion
@@ -1384,7 +1388,6 @@ namespace Services {
       driverPower_ = other.driverPower_;
       steps_ = other.steps_;
       slowdownFactor_ = other.slowdownFactor_;
-      stop_ = other.stop_;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1448,20 +1451,6 @@ namespace Services {
       }
     }
 
-    /// <summary>Field number for the "stop" field.</summary>
-    public const int StopFieldNumber = 5;
-    private bool stop_;
-    /// <summary>
-    /// force abort the current step task
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Stop {
-      get { return stop_; }
-      set {
-        stop_ = value;
-      }
-    }
-
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as FocusStatusRequest);
@@ -1479,7 +1468,6 @@ namespace Services {
       if (DriverPower != other.DriverPower) return false;
       if (Steps != other.Steps) return false;
       if (SlowdownFactor != other.SlowdownFactor) return false;
-      if (Stop != other.Stop) return false;
       return true;
     }
 
@@ -1490,7 +1478,6 @@ namespace Services {
       if (DriverPower != false) hash ^= DriverPower.GetHashCode();
       if (Steps != 0) hash ^= Steps.GetHashCode();
       if (SlowdownFactor != 0) hash ^= SlowdownFactor.GetHashCode();
-      if (Stop != false) hash ^= Stop.GetHashCode();
       return hash;
     }
 
@@ -1517,10 +1504,6 @@ namespace Services {
         output.WriteRawTag(32);
         output.WriteInt32(SlowdownFactor);
       }
-      if (Stop != false) {
-        output.WriteRawTag(40);
-        output.WriteBool(Stop);
-      }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1537,9 +1520,6 @@ namespace Services {
       }
       if (SlowdownFactor != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(SlowdownFactor);
-      }
-      if (Stop != false) {
-        size += 1 + 1;
       }
       return size;
     }
@@ -1560,9 +1540,6 @@ namespace Services {
       }
       if (other.SlowdownFactor != 0) {
         SlowdownFactor = other.SlowdownFactor;
-      }
-      if (other.Stop != false) {
-        Stop = other.Stop;
       }
     }
 
@@ -1588,10 +1565,6 @@ namespace Services {
           }
           case 32: {
             SlowdownFactor = input.ReadInt32();
-            break;
-          }
-          case 40: {
-            Stop = input.ReadBool();
             break;
           }
         }
@@ -1625,8 +1598,7 @@ namespace Services {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public FocusStatusResponse(FocusStatusResponse other) : this() {
       Error = other.error_ != null ? other.Error.Clone() : null;
-      driverPower_ = other.driverPower_;
-      isStepping_ = other.isStepping_;
+      slowdownFactor_ = other.slowdownFactor_;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1645,31 +1617,14 @@ namespace Services {
       }
     }
 
-    /// <summary>Field number for the "driverPower" field.</summary>
-    public const int DriverPowerFieldNumber = 2;
-    private bool driverPower_;
-    /// <summary>
-    /// Indicate the driver power status
-    /// </summary>
+    /// <summary>Field number for the "slowdownFactor" field.</summary>
+    public const int SlowdownFactorFieldNumber = 2;
+    private int slowdownFactor_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool DriverPower {
-      get { return driverPower_; }
+    public int SlowdownFactor {
+      get { return slowdownFactor_; }
       set {
-        driverPower_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "isStepping" field.</summary>
-    public const int IsSteppingFieldNumber = 3;
-    private bool isStepping_;
-    /// <summary>
-    /// Indicate whether the motor is in motion
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool IsStepping {
-      get { return isStepping_; }
-      set {
-        isStepping_ = value;
+        slowdownFactor_ = value;
       }
     }
 
@@ -1687,8 +1642,7 @@ namespace Services {
         return true;
       }
       if (!object.Equals(Error, other.Error)) return false;
-      if (DriverPower != other.DriverPower) return false;
-      if (IsStepping != other.IsStepping) return false;
+      if (SlowdownFactor != other.SlowdownFactor) return false;
       return true;
     }
 
@@ -1696,8 +1650,7 @@ namespace Services {
     public override int GetHashCode() {
       int hash = 1;
       if (error_ != null) hash ^= Error.GetHashCode();
-      if (DriverPower != false) hash ^= DriverPower.GetHashCode();
-      if (IsStepping != false) hash ^= IsStepping.GetHashCode();
+      if (SlowdownFactor != 0) hash ^= SlowdownFactor.GetHashCode();
       return hash;
     }
 
@@ -1712,13 +1665,9 @@ namespace Services {
         output.WriteRawTag(10);
         output.WriteMessage(Error);
       }
-      if (DriverPower != false) {
+      if (SlowdownFactor != 0) {
         output.WriteRawTag(16);
-        output.WriteBool(DriverPower);
-      }
-      if (IsStepping != false) {
-        output.WriteRawTag(24);
-        output.WriteBool(IsStepping);
+        output.WriteInt32(SlowdownFactor);
       }
     }
 
@@ -1728,11 +1677,8 @@ namespace Services {
       if (error_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Error);
       }
-      if (DriverPower != false) {
-        size += 1 + 1;
-      }
-      if (IsStepping != false) {
-        size += 1 + 1;
+      if (SlowdownFactor != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(SlowdownFactor);
       }
       return size;
     }
@@ -1748,11 +1694,8 @@ namespace Services {
         }
         Error.MergeFrom(other.Error);
       }
-      if (other.DriverPower != false) {
-        DriverPower = other.DriverPower;
-      }
-      if (other.IsStepping != false) {
-        IsStepping = other.IsStepping;
+      if (other.SlowdownFactor != 0) {
+        SlowdownFactor = other.SlowdownFactor;
       }
     }
 
@@ -1772,11 +1715,7 @@ namespace Services {
             break;
           }
           case 16: {
-            DriverPower = input.ReadBool();
-            break;
-          }
-          case 24: {
-            IsStepping = input.ReadBool();
+            SlowdownFactor = input.ReadInt32();
             break;
           }
         }
@@ -2432,10 +2371,10 @@ namespace Services {
 
   }
 
-  public sealed partial class HardwareResetStatus : pb::IMessage<HardwareResetStatus> {
-    private static readonly pb::MessageParser<HardwareResetStatus> _parser = new pb::MessageParser<HardwareResetStatus>(() => new HardwareResetStatus());
+  public sealed partial class SoftwareResetStatus : pb::IMessage<SoftwareResetStatus> {
+    private static readonly pb::MessageParser<SoftwareResetStatus> _parser = new pb::MessageParser<SoftwareResetStatus>(() => new SoftwareResetStatus());
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<HardwareResetStatus> Parser { get { return _parser; } }
+    public static pb::MessageParser<SoftwareResetStatus> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
@@ -2448,20 +2387,20 @@ namespace Services {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public HardwareResetStatus() {
+    public SoftwareResetStatus() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public HardwareResetStatus(HardwareResetStatus other) : this() {
+    public SoftwareResetStatus(SoftwareResetStatus other) : this() {
       Error = other.error_ != null ? other.Error.Clone() : null;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public HardwareResetStatus Clone() {
-      return new HardwareResetStatus(this);
+    public SoftwareResetStatus Clone() {
+      return new SoftwareResetStatus(this);
     }
 
     /// <summary>Field number for the "error" field.</summary>
@@ -2477,11 +2416,11 @@ namespace Services {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
-      return Equals(other as HardwareResetStatus);
+      return Equals(other as SoftwareResetStatus);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(HardwareResetStatus other) {
+    public bool Equals(SoftwareResetStatus other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -2522,7 +2461,130 @@ namespace Services {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(HardwareResetStatus other) {
+    public void MergeFrom(SoftwareResetStatus other) {
+      if (other == null) {
+        return;
+      }
+      if (other.error_ != null) {
+        if (error_ == null) {
+          error_ = new global::Services.Error();
+        }
+        Error.MergeFrom(other.Error);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            input.SkipLastField();
+            break;
+          case 10: {
+            if (error_ == null) {
+              error_ = new global::Services.Error();
+            }
+            input.ReadMessage(error_);
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class FocusMotionCompleteEvent : pb::IMessage<FocusMotionCompleteEvent> {
+    private static readonly pb::MessageParser<FocusMotionCompleteEvent> _parser = new pb::MessageParser<FocusMotionCompleteEvent>(() => new FocusMotionCompleteEvent());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<FocusMotionCompleteEvent> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Services.CameraControllerServiceReflection.Descriptor.MessageTypes[16]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public FocusMotionCompleteEvent() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public FocusMotionCompleteEvent(FocusMotionCompleteEvent other) : this() {
+      Error = other.error_ != null ? other.Error.Clone() : null;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public FocusMotionCompleteEvent Clone() {
+      return new FocusMotionCompleteEvent(this);
+    }
+
+    /// <summary>Field number for the "error" field.</summary>
+    public const int ErrorFieldNumber = 1;
+    private global::Services.Error error_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Services.Error Error {
+      get { return error_; }
+      set {
+        error_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as FocusMotionCompleteEvent);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(FocusMotionCompleteEvent other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Error, other.Error)) return false;
+      return true;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (error_ != null) hash ^= Error.GetHashCode();
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (error_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Error);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (error_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Error);
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(FocusMotionCompleteEvent other) {
       if (other == null) {
         return;
       }

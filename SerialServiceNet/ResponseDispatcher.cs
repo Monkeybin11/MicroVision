@@ -68,9 +68,9 @@ namespace SerialServiceNet
                         _lock[responsePrefix] = new object();
                     }
                 }
+
                 lock (_lock[responsePrefix])
                 {
-
                     var signalDictItem = new SignalDictItem();
                     lock (_poolLock)
                     {

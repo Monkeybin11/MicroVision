@@ -61,7 +61,6 @@
     <Compile Include="CameraControllerService.cs" />
     <Compile Include="CameraControllerServiceGrpc.cs" />
     <Compile Include="Error.cs" />
-    <Compile Include="FocusMotorAutoPowerRule.cs" />
     <Compile Include="ResponseDispatcher.cs" />
     <Compile Include="SerialCommHelper.cs" />
     <Compile Include="SerialServiceImpl.cs" />

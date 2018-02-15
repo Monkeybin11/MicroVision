@@ -10,6 +10,7 @@ namespace SerialServiceNet
     public partial class SerialSericeImpl : CameraController.CameraControllerBase
     {
         private Object _invokeLock = new Object();
+
         private Error InvokeCommand(string command, string[] param)
         {
             string tmp = "";
@@ -27,20 +28,31 @@ namespace SerialServiceNet
         /// <returns></returns>
         private Error InvokeCommandWithResponse(string command, string[] param, ref string response, int timeout = 1000)
         {
-            if (! IsSerialPortAvailable())
+            if (!IsSerialPortAvailable())
             {
                 return BuildError("COM Port not available", Error.Types.Level.Error);
             }
 
-            var stringToSend = param != null ? command + param.Aggregate("", (acc, element) => acc + " " + element) + "\n" : command + "\n";
+            var stringToSend = param != null
+                ? command + param.Aggregate("", (acc, element) => acc + " " + element) + "\n"
+                : command + "\n";
             try
             {
                 lock (_invokeLock)
                 {
                     _serialPort.Write(stringToSend);
-                    if (timeout != 0)
+                }
+
+                if (timeout != 0)
+                {
+                    // deprecated return GetImmediateResponse(ref response, timeout);
+                    try
                     {
-                        return GetImmediateResponse(ref response, timeout);
+                        response = _resp.WaitForResult(command, timeout);
+                    }
+                    catch (Exception e)
+                    {
+                        return BuildError(e, Error.Types.Level.Error);
                     }
                 }
             }
@@ -51,6 +63,13 @@ namespace SerialServiceNet
 
             return null;
         }
+
+        /// <summary>
+        /// Deprecated sync code
+        /// </summary>
+        /// <param name="response"></param>
+        /// <param name="timeout"></param>
+        /// <returns></returns>
         private Error GetImmediateResponse(ref string response, int timeout)
         {
             try

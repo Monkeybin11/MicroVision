@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
@@ -22,15 +23,31 @@ namespace SerialServiceNet
         private const string FirmwareVersion = "0.1";
         private const string HardwareVersion = "0.1";
         private const string ServiceVersion = "0.1";
+        private ResponseDispatcher _resp = new ResponseDispatcher();
+        private int _cancellationTimeout = 1000;
+        private Task _dataListener;
 
-        private FocusMotorAutoPowerRule _autoPower;
         public SerialSericeImpl()
         {
             _serialPort = new SerialPortStream();
             _logger = new ConsoleLogger();
-            _autoPower = new FocusMotorAutoPowerRule();
-            _autoPower.MotorEnable = () => InvokeCommand("V", null);
         }
+
+        private void ReadStreamListener()
+        {
+            while (IsSerialPortAvailable())
+            {
+                try
+                {
+                    var line = _serialPort.ReadLine();
+                    _resp.FeedMessage(line);
+                }
+                catch (Exception)
+                {
+                }
+            }
+        }
+
         /// <summary>
         /// internal log function
         /// </summary>
@@ -54,7 +71,6 @@ namespace SerialServiceNet
                     case Warning:
                         _logger.Warning(e, e?.Message);
                         break;
-
                 }
             }
             else
@@ -72,7 +88,6 @@ namespace SerialServiceNet
                     case Warning:
                         _logger.Warning(message);
                         break;
-
                 }
             }
         }
@@ -86,8 +101,14 @@ namespace SerialServiceNet
         private Error BuildError(Exception e, Level level)
         {
             _log(e, level);
-            return new Error() {Level = level, Message = e.Message, Timestamp = Timestamp.FromDateTime(DateTime.UtcNow) };
+            return new Error()
+            {
+                Level = level,
+                Message = e.Message,
+                Timestamp = Timestamp.FromDateTime(DateTime.UtcNow)
+            };
         }
+
         private Error BuildError(string message, Level level)
         {
             _log(message, level);
@@ -103,7 +124,12 @@ namespace SerialServiceNet
         /// <returns></returns>
         public override Task<Services.VersionInfo> GetInfo(Empty request, ServerCallContext context)
         {
-            var version = new Services.VersionInfo(){FirmwareVersion = FirmwareVersion, HardwareVersion = HardwareVersion, ServiceVersion = ServiceVersion};
+            var version = new Services.VersionInfo()
+            {
+                FirmwareVersion = FirmwareVersion,
+                HardwareVersion = HardwareVersion,
+                ServiceVersion = ServiceVersion
+            };
             return Task.FromResult(version);
         }
 
@@ -124,6 +150,7 @@ namespace SerialServiceNet
             {
                 connectionResponse.Error = BuildError(e, Level.Error);
             }
+
             return Task.FromResult<ConnectionResponse>(connectionResponse);
         }
 
@@ -146,12 +173,12 @@ namespace SerialServiceNet
             {
                 var comPorts = SerialPortStream.GetPortNames();
                 comList.ComPort.AddRange(comPorts);
-
             }
             catch (Exception e)
             {
                 comList.Error = BuildError(e, Fatal);
             }
+
             return Task.FromResult<ComList>(comList);
         }
 
@@ -161,7 +188,8 @@ namespace SerialServiceNet
         /// <param name="request"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public override Task<ConnectionResponse> RequestConnectToPort(ConnectionRequest request, ServerCallContext context)
+        public override Task<ConnectionResponse> RequestConnectToPort(ConnectionRequest request,
+            ServerCallContext context)
         {
             var connectionResponse = new ConnectionResponse();
             if (!request.Connect)
@@ -171,13 +199,14 @@ namespace SerialServiceNet
                 {
                     // The serial port is not open
                     connectionResponse.Error = BuildError("The serial port is not opened", Warning);
-                    return Task.FromResult<ConnectionResponse>(connectionResponse);
+                    return Task.FromResult(connectionResponse);
                 }
 
                 // The serial port is opened and ready to be closed
                 try
                 {
                     _serialPort.Close();
+                    _dataListener.Wait(_cancellationTimeout);
                     connectionResponse.IsConnected = false;
                 }
                 catch (Exception e)
@@ -198,9 +227,16 @@ namespace SerialServiceNet
 
                 try
                 {
+                    if (_serialPort.IsOpen)
+                    {
+                        connectionResponse.Error = BuildError("Port already opened", Warning);
+                        return Task.FromResult(connectionResponse);
+                    }
+
                     _serialPort.PortName = request.ComPort;
                     _serialPort.BaudRate = 115200;
                     _serialPort.Open();
+                    _dataListener = Task.Factory.StartNew(ReadStreamListener);
                     connectionResponse.IsConnected = true;
                 }
                 catch (Exception e)
@@ -209,6 +245,7 @@ namespace SerialServiceNet
                     return Task.FromResult(connectionResponse);
                 }
             }
+
             return Task.FromResult(connectionResponse);
         }
 
@@ -218,7 +255,8 @@ namespace SerialServiceNet
         /// <param name="request"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public override Task<CurrentStatusResponse> RequestCurrentStatus(CurrentStatusRequest request, ServerCallContext context)
+        public override Task<CurrentStatusResponse> RequestCurrentStatus(CurrentStatusRequest request,
+            ServerCallContext context)
         {
             var currentResponse = new CurrentStatusResponse();
             string result = "";
@@ -227,9 +265,10 @@ namespace SerialServiceNet
             {
                 return Task.FromResult(currentResponse);
             }
+
             try
             {
-                currentResponse.Current = Int32.Parse(result);
+                currentResponse.Current = Double.Parse(result);
             }
             catch (Exception e)
             {
@@ -240,19 +279,69 @@ namespace SerialServiceNet
             return Task.FromResult(currentResponse);
         }
 
-        //public override Task<FocusStatusResponse> RequestFocusStatus(FocusStatusRequest request, ServerCallContext context)
-        //{
-        //    var focusStatusResponse = new FocusStatusResponse();
-            
-            
-        //}
-
-        public override Task<HardwareResetStatus> RequestHardwareReset(Empty request, ServerCallContext context)
+        /// <summary>
+        /// Access and control the focus motor
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public override Task<FocusStatusResponse> RequestFocusStatus(FocusStatusRequest request,
+            ServerCallContext context)
         {
-            return base.RequestHardwareReset(request, context);
+            var focusStatusResponse = new FocusStatusResponse();
+
+            bool autoPower = request.AutoPower;
+            if (!autoPower)
+            {
+                focusStatusResponse.Error = InvokeCommand(request.DriverPower ? "V" : "v", null);
+                if (focusStatusResponse.Error != null) return Task.FromResult(focusStatusResponse);
+            }
+
+            // set the slow down factor
+            if (request.SlowdownFactor != 0) focusStatusResponse.Error = InvokeCommand("Y", new[] {request.SlowdownFactor.ToString()});
+            if (focusStatusResponse.Error != null) return Task.FromResult(focusStatusResponse);
+
+            // get the slow down factor
+            string output = "";
+            focusStatusResponse.Error = InvokeCommandWithResponse("y",null, ref output);
+            if (focusStatusResponse.Error != null) return Task.FromResult(focusStatusResponse);
+            try
+            {
+                focusStatusResponse.SlowdownFactor = Int32.Parse(output);
+            }
+            catch (Exception e)
+            {
+                focusStatusResponse.Error = BuildError(e, Level.Error);
+                return Task.FromResult(focusStatusResponse);
+            }
+
+            // no need to perform step;
+            if(request.Steps == 0) return Task.FromResult(focusStatusResponse);
+
+            if (autoPower) focusStatusResponse.Error=InvokeCommand("V", null);
+            if (focusStatusResponse.Error != null) return Task.FromResult(focusStatusResponse);
+
+            Task.Delay(50).Wait();
+            string stepResponse = "";
+            // This timeout should be extremely long or even disabled
+            focusStatusResponse.Error=InvokeCommandWithResponse("S", new[] {request.Steps.ToString()}, ref stepResponse, 10000);
+            if (autoPower) focusStatusResponse.Error = InvokeCommand("v", null);
+            return Task.FromResult(focusStatusResponse);
         }
         
-        public override Task<LaserStatusResponse> RequestLaserStatus(LaserStatusRequest request, ServerCallContext context)
+        /// <summary>
+        /// Reset the controller
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public override Task<SoftwareResetStatus> RequestSoftwareReset(Empty request, ServerCallContext context)
+        {
+            return Task.FromResult<SoftwareResetStatus>(new SoftwareResetStatus(){Error = InvokeCommand("SWRESET", null)});
+        }
+
+        public override Task<LaserStatusResponse> RequestLaserStatus(LaserStatusRequest request,
+            ServerCallContext context)
         {
             return base.RequestLaserStatus(request, context);
         }
@@ -263,7 +352,8 @@ namespace SerialServiceNet
         /// <param name="request"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public override Task<PowerStatusResponse> RequestPowerStatus(PowerStatusRequest request, ServerCallContext context)
+        public override Task<PowerStatusResponse> RequestPowerStatus(PowerStatusRequest request,
+            ServerCallContext context)
         {
             var powerStatusResponse = new PowerStatusResponse();
 
@@ -285,6 +375,10 @@ namespace SerialServiceNet
                 // Read mode
                 string outputValue = "";
                 powerStatusResponse.Error = InvokeCommandWithResponse("r", null, ref outputValue, 1000);
+                if (powerStatusResponse.Error != null)
+                {
+                    return Task.FromResult(powerStatusResponse);
+                }
 
                 try
                 {

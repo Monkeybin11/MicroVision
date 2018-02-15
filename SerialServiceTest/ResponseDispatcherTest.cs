@@ -12,13 +12,6 @@ namespace SerialServiceNet
     class ResponseDispatcherTest
     {
         [Test]
-        public void TestFeedWithRegisteredWaiter()
-        {
-            var responseDispatcher = new ResponseDispatcher();
-            responseDispatcher.WaitForResult("r");
-        }
-
-        [Test]
         [TestCase("r", "10323")]
         [TestCase("r", "1 1 1")]
         public async Task TestAsyncVersion(string prefix, string message)
@@ -102,7 +95,7 @@ namespace SerialServiceNet
                 Task.Run(() =>
                 {
                     // another task calling successively
-                    Task.Delay(10).Wait();
+                    Task.Delay(1).Wait();
                     var secondResult = responseDispatcher.WaitForResult("r",-1);
                     Assert.AreEqual(secondBody, secondResult);
                 })

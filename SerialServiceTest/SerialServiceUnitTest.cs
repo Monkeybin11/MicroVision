@@ -145,10 +145,57 @@ namespace SerialServiceTest
             Assert.IsNull(currentStatusResponse.Error, "Error occured in the current read process");
             _writer.WriteLine($"The current reading is {currentStatusResponse.Current}");
         }
+
+        [Category("Integration")]
+        [Test]
+        [TestCase(0)]
+        [TestCase(1000)]
+        [TestCase(5000)]
+        [TestCase(10000)]
+        public void TestFocusExecution(int slowdown)
+        {
+            var openPortResult = client.RequestConnectToPort(new ConnectionRequest() { Connect = true, ComPort = _comPort });
+            Assert.IsNull(openPortResult.Error, "Port Open Failed");
+
+            var openPowerResult = client.RequestPowerStatus(new PowerStatusRequest() {Write = true, PowerCode = 5});
+            Assert.IsNull(openPowerResult.Error, "Failed to switch on power");
+            var response = client.RequestFocusStatus(new FocusStatusRequest()
+            {
+                AutoPower = true,
+                Steps = 500,
+                DriverPower = true,
+                SlowdownFactor = slowdown
+            });
+            Assert.IsNull(response.Error);
+            _writer.WriteLine($"After raising command, the slow down factor is {response.SlowdownFactor}");
+            response = client.RequestFocusStatus(new FocusStatusRequest()
+            {
+                AutoPower = true,
+                Steps = -500,
+                DriverPower = true,
+                SlowdownFactor = 0
+            });
+            Assert.IsNull(response.Error);
+            _writer.WriteLine($"After dropping command, the slow down factor is {response.SlowdownFactor}");
+
+            client.RequestPowerStatus(new PowerStatusRequest() { Write = true, PowerCode = 0 });
+        }
+
+        [Test]
+        public void TestSoftwareReset()
+        {
+            var openPortResult = client.RequestConnectToPort(new ConnectionRequest() { Connect = true, ComPort = _comPort });
+            Assert.IsNull(openPortResult.Error, "Port Open Failed");
+
+            var result = client.RequestSoftwareReset(new Empty());
+            Assert.IsNull(result.Error);
+        }
+        
         [TearDown]
         public void Cleanup()
         {
             // shutdown the COM connection
+            client.RequestPowerStatus(new PowerStatusRequest() { Write = true, PowerCode = 0 });
             client.RequestConnectToPort(new ConnectionRequest() {Connect = false});
             channel.ShutdownAsync().Wait();
         }

@@ -26,7 +26,7 @@ service CameraController {
 	rpc RequestLaserStatus(LaserStatusRequest) returns (LaserStatusResponse);
 	rpc RequestArmTrigger(ArmTriggerRequest) returns (ArmTriggerResponse);
 	
-	rpc RequestHardwareReset (google.protobuf.Empty) returns (HardwareResetStatus);
+	rpc RequestSoftwareReset (google.protobuf.Empty) returns (SoftwareResetStatus);
 	
 	// events
 	rpc FocusMotionCompleted(google.protobuf.Empty) returns (stream FocusMotionCompleteEvent);
@@ -95,16 +95,12 @@ message FocusStatusRequest {
 	int32 slowdownFactor = 4;
 
 	// force abort the current step task
-	bool stop = 5;
+	// bool stop = 5;
 }
 message FocusStatusResponse {
 	Error error = 1;
-
-	// Indicate the driver power status
-	bool driverPower = 2;
-
-	// Indicate whether the motor is in motion
-	bool isStepping = 3;
+	int32 slowdownFactor = 2;
+	
 }
 
 // Laser status pairs
@@ -135,7 +131,7 @@ message ArmTriggerResponse {
 	bool triggerAutoDisarmed = 2;
 }
 
-message HardwareResetStatus {
+message SoftwareResetStatus {
 	Error error = 1;
 }
 

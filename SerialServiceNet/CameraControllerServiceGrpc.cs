@@ -31,7 +31,8 @@ namespace Services {
     static readonly grpc::Marshaller<global::Services.LaserStatusResponse> __Marshaller_LaserStatusResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Services.LaserStatusResponse.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::Services.ArmTriggerRequest> __Marshaller_ArmTriggerRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Services.ArmTriggerRequest.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::Services.ArmTriggerResponse> __Marshaller_ArmTriggerResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Services.ArmTriggerResponse.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Services.HardwareResetStatus> __Marshaller_HardwareResetStatus = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Services.HardwareResetStatus.Parser.ParseFrom);
+    static readonly grpc::Marshaller<global::Services.SoftwareResetStatus> __Marshaller_SoftwareResetStatus = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Services.SoftwareResetStatus.Parser.ParseFrom);
+    static readonly grpc::Marshaller<global::Services.FocusMotionCompleteEvent> __Marshaller_FocusMotionCompleteEvent = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Services.FocusMotionCompleteEvent.Parser.ParseFrom);
 
     static readonly grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::Services.VersionInfo> __Method_GetInfo = new grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::Services.VersionInfo>(
         grpc::MethodType.Unary,
@@ -96,12 +97,19 @@ namespace Services {
         __Marshaller_ArmTriggerRequest,
         __Marshaller_ArmTriggerResponse);
 
-    static readonly grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::Services.HardwareResetStatus> __Method_RequestHardwareReset = new grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::Services.HardwareResetStatus>(
+    static readonly grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::Services.SoftwareResetStatus> __Method_RequestSoftwareReset = new grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::Services.SoftwareResetStatus>(
         grpc::MethodType.Unary,
         __ServiceName,
-        "RequestHardwareReset",
+        "RequestSoftwareReset",
         __Marshaller_Empty,
-        __Marshaller_HardwareResetStatus);
+        __Marshaller_SoftwareResetStatus);
+
+    static readonly grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::Services.FocusMotionCompleteEvent> __Method_FocusMotionCompleted = new grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::Services.FocusMotionCompleteEvent>(
+        grpc::MethodType.ServerStreaming,
+        __ServiceName,
+        "FocusMotionCompleted",
+        __Marshaller_Empty,
+        __Marshaller_FocusMotionCompleteEvent);
 
     /// <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
@@ -187,7 +195,19 @@ namespace Services {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
 
-      public virtual global::System.Threading.Tasks.Task<global::Services.HardwareResetStatus> RequestHardwareReset(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::ServerCallContext context)
+      public virtual global::System.Threading.Tasks.Task<global::Services.SoftwareResetStatus> RequestSoftwareReset(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      /// <summary>
+      /// events
+      /// </summary>
+      /// <param name="request">The request received from the client.</param>
+      /// <param name="responseStream">Used for sending responses back to the client.</param>
+      /// <param name="context">The context of the server-side call handler being invoked.</param>
+      /// <returns>A task indicating completion of the handler.</returns>
+      public virtual global::System.Threading.Tasks.Task FocusMotionCompleted(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::IServerStreamWriter<global::Services.FocusMotionCompleteEvent> responseStream, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
@@ -501,21 +521,43 @@ namespace Services {
       {
         return CallInvoker.AsyncUnaryCall(__Method_RequestArmTrigger, null, options, request);
       }
-      public virtual global::Services.HardwareResetStatus RequestHardwareReset(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      public virtual global::Services.SoftwareResetStatus RequestSoftwareReset(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        return RequestHardwareReset(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+        return RequestSoftwareReset(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
-      public virtual global::Services.HardwareResetStatus RequestHardwareReset(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::CallOptions options)
+      public virtual global::Services.SoftwareResetStatus RequestSoftwareReset(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::CallOptions options)
       {
-        return CallInvoker.BlockingUnaryCall(__Method_RequestHardwareReset, null, options, request);
+        return CallInvoker.BlockingUnaryCall(__Method_RequestSoftwareReset, null, options, request);
       }
-      public virtual grpc::AsyncUnaryCall<global::Services.HardwareResetStatus> RequestHardwareResetAsync(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      public virtual grpc::AsyncUnaryCall<global::Services.SoftwareResetStatus> RequestSoftwareResetAsync(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        return RequestHardwareResetAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+        return RequestSoftwareResetAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
-      public virtual grpc::AsyncUnaryCall<global::Services.HardwareResetStatus> RequestHardwareResetAsync(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::CallOptions options)
+      public virtual grpc::AsyncUnaryCall<global::Services.SoftwareResetStatus> RequestSoftwareResetAsync(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::CallOptions options)
       {
-        return CallInvoker.AsyncUnaryCall(__Method_RequestHardwareReset, null, options, request);
+        return CallInvoker.AsyncUnaryCall(__Method_RequestSoftwareReset, null, options, request);
+      }
+      /// <summary>
+      /// events
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+      /// <param name="cancellationToken">An optional token for canceling the call.</param>
+      /// <returns>The call object.</returns>
+      public virtual grpc::AsyncServerStreamingCall<global::Services.FocusMotionCompleteEvent> FocusMotionCompleted(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      {
+        return FocusMotionCompleted(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      /// events
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="options">The options for the call.</param>
+      /// <returns>The call object.</returns>
+      public virtual grpc::AsyncServerStreamingCall<global::Services.FocusMotionCompleteEvent> FocusMotionCompleted(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncServerStreamingCall(__Method_FocusMotionCompleted, null, options, request);
       }
       /// <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
       protected override CameraControllerClient NewInstance(ClientBaseConfiguration configuration)
@@ -538,7 +580,8 @@ namespace Services {
           .AddMethod(__Method_RequestFocusStatus, serviceImpl.RequestFocusStatus)
           .AddMethod(__Method_RequestLaserStatus, serviceImpl.RequestLaserStatus)
           .AddMethod(__Method_RequestArmTrigger, serviceImpl.RequestArmTrigger)
-          .AddMethod(__Method_RequestHardwareReset, serviceImpl.RequestHardwareReset).Build();
+          .AddMethod(__Method_RequestSoftwareReset, serviceImpl.RequestSoftwareReset)
+          .AddMethod(__Method_FocusMotionCompleted, serviceImpl.FocusMotionCompleted).Build();
     }
 
   }
