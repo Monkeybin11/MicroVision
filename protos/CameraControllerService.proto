@@ -28,8 +28,8 @@ service CameraController {
 	
 	rpc RequestSoftwareReset (google.protobuf.Empty) returns (SoftwareResetStatus);
 	
-	// events
-	rpc FocusMotionCompleted(google.protobuf.Empty) returns (stream FocusMotionCompleteEvent);
+	// stream invoker
+	rpc StreamRequestArmTrigger(stream ArmTriggerRequest) returns (stream ArmTriggerResponse);
 }
 
 message VersionInfo {
@@ -130,9 +130,5 @@ message ArmTriggerResponse {
 }
 
 message SoftwareResetStatus {
-	Error error = 1;
-}
-
-message FocusMotionCompleteEvent {
 	Error error = 1;
 }

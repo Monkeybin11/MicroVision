@@ -47,28 +47,27 @@ namespace Services {
             "aW9uGAMgASgLMhwuU2VydmljZXMuTGFzZXJTdGF0dXNSZXF1ZXN0IlEKEkFy",
             "bVRyaWdnZXJSZXNwb25zZRIeCgVlcnJvchgBIAEoCzIPLlNlcnZpY2VzLkVy",
             "cm9yEhsKE3RyaWdnZXJBdXRvRGlzYXJtZWQYAiABKAgiNQoTU29mdHdhcmVS",
-            "ZXNldFN0YXR1cxIeCgVlcnJvchgBIAEoCzIPLlNlcnZpY2VzLkVycm9yIjoK",
-            "GEZvY3VzTW90aW9uQ29tcGxldGVFdmVudBIeCgVlcnJvchgBIAEoCzIPLlNl",
-            "cnZpY2VzLkVycm9yMuoGChBDYW1lcmFDb250cm9sbGVyEjgKB0dldEluZm8S",
-            "Fi5nb29nbGUucHJvdG9idWYuRW1wdHkaFS5TZXJ2aWNlcy5WZXJzaW9uSW5m",
-            "bxJDCgtJc0Nvbm5lY3RlZBIWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRocLlNl",
-            "cnZpY2VzLkNvbm5lY3Rpb25SZXNwb25zZRI9Cg5SZXF1ZXN0Q29tTGlzdBIY",
-            "LlNlcnZpY2VzLkNvbUxpc3RSZXF1ZXN0GhEuU2VydmljZXMuQ29tTGlzdBJR",
-            "ChRSZXF1ZXN0Q29ubmVjdFRvUG9ydBIbLlNlcnZpY2VzLkNvbm5lY3Rpb25S",
-            "ZXF1ZXN0GhwuU2VydmljZXMuQ29ubmVjdGlvblJlc3BvbnNlElEKElJlcXVl",
-            "c3RQb3dlclN0YXR1cxIcLlNlcnZpY2VzLlBvd2VyU3RhdHVzUmVxdWVzdBod",
-            "LlNlcnZpY2VzLlBvd2VyU3RhdHVzUmVzcG9uc2USVwoUUmVxdWVzdEN1cnJl",
-            "bnRTdGF0dXMSHi5TZXJ2aWNlcy5DdXJyZW50U3RhdHVzUmVxdWVzdBofLlNl",
-            "cnZpY2VzLkN1cnJlbnRTdGF0dXNSZXNwb25zZRJRChJSZXF1ZXN0Rm9jdXNT",
-            "dGF0dXMSHC5TZXJ2aWNlcy5Gb2N1c1N0YXR1c1JlcXVlc3QaHS5TZXJ2aWNl",
-            "cy5Gb2N1c1N0YXR1c1Jlc3BvbnNlElEKElJlcXVlc3RMYXNlclN0YXR1cxIc",
-            "LlNlcnZpY2VzLkxhc2VyU3RhdHVzUmVxdWVzdBodLlNlcnZpY2VzLkxhc2Vy",
-            "U3RhdHVzUmVzcG9uc2USTgoRUmVxdWVzdEFybVRyaWdnZXISGy5TZXJ2aWNl",
-            "cy5Bcm1UcmlnZ2VyUmVxdWVzdBocLlNlcnZpY2VzLkFybVRyaWdnZXJSZXNw",
-            "b25zZRJNChRSZXF1ZXN0U29mdHdhcmVSZXNldBIWLmdvb2dsZS5wcm90b2J1",
-            "Zi5FbXB0eRodLlNlcnZpY2VzLlNvZnR3YXJlUmVzZXRTdGF0dXMSVAoURm9j",
-            "dXNNb3Rpb25Db21wbGV0ZWQSFi5nb29nbGUucHJvdG9idWYuRW1wdHkaIi5T",
-            "ZXJ2aWNlcy5Gb2N1c01vdGlvbkNvbXBsZXRlRXZlbnQwAWIGcHJvdG8z"));
+            "ZXNldFN0YXR1cxIeCgVlcnJvchgBIAEoCzIPLlNlcnZpY2VzLkVycm9yMu4G",
+            "ChBDYW1lcmFDb250cm9sbGVyEjgKB0dldEluZm8SFi5nb29nbGUucHJvdG9i",
+            "dWYuRW1wdHkaFS5TZXJ2aWNlcy5WZXJzaW9uSW5mbxJDCgtJc0Nvbm5lY3Rl",
+            "ZBIWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRocLlNlcnZpY2VzLkNvbm5lY3Rp",
+            "b25SZXNwb25zZRI9Cg5SZXF1ZXN0Q29tTGlzdBIYLlNlcnZpY2VzLkNvbUxp",
+            "c3RSZXF1ZXN0GhEuU2VydmljZXMuQ29tTGlzdBJRChRSZXF1ZXN0Q29ubmVj",
+            "dFRvUG9ydBIbLlNlcnZpY2VzLkNvbm5lY3Rpb25SZXF1ZXN0GhwuU2Vydmlj",
+            "ZXMuQ29ubmVjdGlvblJlc3BvbnNlElEKElJlcXVlc3RQb3dlclN0YXR1cxIc",
+            "LlNlcnZpY2VzLlBvd2VyU3RhdHVzUmVxdWVzdBodLlNlcnZpY2VzLlBvd2Vy",
+            "U3RhdHVzUmVzcG9uc2USVwoUUmVxdWVzdEN1cnJlbnRTdGF0dXMSHi5TZXJ2",
+            "aWNlcy5DdXJyZW50U3RhdHVzUmVxdWVzdBofLlNlcnZpY2VzLkN1cnJlbnRT",
+            "dGF0dXNSZXNwb25zZRJRChJSZXF1ZXN0Rm9jdXNTdGF0dXMSHC5TZXJ2aWNl",
+            "cy5Gb2N1c1N0YXR1c1JlcXVlc3QaHS5TZXJ2aWNlcy5Gb2N1c1N0YXR1c1Jl",
+            "c3BvbnNlElEKElJlcXVlc3RMYXNlclN0YXR1cxIcLlNlcnZpY2VzLkxhc2Vy",
+            "U3RhdHVzUmVxdWVzdBodLlNlcnZpY2VzLkxhc2VyU3RhdHVzUmVzcG9uc2US",
+            "TgoRUmVxdWVzdEFybVRyaWdnZXISGy5TZXJ2aWNlcy5Bcm1UcmlnZ2VyUmVx",
+            "dWVzdBocLlNlcnZpY2VzLkFybVRyaWdnZXJSZXNwb25zZRJNChRSZXF1ZXN0",
+            "U29mdHdhcmVSZXNldBIWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRodLlNlcnZp",
+            "Y2VzLlNvZnR3YXJlUmVzZXRTdGF0dXMSWAoXU3RyZWFtUmVxdWVzdEFybVRy",
+            "aWdnZXISGy5TZXJ2aWNlcy5Bcm1UcmlnZ2VyUmVxdWVzdBocLlNlcnZpY2Vz",
+            "LkFybVRyaWdnZXJSZXNwb25zZSgBMAFiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.EmptyReflection.Descriptor, global::Services.ErrorReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
@@ -87,8 +86,7 @@ namespace Services {
             new pbr::GeneratedClrTypeInfo(typeof(global::Services.LaserStatusResponse), global::Services.LaserStatusResponse.Parser, new[]{ "Error" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Services.ArmTriggerRequest), global::Services.ArmTriggerRequest.Parser, new[]{ "ArmTrigger", "MaxTriggerTimeUs", "LaserConfiguration" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Services.ArmTriggerResponse), global::Services.ArmTriggerResponse.Parser, new[]{ "Error", "TriggerAutoDisarmed" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Services.SoftwareResetStatus), global::Services.SoftwareResetStatus.Parser, new[]{ "Error" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Services.FocusMotionCompleteEvent), global::Services.FocusMotionCompleteEvent.Parser, new[]{ "Error" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Services.SoftwareResetStatus), global::Services.SoftwareResetStatus.Parser, new[]{ "Error" }, null, null, null)
           }));
     }
     #endregion
@@ -2430,129 +2428,6 @@ namespace Services {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(SoftwareResetStatus other) {
-      if (other == null) {
-        return;
-      }
-      if (other.error_ != null) {
-        if (error_ == null) {
-          error_ = new global::Services.Error();
-        }
-        Error.MergeFrom(other.Error);
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(pb::CodedInputStream input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            input.SkipLastField();
-            break;
-          case 10: {
-            if (error_ == null) {
-              error_ = new global::Services.Error();
-            }
-            input.ReadMessage(error_);
-            break;
-          }
-        }
-      }
-    }
-
-  }
-
-  public sealed partial class FocusMotionCompleteEvent : pb::IMessage<FocusMotionCompleteEvent> {
-    private static readonly pb::MessageParser<FocusMotionCompleteEvent> _parser = new pb::MessageParser<FocusMotionCompleteEvent>(() => new FocusMotionCompleteEvent());
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<FocusMotionCompleteEvent> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Services.CameraControllerServiceReflection.Descriptor.MessageTypes[16]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public FocusMotionCompleteEvent() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public FocusMotionCompleteEvent(FocusMotionCompleteEvent other) : this() {
-      Error = other.error_ != null ? other.Error.Clone() : null;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public FocusMotionCompleteEvent Clone() {
-      return new FocusMotionCompleteEvent(this);
-    }
-
-    /// <summary>Field number for the "error" field.</summary>
-    public const int ErrorFieldNumber = 1;
-    private global::Services.Error error_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Services.Error Error {
-      get { return error_; }
-      set {
-        error_ = value;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override bool Equals(object other) {
-      return Equals(other as FocusMotionCompleteEvent);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(FocusMotionCompleteEvent other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (!object.Equals(Error, other.Error)) return false;
-      return true;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (error_ != null) hash ^= Error.GetHashCode();
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void WriteTo(pb::CodedOutputStream output) {
-      if (error_ != null) {
-        output.WriteRawTag(10);
-        output.WriteMessage(Error);
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int CalculateSize() {
-      int size = 0;
-      if (error_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Error);
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(FocusMotionCompleteEvent other) {
       if (other == null) {
         return;
       }

@@ -32,7 +32,6 @@ namespace Services {
     static readonly grpc::Marshaller<global::Services.ArmTriggerRequest> __Marshaller_ArmTriggerRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Services.ArmTriggerRequest.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::Services.ArmTriggerResponse> __Marshaller_ArmTriggerResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Services.ArmTriggerResponse.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::Services.SoftwareResetStatus> __Marshaller_SoftwareResetStatus = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Services.SoftwareResetStatus.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Services.FocusMotionCompleteEvent> __Marshaller_FocusMotionCompleteEvent = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Services.FocusMotionCompleteEvent.Parser.ParseFrom);
 
     static readonly grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::Services.VersionInfo> __Method_GetInfo = new grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::Services.VersionInfo>(
         grpc::MethodType.Unary,
@@ -104,12 +103,12 @@ namespace Services {
         __Marshaller_Empty,
         __Marshaller_SoftwareResetStatus);
 
-    static readonly grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::Services.FocusMotionCompleteEvent> __Method_FocusMotionCompleted = new grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::Services.FocusMotionCompleteEvent>(
-        grpc::MethodType.ServerStreaming,
+    static readonly grpc::Method<global::Services.ArmTriggerRequest, global::Services.ArmTriggerResponse> __Method_StreamRequestArmTrigger = new grpc::Method<global::Services.ArmTriggerRequest, global::Services.ArmTriggerResponse>(
+        grpc::MethodType.DuplexStreaming,
         __ServiceName,
-        "FocusMotionCompleted",
-        __Marshaller_Empty,
-        __Marshaller_FocusMotionCompleteEvent);
+        "StreamRequestArmTrigger",
+        __Marshaller_ArmTriggerRequest,
+        __Marshaller_ArmTriggerResponse);
 
     /// <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
@@ -201,13 +200,13 @@ namespace Services {
       }
 
       /// <summary>
-      /// events
+      /// stream invoker
       /// </summary>
-      /// <param name="request">The request received from the client.</param>
+      /// <param name="requestStream">Used for reading requests from the client.</param>
       /// <param name="responseStream">Used for sending responses back to the client.</param>
       /// <param name="context">The context of the server-side call handler being invoked.</param>
       /// <returns>A task indicating completion of the handler.</returns>
-      public virtual global::System.Threading.Tasks.Task FocusMotionCompleted(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::IServerStreamWriter<global::Services.FocusMotionCompleteEvent> responseStream, grpc::ServerCallContext context)
+      public virtual global::System.Threading.Tasks.Task StreamRequestArmTrigger(grpc::IAsyncStreamReader<global::Services.ArmTriggerRequest> requestStream, grpc::IServerStreamWriter<global::Services.ArmTriggerResponse> responseStream, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
@@ -538,26 +537,24 @@ namespace Services {
         return CallInvoker.AsyncUnaryCall(__Method_RequestSoftwareReset, null, options, request);
       }
       /// <summary>
-      /// events
+      /// stream invoker
       /// </summary>
-      /// <param name="request">The request to send to the server.</param>
       /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The call object.</returns>
-      public virtual grpc::AsyncServerStreamingCall<global::Services.FocusMotionCompleteEvent> FocusMotionCompleted(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      public virtual grpc::AsyncDuplexStreamingCall<global::Services.ArmTriggerRequest, global::Services.ArmTriggerResponse> StreamRequestArmTrigger(grpc::Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
       {
-        return FocusMotionCompleted(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+        return StreamRequestArmTrigger(new grpc::CallOptions(headers, deadline, cancellationToken));
       }
       /// <summary>
-      /// events
+      /// stream invoker
       /// </summary>
-      /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The call object.</returns>
-      public virtual grpc::AsyncServerStreamingCall<global::Services.FocusMotionCompleteEvent> FocusMotionCompleted(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::CallOptions options)
+      public virtual grpc::AsyncDuplexStreamingCall<global::Services.ArmTriggerRequest, global::Services.ArmTriggerResponse> StreamRequestArmTrigger(grpc::CallOptions options)
       {
-        return CallInvoker.AsyncServerStreamingCall(__Method_FocusMotionCompleted, null, options, request);
+        return CallInvoker.AsyncDuplexStreamingCall(__Method_StreamRequestArmTrigger, null, options);
       }
       /// <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
       protected override CameraControllerClient NewInstance(ClientBaseConfiguration configuration)
@@ -581,7 +578,7 @@ namespace Services {
           .AddMethod(__Method_RequestLaserStatus, serviceImpl.RequestLaserStatus)
           .AddMethod(__Method_RequestArmTrigger, serviceImpl.RequestArmTrigger)
           .AddMethod(__Method_RequestSoftwareReset, serviceImpl.RequestSoftwareReset)
-          .AddMethod(__Method_FocusMotionCompleted, serviceImpl.FocusMotionCompleted).Build();
+          .AddMethod(__Method_StreamRequestArmTrigger, serviceImpl.StreamRequestArmTrigger).Build();
     }
 
   }

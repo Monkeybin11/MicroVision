@@ -430,5 +430,14 @@ namespace SerialServiceNet
 
             return Task.FromResult(powerStatusResponse);
         }
+
+        public override async Task StreamRequestArmTrigger(IAsyncStreamReader<ArmTriggerRequest> requestStream, IServerStreamWriter<ArmTriggerResponse> responseStream, ServerCallContext context)
+        {
+            while (await requestStream.MoveNext())
+            {
+                var current = requestStream.Current;
+                await responseStream.WriteAsync(await RequestArmTrigger(current, context));
+            }
+        }
     }
 }

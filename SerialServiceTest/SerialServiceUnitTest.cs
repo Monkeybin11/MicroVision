@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using NUnit.Framework;
+using NUnit.Framework.Constraints;
 using Services;
 
 namespace SerialServiceTest
@@ -19,6 +20,7 @@ namespace SerialServiceTest
         private Channel channel;
         private CameraController.CameraControllerClient client;
         private TestContext testContextInstance;
+
         public TestContext TestContext
         {
             get { return testContextInstance; }
@@ -39,7 +41,7 @@ namespace SerialServiceTest
 
         [Category("Basic")]
         [Test]
-        public void TestGetInfo ()
+        public void TestGetInfo()
         {
             var info = client.GetInfo(new Empty());
             TestContext.WriteLine(
@@ -51,7 +53,8 @@ namespace SerialServiceTest
         public async Task TestGetInfoAsync()
         {
             var info = await client.GetInfoAsync(new Empty());
-            TestContext.WriteLine($"Info package: \n \tFirmware = {info.FirmwareVersion} \n \tHardware = {info.HardwareVersion} \n \tService = {info.ServiceVersion}");
+            TestContext.WriteLine(
+                $"Info package: \n \tFirmware = {info.FirmwareVersion} \n \tHardware = {info.HardwareVersion} \n \tService = {info.ServiceVersion}");
         }
 
         [Category("Basic")]
@@ -76,7 +79,7 @@ namespace SerialServiceTest
         {
             var connect = client.RequestConnectToPort(new ConnectionRequest() {ComPort = _comPort, Connect = true});
             Assert.IsNull(connect.Error);
-            var disconnect = client.RequestConnectToPort(new ConnectionRequest() { Connect = false });
+            var disconnect = client.RequestConnectToPort(new ConnectionRequest() {Connect = false});
             Assert.IsNull(disconnect.Error);
         }
 
@@ -85,7 +88,7 @@ namespace SerialServiceTest
         [Test]
         public void TestConnectWithoutName()
         {
-            var connect = client.RequestConnectToPort(new ConnectionRequest() {Connect = true });
+            var connect = client.RequestConnectToPort(new ConnectionRequest() {Connect = true});
             Assert.NotNull(connect.Error);
             TestContext.WriteLine($"When no COM name is given, you will get error {connect.Error}");
         }
@@ -95,9 +98,9 @@ namespace SerialServiceTest
         [Test]
         public void TestRepeatedOpen()
         {
-            var connect = client.RequestConnectToPort(new ConnectionRequest() { ComPort = _comPort, Connect = true });
+            var connect = client.RequestConnectToPort(new ConnectionRequest() {ComPort = _comPort, Connect = true});
             Assert.IsNull(connect.Error, "The first connection should not fail");
-            connect = client.RequestConnectToPort(new ConnectionRequest() { ComPort = _comPort, Connect = true });
+            connect = client.RequestConnectToPort(new ConnectionRequest() {ComPort = _comPort, Connect = true});
             Assert.NotNull(connect.Error, "The second connection should fail");
             TestContext.WriteLine($"When you try to reopen the COM port, it should give {connect.Error}");
         }
@@ -108,10 +111,10 @@ namespace SerialServiceTest
         public async Task TestPowerConfiguration()
         {
             const int delay = 2000;
-            
+
             int powerCode = 9;
 
-            var connect = client.RequestConnectToPort(new ConnectionRequest() { ComPort = _comPort, Connect = true });
+            var connect = client.RequestConnectToPort(new ConnectionRequest() {ComPort = _comPort, Connect = true});
             Assert.IsNull(connect.Error, "The connection should not fail");
 
             var powerStatusResponse = client.RequestPowerStatus(new PowerStatusRequest() {Write = false});
@@ -119,19 +122,20 @@ namespace SerialServiceTest
             _writer.WriteLine($"Initial power code is {powerStatusResponse.PowerCode}");
 
             await Task.Delay(delay);
-            powerStatusResponse = client.RequestPowerStatus(new PowerStatusRequest() { Write = true, PowerCode = powerCode });
+            powerStatusResponse =
+                client.RequestPowerStatus(new PowerStatusRequest() {Write = true, PowerCode = powerCode});
             Assert.IsNull(powerStatusResponse.Error, "Error when read the power status");
             Assert.AreEqual(powerStatusResponse.PowerCode, powerCode);
             _writer.WriteLine($"After write, power code is {powerStatusResponse.PowerCode}");
 
             await Task.Delay(delay);
-            powerStatusResponse = client.RequestPowerStatus(new PowerStatusRequest() { Write = false });
+            powerStatusResponse = client.RequestPowerStatus(new PowerStatusRequest() {Write = false});
             Assert.IsNull(powerStatusResponse.Error, "Error when read the power status");
             Assert.AreEqual(powerStatusResponse.PowerCode, powerCode);
             _writer.WriteLine($"Read again, power code is {powerStatusResponse.PowerCode}");
 
             await Task.Delay(delay);
-            powerStatusResponse = client.RequestPowerStatus(new PowerStatusRequest() { Write = true, PowerCode = 0});
+            powerStatusResponse = client.RequestPowerStatus(new PowerStatusRequest() {Write = true, PowerCode = 0});
             Assert.IsNull(powerStatusResponse.Error, "Error when read the power status");
             Assert.AreEqual(powerStatusResponse.PowerCode, 0);
             _writer.WriteLine($"Finally, reset the power code to 0, power code is {powerStatusResponse.PowerCode}");
@@ -149,7 +153,7 @@ namespace SerialServiceTest
 
         private void FocusExecutionCommonCode(int slowdown)
         {
-            var openPowerResult = client.RequestPowerStatus(new PowerStatusRequest() { Write = true, PowerCode = 5 });
+            var openPowerResult = client.RequestPowerStatus(new PowerStatusRequest() {Write = true, PowerCode = 5});
             Assert.IsNull(openPowerResult.Error, "Failed to switch on power");
             var response = client.RequestFocusStatus(new FocusStatusRequest()
             {
@@ -169,7 +173,7 @@ namespace SerialServiceTest
             });
             Assert.IsNull(response.Error);
             _writer.WriteLine($"After dropping command, the slow down factor is {response.SlowdownFactor}");
-            client.RequestPowerStatus(new PowerStatusRequest() { Write = true, PowerCode = 0 });
+            client.RequestPowerStatus(new PowerStatusRequest() {Write = true, PowerCode = 0});
         }
 
         [Category("Integration")]
@@ -180,7 +184,8 @@ namespace SerialServiceTest
         [TestCase(10000)]
         public void TestFocusExecution(int slowdown)
         {
-            var openPortResult = client.RequestConnectToPort(new ConnectionRequest() { Connect = true, ComPort = _comPort });
+            var openPortResult =
+                client.RequestConnectToPort(new ConnectionRequest() {Connect = true, ComPort = _comPort});
             Assert.IsNull(openPortResult.Error, "Port Open Failed");
 
             FocusExecutionCommonCode(slowdown);
@@ -191,7 +196,8 @@ namespace SerialServiceTest
         [TestCase(500)]
         public void TestReadDuringExecution(int delay)
         {
-            var openPortResult = client.RequestConnectToPort(new ConnectionRequest() { Connect = true, ComPort = _comPort });
+            var openPortResult =
+                client.RequestConnectToPort(new ConnectionRequest() {Connect = true, ComPort = _comPort});
             Assert.IsNull(openPortResult.Error, "Port Open Failed");
 
             var cancel = new CancellationTokenSource();
@@ -217,9 +223,10 @@ namespace SerialServiceTest
         [Category("Integration")]
         public void TestArmTriggerAndTimeOut()
         {
-            var openPortResult = client.RequestConnectToPort(new ConnectionRequest() { Connect = true, ComPort = _comPort });
+            var openPortResult =
+                client.RequestConnectToPort(new ConnectionRequest() {Connect = true, ComPort = _comPort});
             Assert.IsNull(openPortResult.Error, "Port Open Failed");
-            client.RequestPowerStatus(new PowerStatusRequest() { Write = true, PowerCode = 3 });
+            client.RequestPowerStatus(new PowerStatusRequest() {Write = true, PowerCode = 3});
             Task.Delay(5000).Wait();
             var armTriggerResult = client.RequestArmTrigger(new ArmTriggerRequest()
             {
@@ -232,20 +239,58 @@ namespace SerialServiceTest
         }
 
         [Test]
+        public void TestStreamControl()
+        {
+            var openPortResult =
+                client.RequestConnectToPort(new ConnectionRequest() {Connect = true, ComPort = _comPort});
+            Assert.IsNull(openPortResult.Error, "Port Open Failed");
+            client.RequestPowerStatus(new PowerStatusRequest() {Write = true, PowerCode = 3});
+            Task.Delay(5000).Wait();
+            var stream = client.StreamRequestArmTrigger(new CallOptions());
+
+            var cancel = new CancellationTokenSource();
+            // receive
+            Task.Run(async () =>
+            {
+                while (await stream.ResponseStream.MoveNext(cancel.Token))
+                {
+                    _writer.WriteLine($"Got new message! {stream.ResponseStream.Current}");
+                    
+                }
+            });
+
+            var requestData = new ArmTriggerRequest()
+            {
+                ArmTrigger = true,
+                MaxTriggerTimeUs = 10000,
+                LaserConfiguration = new LaserStatusRequest() {Intensity = 255, DurationUs = 45}
+            };
+
+            for (int i = 0; i < 3; i++)
+            {
+                stream.RequestStream.WriteAsync(requestData);
+                Task.Delay(500).Wait();
+            }
+
+            cancel.Cancel();
+        }
+
+        [Test]
         public void TestSoftwareReset()
         {
-            var openPortResult = client.RequestConnectToPort(new ConnectionRequest() { Connect = true, ComPort = _comPort });
+            var openPortResult =
+                client.RequestConnectToPort(new ConnectionRequest() {Connect = true, ComPort = _comPort});
             Assert.IsNull(openPortResult.Error, "Port Open Failed");
 
             var result = client.RequestSoftwareReset(new Empty());
             Assert.IsNull(result.Error);
         }
-        
+
         [TearDown]
         public void Cleanup()
         {
             // shutdown the COM connection
-            client.RequestPowerStatus(new PowerStatusRequest() { Write = true, PowerCode = 0 });
+            client.RequestPowerStatus(new PowerStatusRequest() {Write = true, PowerCode = 0});
             client.RequestConnectToPort(new ConnectionRequest() {Connect = false});
             channel.ShutdownAsync().Wait();
         }
