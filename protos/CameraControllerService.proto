@@ -105,8 +105,6 @@ message FocusStatusResponse {
 
 // Laser status pairs
 message LaserStatusRequest {
-	// Microseconds of laser on delay
-	int64 laserDelayUs = 1;
 	// Microseconds of laser on duration
 	int64 durationUs = 2;
 	int64 intensity = 3;

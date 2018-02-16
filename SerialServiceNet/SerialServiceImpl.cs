@@ -157,7 +157,27 @@ namespace SerialServiceNet
 
         public override Task<ArmTriggerResponse> RequestArmTrigger(ArmTriggerRequest request, ServerCallContext context)
         {
-            return base.RequestArmTrigger(request, context);
+            var response = new ArmTriggerResponse();
+            var laserConfiguration = request.LaserConfiguration;
+            response.Error = InvokeCommand("P", new[] {laserConfiguration.Intensity.ToString()});
+            if (response.Error != null) return Task.FromResult(response);
+
+            response.Error = InvokeCommand("D", new[] { laserConfiguration.DurationUs.ToString() });
+            if (response.Error != null) return Task.FromResult(response);
+
+            response.Error = InvokeCommand("M", new[] { request.MaxTriggerTimeUs.ToString() });
+            if (response.Error != null) return Task.FromResult(response);
+
+            response.TriggerAutoDisarmed = false;
+            if (request.ArmTrigger)
+            {
+                string outString = "";
+                response.Error = InvokeCommandWithResponse("B", null, ref outString);
+                if (response.Error != null) return Task.FromResult(response);
+
+                response.TriggerAutoDisarmed = outString == "1";
+            }
+            return Task.FromResult(response);
         }
 
         /// <summary>
@@ -298,12 +318,13 @@ namespace SerialServiceNet
             }
 
             // set the slow down factor
-            if (request.SlowdownFactor != 0) focusStatusResponse.Error = InvokeCommand("Y", new[] {request.SlowdownFactor.ToString()});
+            if (request.SlowdownFactor != 0)
+                focusStatusResponse.Error = InvokeCommand("Y", new[] {request.SlowdownFactor.ToString()});
             if (focusStatusResponse.Error != null) return Task.FromResult(focusStatusResponse);
 
             // get the slow down factor
             string output = "";
-            focusStatusResponse.Error = InvokeCommandWithResponse("y",null, ref output);
+            focusStatusResponse.Error = InvokeCommandWithResponse("y", null, ref output);
             if (focusStatusResponse.Error != null) return Task.FromResult(focusStatusResponse);
             try
             {
@@ -316,19 +337,20 @@ namespace SerialServiceNet
             }
 
             // no need to perform step;
-            if(request.Steps == 0) return Task.FromResult(focusStatusResponse);
+            if (request.Steps == 0) return Task.FromResult(focusStatusResponse);
 
-            if (autoPower) focusStatusResponse.Error=InvokeCommand("V", null);
+            if (autoPower) focusStatusResponse.Error = InvokeCommand("V", null);
             if (focusStatusResponse.Error != null) return Task.FromResult(focusStatusResponse);
 
             Task.Delay(50).Wait();
             string stepResponse = "";
             // This timeout should be extremely long or even disabled
-            focusStatusResponse.Error=InvokeCommandWithResponse("S", new[] {request.Steps.ToString()}, ref stepResponse, 10000);
+            focusStatusResponse.Error =
+                InvokeCommandWithResponse("S", new[] {request.Steps.ToString()}, ref stepResponse, 10000);
             if (autoPower) focusStatusResponse.Error = InvokeCommand("v", null);
             return Task.FromResult(focusStatusResponse);
         }
-        
+
         /// <summary>
         /// Reset the controller
         /// </summary>
@@ -337,13 +359,28 @@ namespace SerialServiceNet
         /// <returns></returns>
         public override Task<SoftwareResetStatus> RequestSoftwareReset(Empty request, ServerCallContext context)
         {
-            return Task.FromResult<SoftwareResetStatus>(new SoftwareResetStatus(){Error = InvokeCommand("SWRESET", null)});
+            return Task.FromResult<SoftwareResetStatus>(new SoftwareResetStatus()
+            {
+                Error = InvokeCommand("SWRESET", null)
+            });
         }
 
+        /// <summary>
+        /// Direct access to the laser control. Currently disabled for safety concern
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public override Task<LaserStatusResponse> RequestLaserStatus(LaserStatusRequest request,
             ServerCallContext context)
         {
-            return base.RequestLaserStatus(request, context);
+            return Task.FromResult(new LaserStatusResponse()
+            {
+                Error = BuildError(
+                    new NotImplementedException(
+                        "For safety reason the laser is not accessible by the interface, please use the arm trigger feature to enable laser"),
+                    Level.Error)
+            });
         }
 
         /// <summary>

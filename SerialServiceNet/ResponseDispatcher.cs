@@ -46,7 +46,8 @@ namespace SerialServiceNet
 
             var tokens = message.Split(' ');
             var prefix = tokens[0];
-            var msgbody = String.Join(" ", tokens.Skip(1));
+            var msgbody = String.Join(" ", tokens.Skip(1)).Trim();
+
             lock (_poolLock)
             {
                 if (Pool.ContainsKey(prefix))

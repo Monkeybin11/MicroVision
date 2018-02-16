@@ -214,6 +214,24 @@ namespace SerialServiceTest
         }
 
         [Test]
+        [Category("Integration")]
+        public void TestArmTriggerAndTimeOut()
+        {
+            var openPortResult = client.RequestConnectToPort(new ConnectionRequest() { Connect = true, ComPort = _comPort });
+            Assert.IsNull(openPortResult.Error, "Port Open Failed");
+            client.RequestPowerStatus(new PowerStatusRequest() { Write = true, PowerCode = 3 });
+            Task.Delay(5000).Wait();
+            var armTriggerResult = client.RequestArmTrigger(new ArmTriggerRequest()
+            {
+                ArmTrigger = true,
+                LaserConfiguration = new LaserStatusRequest() {DurationUs = 1000, Intensity = 255},
+                MaxTriggerTimeUs = 100000
+            });
+            Assert.IsNull(armTriggerResult.Error, "Arm trigger generated an error");
+            Assert.AreEqual(true, armTriggerResult.TriggerAutoDisarmed);
+        }
+
+        [Test]
         public void TestSoftwareReset()
         {
             var openPortResult = client.RequestConnectToPort(new ConnectionRequest() { Connect = true, ComPort = _comPort });
