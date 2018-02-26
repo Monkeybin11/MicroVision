@@ -7,7 +7,7 @@ package Services;
 import "google/protobuf/empty.proto";
 import "Error.proto";
 
-service Camera {
+service VimbaCamera {
 	// Allocate or free the vimba instance
 	rpc VimbaInstanceControl (VimbaInstanceControlRequest) returns (VimbaInstanceControlResponse);
 	
@@ -28,9 +28,8 @@ service Camera {
 	rpc RequestFrameStream (stream CameraAcquisitionRequest) returns (stream BufferedFramesResponse);
 }
 enum ConnectionCommands {
-	READ = 0;
-	CONNECT = 1;
-	DISCONNECT = 2;
+	CONNECT = 0;
+	DISCONNECT = 1;
 }
 message VimbaInstanceControlRequest {
 	// true for allocating the instance and false for release the instance
@@ -93,3 +92,20 @@ message CameraParametersResponse {
 	Error error = 1;
 	CameraParameters params = 2;
 }
+
+message CameraAcquisitionRequest {
+	
+}
+
+message CameraAcquisitionResponse {
+	Error error = 1;
+}
+
+message BufferedFramesRequest {
+}
+message BufferedFramesResponse {
+	Error error = 1;
+	repeated bytes images = 2;
+}
+
+

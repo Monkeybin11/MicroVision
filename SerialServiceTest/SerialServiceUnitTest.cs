@@ -158,7 +158,7 @@ namespace SerialServiceTest
             var response = client.RequestFocusStatus(new FocusStatusRequest()
             {
                 AutoPower = true,
-                Steps = 500,
+                Steps = 500*64,
                 DriverPower = true,
                 SlowdownFactor = slowdown
             });
@@ -167,7 +167,7 @@ namespace SerialServiceTest
             response = client.RequestFocusStatus(new FocusStatusRequest()
             {
                 AutoPower = true,
-                Steps = -500,
+                Steps = -500*64,
                 DriverPower = true,
                 SlowdownFactor = 0
             });
@@ -179,9 +179,9 @@ namespace SerialServiceTest
         [Category("Integration")]
         [Test]
         [TestCase(0)]
-        [TestCase(1000)]
-        [TestCase(5000)]
-        [TestCase(10000)]
+        [TestCase(100)]
+        //[TestCase(1000)]
+        //[TestCase(5000)]
         public void TestFocusExecution(int slowdown)
         {
             var openPortResult =

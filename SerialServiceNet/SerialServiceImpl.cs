@@ -17,7 +17,6 @@ namespace SerialServiceNet
     public partial class SerialSericeImpl : CameraController.CameraControllerBase
     {
         private SerialPortStream _serialPort;
-        private ConsoleLogger _logger;
 
 
         private const string FirmwareVersion = "0.1";
@@ -30,7 +29,6 @@ namespace SerialServiceNet
         public SerialSericeImpl()
         {
             _serialPort = new SerialPortStream();
-            _logger = new ConsoleLogger();
         }
 
         private void ReadStreamListener()
@@ -47,74 +45,6 @@ namespace SerialServiceNet
                 }
             }
         }
-
-        /// <summary>
-        /// internal log function
-        /// </summary>
-        /// <typeparam name="T">Exception or string</typeparam>
-        /// <param name="msg"></param>
-        /// <param name="level"></param>
-        private void _log<T>(T msg, Level level)
-        {
-            if (typeof(T) == typeof(Exception))
-            {
-                var e = msg as Exception;
-                switch (level)
-                {
-                    case Level.Error:
-                    case Level.Fatal:
-                        _logger.Error(e, e?.Message);
-                        break;
-                    case Level.Info:
-                        _logger.Info(e?.Message);
-                        break;
-                    case Warning:
-                        _logger.Warning(e, e?.Message);
-                        break;
-                }
-            }
-            else
-            {
-                var message = msg as string;
-                switch (level)
-                {
-                    case Level.Error:
-                    case Level.Fatal:
-                        _logger.Error(message);
-                        break;
-                    case Level.Info:
-                        _logger.Info(message);
-                        break;
-                    case Warning:
-                        _logger.Warning(message);
-                        break;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Internal use for build the error structure.
-        /// </summary>
-        /// <param name="e"> Exception thrown</param>
-        /// <param name="level"> error level</param>
-        /// <returns>Error object</returns>
-        private Error BuildError(Exception e, Level level)
-        {
-            _log(e, level);
-            return new Error()
-            {
-                Level = level,
-                Message = e.Message,
-                Timestamp = Timestamp.FromDateTime(DateTime.UtcNow)
-            };
-        }
-
-        private Error BuildError(string message, Level level)
-        {
-            _log(message, level);
-            return new Error() {Level = level, Message = message, Timestamp = Timestamp.FromDateTime(DateTime.UtcNow)};
-        }
-
 
         /// <summary>
         /// Get version info
@@ -148,7 +78,7 @@ namespace SerialServiceNet
             }
             catch (Exception e)
             {
-                connectionResponse.Error = BuildError(e, Level.Error);
+                connectionResponse.Error = ServiceHelper.BuildError(e, Level.Error);
             }
 
             return Task.FromResult<ConnectionResponse>(connectionResponse);
@@ -196,7 +126,7 @@ namespace SerialServiceNet
             }
             catch (Exception e)
             {
-                comList.Error = BuildError(e, Fatal);
+                comList.Error = ServiceHelper.BuildError(e, Fatal);
             }
 
             return Task.FromResult<ComList>(comList);
@@ -218,7 +148,7 @@ namespace SerialServiceNet
                 if (!_serialPort.IsOpen)
                 {
                     // The serial port is not open
-                    connectionResponse.Error = BuildError("The serial port is not opened", Warning);
+                    connectionResponse.Error = ServiceHelper.BuildError("The serial port is not opened", Warning);
                     return Task.FromResult(connectionResponse);
                 }
 
@@ -231,7 +161,7 @@ namespace SerialServiceNet
                 }
                 catch (Exception e)
                 {
-                    connectionResponse.Error = BuildError(e, Level.Error);
+                    connectionResponse.Error = ServiceHelper.BuildError(e, Level.Error);
                     return Task.FromResult(connectionResponse);
                 }
             }
@@ -241,7 +171,7 @@ namespace SerialServiceNet
                 if (String.IsNullOrEmpty(request.ComPort))
                 {
                     // Argument is invalid
-                    connectionResponse.Error = BuildError("ComPort is invalid", Level.Error);
+                    connectionResponse.Error = ServiceHelper.BuildError("ComPort is invalid", Level.Error);
                     return Task.FromResult(connectionResponse);
                 }
 
@@ -249,7 +179,7 @@ namespace SerialServiceNet
                 {
                     if (_serialPort.IsOpen)
                     {
-                        connectionResponse.Error = BuildError("Port already opened", Warning);
+                        connectionResponse.Error = ServiceHelper.BuildError("Port already opened", Warning);
                         return Task.FromResult(connectionResponse);
                     }
 
@@ -261,7 +191,7 @@ namespace SerialServiceNet
                 }
                 catch (Exception e)
                 {
-                    connectionResponse.Error = BuildError(e, Level.Error);
+                    connectionResponse.Error = ServiceHelper.BuildError(e, Level.Error);
                     return Task.FromResult(connectionResponse);
                 }
             }
@@ -292,7 +222,7 @@ namespace SerialServiceNet
             }
             catch (Exception e)
             {
-                currentResponse.Error = BuildError(e, Level.Error);
+                currentResponse.Error = ServiceHelper.BuildError(e, Level.Error);
                 return Task.FromResult(currentResponse);
             }
 
@@ -332,7 +262,7 @@ namespace SerialServiceNet
             }
             catch (Exception e)
             {
-                focusStatusResponse.Error = BuildError(e, Level.Error);
+                focusStatusResponse.Error = ServiceHelper.BuildError(e, Level.Error);
                 return Task.FromResult(focusStatusResponse);
             }
 
@@ -376,7 +306,7 @@ namespace SerialServiceNet
         {
             return Task.FromResult(new LaserStatusResponse()
             {
-                Error = BuildError(
+                Error = ServiceHelper.BuildError(
                     new NotImplementedException(
                         "For safety reason the laser is not accessible by the interface, please use the arm trigger feature to enable laser"),
                     Level.Error)
@@ -399,7 +329,7 @@ namespace SerialServiceNet
                 // change the power configuration (Write mode)
                 if (request.PowerCode < 0 || request.PowerCode > 15)
                 {
-                    powerStatusResponse.Error = BuildError("Power code is invalid", Level.Error);
+                    powerStatusResponse.Error = ServiceHelper.BuildError("Power code is invalid", Level.Error);
                     return Task.FromResult<PowerStatusResponse>(powerStatusResponse);
                 }
 
@@ -423,7 +353,7 @@ namespace SerialServiceNet
                 }
                 catch (Exception e)
                 {
-                    powerStatusResponse.Error = BuildError(e, Level.Error);
+                    powerStatusResponse.Error = ServiceHelper.BuildError(e, Level.Error);
                     return Task.FromResult(powerStatusResponse);
                 }
             }

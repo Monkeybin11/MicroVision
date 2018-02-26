@@ -21,7 +21,20 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialServiceNet", "SerialS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialServiceTest", "SerialServiceTest\SerialServiceTest.csproj", "{EAAC31FA-46F3-4F94-BA42-8131C7DF809B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CameraSerivce", "CameraSerivce", "{5AE61730-0D5C-4799-A9C4-8D4E3B662448}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraServiceNet", "CameraServiceNet\CameraServiceNet.csproj", "{6976E890-16EC-413C-9106-62AB4811F6E3}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "ServiceShared", "ServiceShared\ServiceShared.shproj", "{B8873343-BA9E-4EB8-A3F9-49FE9B7A379B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraServiceTest", "CameraServiceTest\CameraServiceTest.csproj", "{8EDF4429-251A-416D-BB68-93F227191BCF}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		ServiceShared\ServiceShared.projitems*{6976e890-16ec-413c-9106-62ab4811f6e3}*SharedItemsImports = 4
+		ServiceShared\ServiceShared.projitems*{b02ffa12-e312-46f8-b31d-d29e49c0e981}*SharedItemsImports = 4
+		ServiceShared\ServiceShared.projitems*{b8873343-ba9e-4eb8-a3f9-49fe9b7a379b}*SharedItemsImports = 13
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -59,6 +72,14 @@ Global
 		{EAAC31FA-46F3-4F94-BA42-8131C7DF809B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EAAC31FA-46F3-4F94-BA42-8131C7DF809B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EAAC31FA-46F3-4F94-BA42-8131C7DF809B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6976E890-16EC-413C-9106-62AB4811F6E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6976E890-16EC-413C-9106-62AB4811F6E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6976E890-16EC-413C-9106-62AB4811F6E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6976E890-16EC-413C-9106-62AB4811F6E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EDF4429-251A-416D-BB68-93F227191BCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EDF4429-251A-416D-BB68-93F227191BCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EDF4429-251A-416D-BB68-93F227191BCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EDF4429-251A-416D-BB68-93F227191BCF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,6 +88,8 @@ Global
 		{DB6B7F47-2D68-4830-BFA8-B588C9DC2D41} = {F3770C02-533C-4D14-9D37-7A9E6A8BB674}
 		{B02FFA12-E312-46F8-B31D-D29E49C0E981} = {F3770C02-533C-4D14-9D37-7A9E6A8BB674}
 		{EAAC31FA-46F3-4F94-BA42-8131C7DF809B} = {F3770C02-533C-4D14-9D37-7A9E6A8BB674}
+		{6976E890-16EC-413C-9106-62AB4811F6E3} = {5AE61730-0D5C-4799-A9C4-8D4E3B662448}
+		{8EDF4429-251A-416D-BB68-93F227191BCF} = {5AE61730-0D5C-4799-A9C4-8D4E3B662448}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0848A97E-E3F5-4BF1-899F-F6EB1A95927D}
