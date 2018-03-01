@@ -30,6 +30,8 @@ namespace Services {
     static readonly grpc::Marshaller<global::Services.CameraAcquisitionResponse> __Marshaller_CameraAcquisitionResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Services.CameraAcquisitionResponse.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::Services.BufferedFramesRequest> __Marshaller_BufferedFramesRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Services.BufferedFramesRequest.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::Services.BufferedFramesResponse> __Marshaller_BufferedFramesResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Services.BufferedFramesResponse.Parser.ParseFrom);
+    static readonly grpc::Marshaller<global::Services.TemperatureRequest> __Marshaller_TemperatureRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Services.TemperatureRequest.Parser.ParseFrom);
+    static readonly grpc::Marshaller<global::Services.TemperatureResponse> __Marshaller_TemperatureResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Services.TemperatureResponse.Parser.ParseFrom);
 
     static readonly grpc::Method<global::Services.VimbaInstanceControlRequest, global::Services.VimbaInstanceControlResponse> __Method_VimbaInstanceControl = new grpc::Method<global::Services.VimbaInstanceControlRequest, global::Services.VimbaInstanceControlResponse>(
         grpc::MethodType.Unary,
@@ -79,6 +81,13 @@ namespace Services {
         "RequestFrameStream",
         __Marshaller_CameraAcquisitionRequest,
         __Marshaller_BufferedFramesResponse);
+
+    static readonly grpc::Method<global::Services.TemperatureRequest, global::Services.TemperatureResponse> __Method_RequestTemperature = new grpc::Method<global::Services.TemperatureRequest, global::Services.TemperatureResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "RequestTemperature",
+        __Marshaller_TemperatureRequest,
+        __Marshaller_TemperatureResponse);
 
     /// <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
@@ -151,6 +160,11 @@ namespace Services {
       /// <param name="context">The context of the server-side call handler being invoked.</param>
       /// <returns>A task indicating completion of the handler.</returns>
       public virtual global::System.Threading.Tasks.Task RequestFrameStream(grpc::IAsyncStreamReader<global::Services.CameraAcquisitionRequest> requestStream, grpc::IServerStreamWriter<global::Services.BufferedFramesResponse> responseStream, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      public virtual global::System.Threading.Tasks.Task<global::Services.TemperatureResponse> RequestTemperature(global::Services.TemperatureRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
@@ -408,6 +422,22 @@ namespace Services {
       {
         return CallInvoker.AsyncDuplexStreamingCall(__Method_RequestFrameStream, null, options);
       }
+      public virtual global::Services.TemperatureResponse RequestTemperature(global::Services.TemperatureRequest request, grpc::Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      {
+        return RequestTemperature(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      public virtual global::Services.TemperatureResponse RequestTemperature(global::Services.TemperatureRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_RequestTemperature, null, options, request);
+      }
+      public virtual grpc::AsyncUnaryCall<global::Services.TemperatureResponse> RequestTemperatureAsync(global::Services.TemperatureRequest request, grpc::Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      {
+        return RequestTemperatureAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      public virtual grpc::AsyncUnaryCall<global::Services.TemperatureResponse> RequestTemperatureAsync(global::Services.TemperatureRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_RequestTemperature, null, options, request);
+      }
       /// <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
       protected override VimbaCameraClient NewInstance(ClientBaseConfiguration configuration)
       {
@@ -426,7 +456,8 @@ namespace Services {
           .AddMethod(__Method_RequestCameraParameters, serviceImpl.RequestCameraParameters)
           .AddMethod(__Method_RequestCameraAcquisition, serviceImpl.RequestCameraAcquisition)
           .AddMethod(__Method_RequestBufferedFrames, serviceImpl.RequestBufferedFrames)
-          .AddMethod(__Method_RequestFrameStream, serviceImpl.RequestFrameStream).Build();
+          .AddMethod(__Method_RequestFrameStream, serviceImpl.RequestFrameStream)
+          .AddMethod(__Method_RequestTemperature, serviceImpl.RequestTemperature).Build();
     }
 
   }

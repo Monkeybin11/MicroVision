@@ -33,24 +33,20 @@ namespace Services {
             "Y2FtZXJhSUQYASABKAkSLQoHY29tbWFuZBgCIAEoDjIcLlNlcnZpY2VzLkNv",
             "bm5lY3Rpb25Db21tYW5kcyJPChhDYW1lcmFDb25uZWN0aW9uUmVzcG9uc2US",
             "HgoFZXJyb3IYASABKAsyDy5TZXJ2aWNlcy5FcnJvchITCgtpc0Nvbm5lY3Rl",
-            "ZBgCIAEoCCLxAgoQQ2FtZXJhUGFyYW1ldGVycxIUCgxleHBvc3VyZVRpbWUY",
-            "ASABKAESEQoJZnJhbWVSYXRlGAIgASgBEgwKBGdhaW4YAyABKAESRAoTdHJp",
-            "Z2dlckxpbmVTZWxlY3RvchgEIAEoDjInLlNlcnZpY2VzLkNhbWVyYVBhcmFt",
-            "ZXRlcnMuTGluZVNlbGVjdG9yEhsKE3RyaWdnZXJMaW5lSW52ZXJ0ZXIYBSAB",
-            "KAgSQAoRdHJpZ2dlckxpbmVTb3VyY2UYBiABKA4yJS5TZXJ2aWNlcy5DYW1l",
-            "cmFQYXJhbWV0ZXJzLkxpbmVTb3VyY2USEQoJbnVtRnJhbWVzGAcgASgFIjoK",
-            "DExpbmVTZWxlY3RvchIJCgVMaW5lMBAAEgkKBUxpbmUxEAESCQoFTGluZTIQ",
-            "AhIJCgVMaW5lMxADIjIKCkxpbmVTb3VyY2USFAoQQWNxdWlzaXRpb25TdGFy",
-            "dBAAEg4KCkZyYW1lU3RhcnQQASJUChdDYW1lcmFQYXJhbWV0ZXJzUmVxdWVz",
-            "dBINCgV3cml0ZRgBIAEoCBIqCgZwYXJhbXMYAiABKAsyGi5TZXJ2aWNlcy5D",
-            "YW1lcmFQYXJhbWV0ZXJzImYKGENhbWVyYVBhcmFtZXRlcnNSZXNwb25zZRIe",
-            "CgVlcnJvchgBIAEoCzIPLlNlcnZpY2VzLkVycm9yEioKBnBhcmFtcxgCIAEo",
-            "CzIaLlNlcnZpY2VzLkNhbWVyYVBhcmFtZXRlcnMiGgoYQ2FtZXJhQWNxdWlz",
-            "aXRpb25SZXF1ZXN0IjsKGUNhbWVyYUFjcXVpc2l0aW9uUmVzcG9uc2USHgoF",
-            "ZXJyb3IYASABKAsyDy5TZXJ2aWNlcy5FcnJvciIXChVCdWZmZXJlZEZyYW1l",
-            "c1JlcXVlc3QiSAoWQnVmZmVyZWRGcmFtZXNSZXNwb25zZRIeCgVlcnJvchgB",
-            "IAEoCzIPLlNlcnZpY2VzLkVycm9yEg4KBmltYWdlcxgCIAMoDCoxChJDb25u",
-            "ZWN0aW9uQ29tbWFuZHMSCwoHQ09OTkVDVBAAEg4KCkRJU0NPTk5FQ1QQATKp",
+            "ZBgCIAEoCCJcChBDYW1lcmFQYXJhbWV0ZXJzEhQKDGV4cG9zdXJlVGltZRgB",
+            "IAEoARIRCglmcmFtZVJhdGUYAiABKAESDAoEZ2FpbhgDIAEoARIRCgludW1G",
+            "cmFtZXMYByABKAUiVAoXQ2FtZXJhUGFyYW1ldGVyc1JlcXVlc3QSDQoFd3Jp",
+            "dGUYASABKAgSKgoGcGFyYW1zGAIgASgLMhouU2VydmljZXMuQ2FtZXJhUGFy",
+            "YW1ldGVycyJmChhDYW1lcmFQYXJhbWV0ZXJzUmVzcG9uc2USHgoFZXJyb3IY",
+            "ASABKAsyDy5TZXJ2aWNlcy5FcnJvchIqCgZwYXJhbXMYAiABKAsyGi5TZXJ2",
+            "aWNlcy5DYW1lcmFQYXJhbWV0ZXJzIhoKGENhbWVyYUFjcXVpc2l0aW9uUmVx",
+            "dWVzdCI7ChlDYW1lcmFBY3F1aXNpdGlvblJlc3BvbnNlEh4KBWVycm9yGAEg",
+            "ASgLMg8uU2VydmljZXMuRXJyb3IiFwoVQnVmZmVyZWRGcmFtZXNSZXF1ZXN0",
+            "IkgKFkJ1ZmZlcmVkRnJhbWVzUmVzcG9uc2USHgoFZXJyb3IYASABKAsyDy5T",
+            "ZXJ2aWNlcy5FcnJvchIOCgZpbWFnZXMYAiADKAwiFAoSVGVtcGVyYXR1cmVS",
+            "ZXF1ZXN0IkoKE1RlbXBlcmF0dXJlUmVzcG9uc2USHgoFZXJyb3IYASABKAsy",
+            "Dy5TZXJ2aWNlcy5FcnJvchITCgt0ZW1wZXJhdHVyZRgCIAEoASoxChJDb25u",
+            "ZWN0aW9uQ29tbWFuZHMSCwoHQ09OTkVDVBAAEg4KCkRJU0NPTk5FQ1QQATL8",
             "BQoLVmltYmFDYW1lcmESZQoUVmltYmFJbnN0YW5jZUNvbnRyb2wSJS5TZXJ2",
             "aWNlcy5WaW1iYUluc3RhbmNlQ29udHJvbFJlcXVlc3QaJi5TZXJ2aWNlcy5W",
             "aW1iYUluc3RhbmNlQ29udHJvbFJlc3BvbnNlEk4KEVJlcXVlc3RDYW1lcmFM",
@@ -66,7 +62,9 @@ namespace Services {
             "cmFtZXNSZXF1ZXN0GiAuU2VydmljZXMuQnVmZmVyZWRGcmFtZXNSZXNwb25z",
             "ZRJeChJSZXF1ZXN0RnJhbWVTdHJlYW0SIi5TZXJ2aWNlcy5DYW1lcmFBY3F1",
             "aXNpdGlvblJlcXVlc3QaIC5TZXJ2aWNlcy5CdWZmZXJlZEZyYW1lc1Jlc3Bv",
-            "bnNlKAEwAWIGcHJvdG8z"));
+            "bnNlKAEwARJRChJSZXF1ZXN0VGVtcGVyYXR1cmUSHC5TZXJ2aWNlcy5UZW1w",
+            "ZXJhdHVyZVJlcXVlc3QaHS5TZXJ2aWNlcy5UZW1wZXJhdHVyZVJlc3BvbnNl",
+            "YgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.EmptyReflection.Descriptor, global::Services.ErrorReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Services.ConnectionCommands), }, new pbr::GeneratedClrTypeInfo[] {
@@ -76,13 +74,15 @@ namespace Services {
             new pbr::GeneratedClrTypeInfo(typeof(global::Services.CameraListResponse), global::Services.CameraListResponse.Parser, new[]{ "Error", "CameraList" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Services.CameraConnectionRequest), global::Services.CameraConnectionRequest.Parser, new[]{ "CameraID", "Command" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Services.CameraConnectionResponse), global::Services.CameraConnectionResponse.Parser, new[]{ "Error", "IsConnected" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Services.CameraParameters), global::Services.CameraParameters.Parser, new[]{ "ExposureTime", "FrameRate", "Gain", "TriggerLineSelector", "TriggerLineInverter", "TriggerLineSource", "NumFrames" }, null, new[]{ typeof(global::Services.CameraParameters.Types.LineSelector), typeof(global::Services.CameraParameters.Types.LineSource) }, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Services.CameraParameters), global::Services.CameraParameters.Parser, new[]{ "ExposureTime", "FrameRate", "Gain", "NumFrames" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Services.CameraParametersRequest), global::Services.CameraParametersRequest.Parser, new[]{ "Write", "Params" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Services.CameraParametersResponse), global::Services.CameraParametersResponse.Parser, new[]{ "Error", "Params" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Services.CameraAcquisitionRequest), global::Services.CameraAcquisitionRequest.Parser, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Services.CameraAcquisitionResponse), global::Services.CameraAcquisitionResponse.Parser, new[]{ "Error" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Services.BufferedFramesRequest), global::Services.BufferedFramesRequest.Parser, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Services.BufferedFramesResponse), global::Services.BufferedFramesResponse.Parser, new[]{ "Error", "Images" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Services.BufferedFramesResponse), global::Services.BufferedFramesResponse.Parser, new[]{ "Error", "Images" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Services.TemperatureRequest), global::Services.TemperatureRequest.Parser, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Services.TemperatureResponse), global::Services.TemperatureResponse.Parser, new[]{ "Error", "Temperature" }, null, null, null)
           }));
     }
     #endregion
@@ -932,9 +932,6 @@ namespace Services {
       exposureTime_ = other.exposureTime_;
       frameRate_ = other.frameRate_;
       gain_ = other.gain_;
-      triggerLineSelector_ = other.triggerLineSelector_;
-      triggerLineInverter_ = other.triggerLineInverter_;
-      triggerLineSource_ = other.triggerLineSource_;
       numFrames_ = other.numFrames_;
     }
 
@@ -976,42 +973,12 @@ namespace Services {
       }
     }
 
-    /// <summary>Field number for the "triggerLineSelector" field.</summary>
-    public const int TriggerLineSelectorFieldNumber = 4;
-    private global::Services.CameraParameters.Types.LineSelector triggerLineSelector_ = 0;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Services.CameraParameters.Types.LineSelector TriggerLineSelector {
-      get { return triggerLineSelector_; }
-      set {
-        triggerLineSelector_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "triggerLineInverter" field.</summary>
-    public const int TriggerLineInverterFieldNumber = 5;
-    private bool triggerLineInverter_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool TriggerLineInverter {
-      get { return triggerLineInverter_; }
-      set {
-        triggerLineInverter_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "triggerLineSource" field.</summary>
-    public const int TriggerLineSourceFieldNumber = 6;
-    private global::Services.CameraParameters.Types.LineSource triggerLineSource_ = 0;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Services.CameraParameters.Types.LineSource TriggerLineSource {
-      get { return triggerLineSource_; }
-      set {
-        triggerLineSource_ = value;
-      }
-    }
-
     /// <summary>Field number for the "numFrames" field.</summary>
     public const int NumFramesFieldNumber = 7;
     private int numFrames_;
+    /// <summary>
+    ///	LineSource triggerLineSource = 6;
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int NumFrames {
       get { return numFrames_; }
@@ -1036,9 +1003,6 @@ namespace Services {
       if (ExposureTime != other.ExposureTime) return false;
       if (FrameRate != other.FrameRate) return false;
       if (Gain != other.Gain) return false;
-      if (TriggerLineSelector != other.TriggerLineSelector) return false;
-      if (TriggerLineInverter != other.TriggerLineInverter) return false;
-      if (TriggerLineSource != other.TriggerLineSource) return false;
       if (NumFrames != other.NumFrames) return false;
       return true;
     }
@@ -1049,9 +1013,6 @@ namespace Services {
       if (ExposureTime != 0D) hash ^= ExposureTime.GetHashCode();
       if (FrameRate != 0D) hash ^= FrameRate.GetHashCode();
       if (Gain != 0D) hash ^= Gain.GetHashCode();
-      if (TriggerLineSelector != 0) hash ^= TriggerLineSelector.GetHashCode();
-      if (TriggerLineInverter != false) hash ^= TriggerLineInverter.GetHashCode();
-      if (TriggerLineSource != 0) hash ^= TriggerLineSource.GetHashCode();
       if (NumFrames != 0) hash ^= NumFrames.GetHashCode();
       return hash;
     }
@@ -1075,18 +1036,6 @@ namespace Services {
         output.WriteRawTag(25);
         output.WriteDouble(Gain);
       }
-      if (TriggerLineSelector != 0) {
-        output.WriteRawTag(32);
-        output.WriteEnum((int) TriggerLineSelector);
-      }
-      if (TriggerLineInverter != false) {
-        output.WriteRawTag(40);
-        output.WriteBool(TriggerLineInverter);
-      }
-      if (TriggerLineSource != 0) {
-        output.WriteRawTag(48);
-        output.WriteEnum((int) TriggerLineSource);
-      }
       if (NumFrames != 0) {
         output.WriteRawTag(56);
         output.WriteInt32(NumFrames);
@@ -1104,15 +1053,6 @@ namespace Services {
       }
       if (Gain != 0D) {
         size += 1 + 8;
-      }
-      if (TriggerLineSelector != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) TriggerLineSelector);
-      }
-      if (TriggerLineInverter != false) {
-        size += 1 + 1;
-      }
-      if (TriggerLineSource != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) TriggerLineSource);
       }
       if (NumFrames != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(NumFrames);
@@ -1133,15 +1073,6 @@ namespace Services {
       }
       if (other.Gain != 0D) {
         Gain = other.Gain;
-      }
-      if (other.TriggerLineSelector != 0) {
-        TriggerLineSelector = other.TriggerLineSelector;
-      }
-      if (other.TriggerLineInverter != false) {
-        TriggerLineInverter = other.TriggerLineInverter;
-      }
-      if (other.TriggerLineSource != 0) {
-        TriggerLineSource = other.TriggerLineSource;
       }
       if (other.NumFrames != 0) {
         NumFrames = other.NumFrames;
@@ -1168,18 +1099,6 @@ namespace Services {
             Gain = input.ReadDouble();
             break;
           }
-          case 32: {
-            triggerLineSelector_ = (global::Services.CameraParameters.Types.LineSelector) input.ReadEnum();
-            break;
-          }
-          case 40: {
-            TriggerLineInverter = input.ReadBool();
-            break;
-          }
-          case 48: {
-            triggerLineSource_ = (global::Services.CameraParameters.Types.LineSource) input.ReadEnum();
-            break;
-          }
           case 56: {
             NumFrames = input.ReadInt32();
             break;
@@ -1187,25 +1106,6 @@ namespace Services {
         }
       }
     }
-
-    #region Nested types
-    /// <summary>Container for nested types declared in the CameraParameters message type.</summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static partial class Types {
-      public enum LineSelector {
-        [pbr::OriginalName("Line0")] Line0 = 0,
-        [pbr::OriginalName("Line1")] Line1 = 1,
-        [pbr::OriginalName("Line2")] Line2 = 2,
-        [pbr::OriginalName("Line3")] Line3 = 3,
-      }
-
-      public enum LineSource {
-        [pbr::OriginalName("AcquisitionStart")] AcquisitionStart = 0,
-        [pbr::OriginalName("FrameStart")] FrameStart = 1,
-      }
-
-    }
-    #endregion
 
   }
 
@@ -1956,6 +1856,246 @@ namespace Services {
           }
           case 18: {
             images_.AddEntriesFrom(input, _repeated_images_codec);
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class TemperatureRequest : pb::IMessage<TemperatureRequest> {
+    private static readonly pb::MessageParser<TemperatureRequest> _parser = new pb::MessageParser<TemperatureRequest>(() => new TemperatureRequest());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<TemperatureRequest> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Services.CameraServiceReflection.Descriptor.MessageTypes[13]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public TemperatureRequest() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public TemperatureRequest(TemperatureRequest other) : this() {
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public TemperatureRequest Clone() {
+      return new TemperatureRequest(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as TemperatureRequest);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(TemperatureRequest other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      return true;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(TemperatureRequest other) {
+      if (other == null) {
+        return;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            input.SkipLastField();
+            break;
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class TemperatureResponse : pb::IMessage<TemperatureResponse> {
+    private static readonly pb::MessageParser<TemperatureResponse> _parser = new pb::MessageParser<TemperatureResponse>(() => new TemperatureResponse());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<TemperatureResponse> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Services.CameraServiceReflection.Descriptor.MessageTypes[14]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public TemperatureResponse() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public TemperatureResponse(TemperatureResponse other) : this() {
+      Error = other.error_ != null ? other.Error.Clone() : null;
+      temperature_ = other.temperature_;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public TemperatureResponse Clone() {
+      return new TemperatureResponse(this);
+    }
+
+    /// <summary>Field number for the "error" field.</summary>
+    public const int ErrorFieldNumber = 1;
+    private global::Services.Error error_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Services.Error Error {
+      get { return error_; }
+      set {
+        error_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "temperature" field.</summary>
+    public const int TemperatureFieldNumber = 2;
+    private double temperature_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public double Temperature {
+      get { return temperature_; }
+      set {
+        temperature_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as TemperatureResponse);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(TemperatureResponse other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Error, other.Error)) return false;
+      if (Temperature != other.Temperature) return false;
+      return true;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (error_ != null) hash ^= Error.GetHashCode();
+      if (Temperature != 0D) hash ^= Temperature.GetHashCode();
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (error_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Error);
+      }
+      if (Temperature != 0D) {
+        output.WriteRawTag(17);
+        output.WriteDouble(Temperature);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (error_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Error);
+      }
+      if (Temperature != 0D) {
+        size += 1 + 8;
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(TemperatureResponse other) {
+      if (other == null) {
+        return;
+      }
+      if (other.error_ != null) {
+        if (error_ == null) {
+          error_ = new global::Services.Error();
+        }
+        Error.MergeFrom(other.Error);
+      }
+      if (other.Temperature != 0D) {
+        Temperature = other.Temperature;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            input.SkipLastField();
+            break;
+          case 10: {
+            if (error_ == null) {
+              error_ = new global::Services.Error();
+            }
+            input.ReadMessage(error_);
+            break;
+          }
+          case 17: {
+            Temperature = input.ReadDouble();
             break;
           }
         }

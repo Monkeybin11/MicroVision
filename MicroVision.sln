@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroVision", "MicroVision\MicroVision.csproj", "{C7728662-3A11-4B8F-B633-A7B0476DDE3C}"
 EndProject
@@ -28,6 +28,13 @@ EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "ServiceShared", "ServiceShared\ServiceShared.shproj", "{B8873343-BA9E-4EB8-A3F9-49FE9B7A379B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraServiceTest", "CameraServiceTest\CameraServiceTest.csproj", "{8EDF4429-251A-416D-BB68-93F227191BCF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Proto", "Proto", "{4344FB2A-52A2-4BD8-BE25-202C17D2BEB9}"
+	ProjectSection(SolutionItems) = preProject
+		protos\CameraControllerService.proto = protos\CameraControllerService.proto
+		protos\CameraService.proto = protos\CameraService.proto
+		protos\Error.proto = protos\Error.proto
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution

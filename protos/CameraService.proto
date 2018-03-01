@@ -26,6 +26,8 @@ service VimbaCamera {
 
 	// stream image transmission
 	rpc RequestFrameStream (stream CameraAcquisitionRequest) returns (stream BufferedFramesResponse);
+
+	rpc RequestTemperature(TemperatureRequest) returns (TemperatureResponse);
 }
 enum ConnectionCommands {
 	CONNECT = 0;
@@ -65,22 +67,22 @@ message CameraParameters {
 	double frameRate = 2;
 	double gain = 3;
 	
-	enum LineSelector {
-		Line0 = 0;
-		Line1 = 1;
-		Line2 = 2;
-		Line3 = 3;
-	}
-	LineSelector triggerLineSelector = 4;
+//	enum LineSelector {
+//		Line0 = 0;
+//		Line1 = 1;
+//		Line2 = 2;
+//		Line3 = 3;
+//	}
+//	LineSelector triggerLineSelector = 4;
 
-	bool triggerLineInverter = 5;
+//	bool triggerLineInverter = 5;
 
-	enum LineSource {
-		AcquisitionStart = 0;
-		FrameStart = 1;
-	}
+//	enum LineSource {
+//		AcquisitionStart = 0;
+//		FrameStart = 1;
+//	}
 	
-	LineSource triggerLineSource = 6;
+//	LineSource triggerLineSource = 6;
 	int32 numFrames = 7;
 }
 message CameraParametersRequest {
@@ -108,4 +110,10 @@ message BufferedFramesResponse {
 	repeated bytes images = 2;
 }
 
-
+message TemperatureRequest {
+	
+}
+message TemperatureResponse {
+	Error error = 1;
+	double temperature = 2;
+}

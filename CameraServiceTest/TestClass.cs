@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,7 +16,7 @@ namespace CameraServiceTest
     {
         private VimbaCamera.VimbaCameraClient _client;
         private Channel _channel;
-        private string _cameraId = "DEV????";
+        private string _cameraId = "DEV_1AB22800055C";
 
         public delegate void InsertRunnable();
 
@@ -24,7 +25,7 @@ namespace CameraServiceTest
             {
                 var response =
                     _client.VimbaInstanceControl(
-                        new VimbaInstanceControlRequest() { Command = ConnectionCommands.Connect });
+                        new VimbaInstanceControlRequest() {Command = ConnectionCommands.Connect});
                 Assert.IsNull(response.Error);
                 Assert.IsTrue(response.IsStarted);
             }
@@ -32,7 +33,7 @@ namespace CameraServiceTest
             {
                 var response =
                     _client.VimbaInstanceControl(
-                        new VimbaInstanceControlRequest() { Command = ConnectionCommands.Disconnect });
+                        new VimbaInstanceControlRequest() {Command = ConnectionCommands.Disconnect});
                 Assert.IsNull(response.Error);
                 Assert.IsFalse(response.IsStarted);
             }
@@ -85,8 +86,99 @@ namespace CameraServiceTest
                     new CameraConnectionRequest() {CameraID = _cameraId, Command = ConnectionCommands.Connect});
 
                 Assert.IsNull(response.Error);
+                Assert.IsTrue(response.IsConnected);
 
+                response = _client.RequestCameraConnection(
+                    new CameraConnectionRequest() {CameraID = _cameraId, Command = ConnectionCommands.Disconnect});
+                Assert.IsNull(response.Error);
+                Assert.IsFalse(response.IsConnected);
             });
         }
-    }
+
+        [Test]
+        public void TestConfigureCamera()
+        {
+            double exposureTime = 45.0;
+            int numFrames = 1;
+            int gain = 10;
+            double frameRate = 390.0;
+
+            StartVimbaAndShutDown(() =>
+            {
+                _client.RequestCameraConnection(
+                    new CameraConnectionRequest() {CameraID = _cameraId, Command = ConnectionCommands.Connect});
+
+                var response = _client.RequestCameraParameters(new CameraParametersRequest()
+                {
+                    Write = true,
+                    Params = new CameraParameters()
+                    {
+                        ExposureTime = exposureTime,
+                        NumFrames = numFrames,
+                        Gain = gain,
+                        FrameRate = frameRate
+                    }
+                });
+                Assert.IsNull(response.Error);
+
+                // read out
+                response = _client.RequestCameraParameters(new CameraParametersRequest() {Write = false});
+                Assert.IsNull(response.Error);
+                Assert.IsTrue(Math.Abs(response.Params.ExposureTime - exposureTime) < 1);
+                Assert.IsTrue(Math.Abs(response.Params.FrameRate - frameRate) < 1);
+                Assert.IsTrue(Math.Abs(response.Params.Gain - gain) < 1);
+                Assert.AreEqual(response.Params.NumFrames, numFrames);
+            });
+        }
+
+        [Test]
+        public void TestRequestTemperature()
+        {
+            StartVimbaAndShutDown(() =>
+            {
+                _client.RequestCameraConnection(new CameraConnectionRequest()
+                {
+                    CameraID = _cameraId,
+                    Command = ConnectionCommands.Connect
+                });
+
+                var response = _client.RequestTemperature(new TemperatureRequest());
+                Assert.IsNull(response.Error);
+                TestContext.WriteLine($"The device temperature is {response.Temperature}");
+            });
+        }
+
+        [Test]
+        public void TestCaptureAndReadBufferedFrames()
+        {
+            StartVimbaAndShutDown(() =>
+            {
+                _client.RequestCameraConnection(new CameraConnectionRequest()
+                {
+                    Command = ConnectionCommands.Connect,
+                    CameraID = _cameraId
+                });
+                var response = _client.RequestCameraAcquisition(new CameraAcquisitionRequest());
+                Assert.IsNull(response.Error);
+
+                Task.Delay(1000).Wait();
+
+                // read frame
+                var frameResponse = _client.RequestBufferedFrames(new BufferedFramesRequest());
+                Assert.IsNull(frameResponse.Error);
+                TestContext.WriteLine($"There are {frameResponse.Images.Count} images.");
+                foreach (var images in frameResponse.Images)
+                {
+                    string tempImageFile = Path.GetTempFileName();
+                    using (var f = File.Open(tempImageFile, FileMode.OpenOrCreate))
+                    {
+                        images.WriteTo(f);
+                    }
+                    TestContext.AddTestAttachment(tempImageFile);
+                    TestContext.WriteLine($"Image written to: {tempImageFile}");
+                }
+            });
+
+        }
+    } // test class 
 }
