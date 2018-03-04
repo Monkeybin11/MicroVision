@@ -83,22 +83,16 @@ namespace CameraServiceNet
             {
                 throw new ApplicationException($"camera is not at correct state");
             }
-
-            try
-            {
-                _cameraInstance.StopContinuousImageAcquisition();
-            }
-            catch (Exception)
-            {
-                // ignored
-            }
-
             var features = _cameraInstance.Features;
+
+            features["AcquisitionStop"].RunCommand();
+
             features["LineSelector"].StringValue = "Line1";
             features["LineMode"].StringValue = "Output";
             features["LineInverter"].BoolValue = true;
             features["LineSource"].StringValue = "FrameActive";
-            features["AcquisitionMode"].StringValue = "MultiFrame";
+            features["AcquisitionMode"].EnumValue = "MultiFrame";
+            features["AcquisitionFrameCount"].IntValue = _numFrames;
             features["AcquisitionFrameRateMode"].StringValue = "Basic";
         }
         /// <summary>
@@ -323,6 +317,20 @@ namespace CameraServiceNet
                 ret.Error = ServiceHelper.BuildError(e, Error.Types.Level.Error);
             }
 
+            return Task.FromResult(ret);
+        }
+
+        public override Task<ResetResponse> RequestReset(ResetRequest request, ServerCallContext context)
+        {
+            var ret = new ResetResponse();
+            try
+            {
+                _cameraInstance.Features["DeviceReset"].RunCommand();
+            }
+            catch (Exception e)
+            {
+                ret.Error = ServiceHelper.BuildError(e, Error.Types.Level.Error);
+            }
             return Task.FromResult(ret);
         }
     }

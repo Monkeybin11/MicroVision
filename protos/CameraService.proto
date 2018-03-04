@@ -28,6 +28,7 @@ service VimbaCamera {
 	rpc RequestFrameStream (stream CameraAcquisitionRequest) returns (stream BufferedFramesResponse);
 
 	rpc RequestTemperature(TemperatureRequest) returns (TemperatureResponse);
+	rpc RequestReset(ResetRequest) returns (ResetResponse);
 }
 enum ConnectionCommands {
 	CONNECT = 0;
@@ -116,4 +117,11 @@ message TemperatureRequest {
 message TemperatureResponse {
 	Error error = 1;
 	double temperature = 2;
+}
+
+message ResetRequest {
+}
+
+message ResetResponse {
+	Error error = 1;
 }

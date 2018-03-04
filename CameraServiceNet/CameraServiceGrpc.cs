@@ -32,6 +32,8 @@ namespace Services {
     static readonly grpc::Marshaller<global::Services.BufferedFramesResponse> __Marshaller_BufferedFramesResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Services.BufferedFramesResponse.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::Services.TemperatureRequest> __Marshaller_TemperatureRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Services.TemperatureRequest.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::Services.TemperatureResponse> __Marshaller_TemperatureResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Services.TemperatureResponse.Parser.ParseFrom);
+    static readonly grpc::Marshaller<global::Services.ResetRequest> __Marshaller_ResetRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Services.ResetRequest.Parser.ParseFrom);
+    static readonly grpc::Marshaller<global::Services.ResetResponse> __Marshaller_ResetResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Services.ResetResponse.Parser.ParseFrom);
 
     static readonly grpc::Method<global::Services.VimbaInstanceControlRequest, global::Services.VimbaInstanceControlResponse> __Method_VimbaInstanceControl = new grpc::Method<global::Services.VimbaInstanceControlRequest, global::Services.VimbaInstanceControlResponse>(
         grpc::MethodType.Unary,
@@ -88,6 +90,13 @@ namespace Services {
         "RequestTemperature",
         __Marshaller_TemperatureRequest,
         __Marshaller_TemperatureResponse);
+
+    static readonly grpc::Method<global::Services.ResetRequest, global::Services.ResetResponse> __Method_RequestReset = new grpc::Method<global::Services.ResetRequest, global::Services.ResetResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "RequestReset",
+        __Marshaller_ResetRequest,
+        __Marshaller_ResetResponse);
 
     /// <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
@@ -165,6 +174,11 @@ namespace Services {
       }
 
       public virtual global::System.Threading.Tasks.Task<global::Services.TemperatureResponse> RequestTemperature(global::Services.TemperatureRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      public virtual global::System.Threading.Tasks.Task<global::Services.ResetResponse> RequestReset(global::Services.ResetRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
@@ -438,6 +452,22 @@ namespace Services {
       {
         return CallInvoker.AsyncUnaryCall(__Method_RequestTemperature, null, options, request);
       }
+      public virtual global::Services.ResetResponse RequestReset(global::Services.ResetRequest request, grpc::Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      {
+        return RequestReset(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      public virtual global::Services.ResetResponse RequestReset(global::Services.ResetRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_RequestReset, null, options, request);
+      }
+      public virtual grpc::AsyncUnaryCall<global::Services.ResetResponse> RequestResetAsync(global::Services.ResetRequest request, grpc::Metadata headers = null, DateTime? deadline = null, CancellationToken cancellationToken = default(CancellationToken))
+      {
+        return RequestResetAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      public virtual grpc::AsyncUnaryCall<global::Services.ResetResponse> RequestResetAsync(global::Services.ResetRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_RequestReset, null, options, request);
+      }
       /// <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
       protected override VimbaCameraClient NewInstance(ClientBaseConfiguration configuration)
       {
@@ -457,7 +487,8 @@ namespace Services {
           .AddMethod(__Method_RequestCameraAcquisition, serviceImpl.RequestCameraAcquisition)
           .AddMethod(__Method_RequestBufferedFrames, serviceImpl.RequestBufferedFrames)
           .AddMethod(__Method_RequestFrameStream, serviceImpl.RequestFrameStream)
-          .AddMethod(__Method_RequestTemperature, serviceImpl.RequestTemperature).Build();
+          .AddMethod(__Method_RequestTemperature, serviceImpl.RequestTemperature)
+          .AddMethod(__Method_RequestReset, serviceImpl.RequestReset).Build();
     }
 
   }

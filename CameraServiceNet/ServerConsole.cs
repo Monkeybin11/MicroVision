@@ -10,7 +10,7 @@ namespace CameraServiceNet
 {
     public class ServerConsole
     {
-        public static int Main(string[] args)
+        public static Server CreateServer()
         {
             string Uri = "localhost";
             int Port = 39946;
@@ -19,9 +19,13 @@ namespace CameraServiceNet
                 Services = { VimbaCamera.BindService(new CameraServiceImpl()) },
                 Ports = { new ServerPort(Uri, Port, ServerCredentials.Insecure) }
             };
+            return server;
+        }
+        public static int Main(string[] args)
+        {
+            var server = CreateServer();
             server.Start();
-            Console.WriteLine($"Camera rpc server listens on {Uri}:{Port}");
-            Console.ReadKey();
+            Console.Read();
             return 0;
         }
     }

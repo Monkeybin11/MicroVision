@@ -45,26 +45,29 @@ namespace Services {
             "IkgKFkJ1ZmZlcmVkRnJhbWVzUmVzcG9uc2USHgoFZXJyb3IYASABKAsyDy5T",
             "ZXJ2aWNlcy5FcnJvchIOCgZpbWFnZXMYAiADKAwiFAoSVGVtcGVyYXR1cmVS",
             "ZXF1ZXN0IkoKE1RlbXBlcmF0dXJlUmVzcG9uc2USHgoFZXJyb3IYASABKAsy",
-            "Dy5TZXJ2aWNlcy5FcnJvchITCgt0ZW1wZXJhdHVyZRgCIAEoASoxChJDb25u",
-            "ZWN0aW9uQ29tbWFuZHMSCwoHQ09OTkVDVBAAEg4KCkRJU0NPTk5FQ1QQATL8",
-            "BQoLVmltYmFDYW1lcmESZQoUVmltYmFJbnN0YW5jZUNvbnRyb2wSJS5TZXJ2",
-            "aWNlcy5WaW1iYUluc3RhbmNlQ29udHJvbFJlcXVlc3QaJi5TZXJ2aWNlcy5W",
-            "aW1iYUluc3RhbmNlQ29udHJvbFJlc3BvbnNlEk4KEVJlcXVlc3RDYW1lcmFM",
-            "aXN0EhsuU2VydmljZXMuQ2FtZXJhTGlzdFJlcXVlc3QaHC5TZXJ2aWNlcy5D",
-            "YW1lcmFMaXN0UmVzcG9uc2USYAoXUmVxdWVzdENhbWVyYUNvbm5lY3Rpb24S",
-            "IS5TZXJ2aWNlcy5DYW1lcmFDb25uZWN0aW9uUmVxdWVzdBoiLlNlcnZpY2Vz",
-            "LkNhbWVyYUNvbm5lY3Rpb25SZXNwb25zZRJgChdSZXF1ZXN0Q2FtZXJhUGFy",
-            "YW1ldGVycxIhLlNlcnZpY2VzLkNhbWVyYVBhcmFtZXRlcnNSZXF1ZXN0GiIu",
-            "U2VydmljZXMuQ2FtZXJhUGFyYW1ldGVyc1Jlc3BvbnNlEmMKGFJlcXVlc3RD",
-            "YW1lcmFBY3F1aXNpdGlvbhIiLlNlcnZpY2VzLkNhbWVyYUFjcXVpc2l0aW9u",
-            "UmVxdWVzdBojLlNlcnZpY2VzLkNhbWVyYUFjcXVpc2l0aW9uUmVzcG9uc2US",
-            "WgoVUmVxdWVzdEJ1ZmZlcmVkRnJhbWVzEh8uU2VydmljZXMuQnVmZmVyZWRG",
-            "cmFtZXNSZXF1ZXN0GiAuU2VydmljZXMuQnVmZmVyZWRGcmFtZXNSZXNwb25z",
-            "ZRJeChJSZXF1ZXN0RnJhbWVTdHJlYW0SIi5TZXJ2aWNlcy5DYW1lcmFBY3F1",
-            "aXNpdGlvblJlcXVlc3QaIC5TZXJ2aWNlcy5CdWZmZXJlZEZyYW1lc1Jlc3Bv",
-            "bnNlKAEwARJRChJSZXF1ZXN0VGVtcGVyYXR1cmUSHC5TZXJ2aWNlcy5UZW1w",
-            "ZXJhdHVyZVJlcXVlc3QaHS5TZXJ2aWNlcy5UZW1wZXJhdHVyZVJlc3BvbnNl",
-            "YgZwcm90bzM="));
+            "Dy5TZXJ2aWNlcy5FcnJvchITCgt0ZW1wZXJhdHVyZRgCIAEoASIOCgxSZXNl",
+            "dFJlcXVlc3QiLwoNUmVzZXRSZXNwb25zZRIeCgVlcnJvchgBIAEoCzIPLlNl",
+            "cnZpY2VzLkVycm9yKjEKEkNvbm5lY3Rpb25Db21tYW5kcxILCgdDT05ORUNU",
+            "EAASDgoKRElTQ09OTkVDVBABMr0GCgtWaW1iYUNhbWVyYRJlChRWaW1iYUlu",
+            "c3RhbmNlQ29udHJvbBIlLlNlcnZpY2VzLlZpbWJhSW5zdGFuY2VDb250cm9s",
+            "UmVxdWVzdBomLlNlcnZpY2VzLlZpbWJhSW5zdGFuY2VDb250cm9sUmVzcG9u",
+            "c2USTgoRUmVxdWVzdENhbWVyYUxpc3QSGy5TZXJ2aWNlcy5DYW1lcmFMaXN0",
+            "UmVxdWVzdBocLlNlcnZpY2VzLkNhbWVyYUxpc3RSZXNwb25zZRJgChdSZXF1",
+            "ZXN0Q2FtZXJhQ29ubmVjdGlvbhIhLlNlcnZpY2VzLkNhbWVyYUNvbm5lY3Rp",
+            "b25SZXF1ZXN0GiIuU2VydmljZXMuQ2FtZXJhQ29ubmVjdGlvblJlc3BvbnNl",
+            "EmAKF1JlcXVlc3RDYW1lcmFQYXJhbWV0ZXJzEiEuU2VydmljZXMuQ2FtZXJh",
+            "UGFyYW1ldGVyc1JlcXVlc3QaIi5TZXJ2aWNlcy5DYW1lcmFQYXJhbWV0ZXJz",
+            "UmVzcG9uc2USYwoYUmVxdWVzdENhbWVyYUFjcXVpc2l0aW9uEiIuU2Vydmlj",
+            "ZXMuQ2FtZXJhQWNxdWlzaXRpb25SZXF1ZXN0GiMuU2VydmljZXMuQ2FtZXJh",
+            "QWNxdWlzaXRpb25SZXNwb25zZRJaChVSZXF1ZXN0QnVmZmVyZWRGcmFtZXMS",
+            "Hy5TZXJ2aWNlcy5CdWZmZXJlZEZyYW1lc1JlcXVlc3QaIC5TZXJ2aWNlcy5C",
+            "dWZmZXJlZEZyYW1lc1Jlc3BvbnNlEl4KElJlcXVlc3RGcmFtZVN0cmVhbRIi",
+            "LlNlcnZpY2VzLkNhbWVyYUFjcXVpc2l0aW9uUmVxdWVzdBogLlNlcnZpY2Vz",
+            "LkJ1ZmZlcmVkRnJhbWVzUmVzcG9uc2UoATABElEKElJlcXVlc3RUZW1wZXJh",
+            "dHVyZRIcLlNlcnZpY2VzLlRlbXBlcmF0dXJlUmVxdWVzdBodLlNlcnZpY2Vz",
+            "LlRlbXBlcmF0dXJlUmVzcG9uc2USPwoMUmVxdWVzdFJlc2V0EhYuU2Vydmlj",
+            "ZXMuUmVzZXRSZXF1ZXN0GhcuU2VydmljZXMuUmVzZXRSZXNwb25zZWIGcHJv",
+            "dG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.EmptyReflection.Descriptor, global::Services.ErrorReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Services.ConnectionCommands), }, new pbr::GeneratedClrTypeInfo[] {
@@ -82,7 +85,9 @@ namespace Services {
             new pbr::GeneratedClrTypeInfo(typeof(global::Services.BufferedFramesRequest), global::Services.BufferedFramesRequest.Parser, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Services.BufferedFramesResponse), global::Services.BufferedFramesResponse.Parser, new[]{ "Error", "Images" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Services.TemperatureRequest), global::Services.TemperatureRequest.Parser, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Services.TemperatureResponse), global::Services.TemperatureResponse.Parser, new[]{ "Error", "Temperature" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Services.TemperatureResponse), global::Services.TemperatureResponse.Parser, new[]{ "Error", "Temperature" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Services.ResetRequest), global::Services.ResetRequest.Parser, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Services.ResetResponse), global::Services.ResetResponse.Parser, new[]{ "Error" }, null, null, null)
           }));
     }
     #endregion
@@ -2096,6 +2101,218 @@ namespace Services {
           }
           case 17: {
             Temperature = input.ReadDouble();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class ResetRequest : pb::IMessage<ResetRequest> {
+    private static readonly pb::MessageParser<ResetRequest> _parser = new pb::MessageParser<ResetRequest>(() => new ResetRequest());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<ResetRequest> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Services.CameraServiceReflection.Descriptor.MessageTypes[15]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ResetRequest() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ResetRequest(ResetRequest other) : this() {
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ResetRequest Clone() {
+      return new ResetRequest(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as ResetRequest);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(ResetRequest other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      return true;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(ResetRequest other) {
+      if (other == null) {
+        return;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            input.SkipLastField();
+            break;
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class ResetResponse : pb::IMessage<ResetResponse> {
+    private static readonly pb::MessageParser<ResetResponse> _parser = new pb::MessageParser<ResetResponse>(() => new ResetResponse());
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<ResetResponse> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Services.CameraServiceReflection.Descriptor.MessageTypes[16]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ResetResponse() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ResetResponse(ResetResponse other) : this() {
+      Error = other.error_ != null ? other.Error.Clone() : null;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ResetResponse Clone() {
+      return new ResetResponse(this);
+    }
+
+    /// <summary>Field number for the "error" field.</summary>
+    public const int ErrorFieldNumber = 1;
+    private global::Services.Error error_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Services.Error Error {
+      get { return error_; }
+      set {
+        error_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as ResetResponse);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(ResetResponse other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Error, other.Error)) return false;
+      return true;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (error_ != null) hash ^= Error.GetHashCode();
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (error_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Error);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (error_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Error);
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(ResetResponse other) {
+      if (other == null) {
+        return;
+      }
+      if (other.error_ != null) {
+        if (error_ == null) {
+          error_ = new global::Services.Error();
+        }
+        Error.MergeFrom(other.Error);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            input.SkipLastField();
+            break;
+          case 10: {
+            if (error_ == null) {
+              error_ = new global::Services.Error();
+            }
+            input.ReadMessage(error_);
             break;
           }
         }
