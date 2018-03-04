@@ -1,10 +1,17 @@
-﻿using NUnit.Framework;
+﻿#define useWinServer
+
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Security.Policy;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using CameraServiceNet;
 using Grpc.Core;
 using NUnit.Framework.Constraints;
 using Services;
@@ -39,6 +46,20 @@ namespace CameraServiceTest
             }
         }
 
+#if useWinServer
+        private Process process;
+        [OneTimeSetUp]
+        public void StartWinServer()
+        {
+            process = Process.Start(@"C:\Users\wuyua\source\repos\MicroVision\CameraServiceNet\bin\Debug\CameraServiceNet.exe");
+        }
+
+        [OneTimeTearDown]
+        public void StopWinServer()
+        {
+            process.Kill();
+        }
+#endif
         [SetUp]
         public void Setup()
         {
@@ -174,11 +195,26 @@ namespace CameraServiceTest
                     {
                         images.WriteTo(f);
                     }
+
                     TestContext.AddTestAttachment(tempImageFile);
                     TestContext.WriteLine($"Image written to: {tempImageFile}");
                 }
             });
+        }
 
+        [Test]
+        public void TestResetDevice()
+        {
+            StartVimbaAndShutDown(() =>
+            {
+                _client.RequestCameraConnection(new CameraConnectionRequest()
+                {
+                    Command = ConnectionCommands.Connect,
+                    CameraID = _cameraId
+                });
+                var response = _client.RequestReset(new ResetRequest());
+                Assert.IsNull(response.Error);
+            });
         }
     } // test class 
 }
