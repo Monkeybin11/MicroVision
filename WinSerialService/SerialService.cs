@@ -7,22 +7,28 @@ using System.Linq;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
+using Grpc.Core;
 
-namespace WindowsSerialSerivce
+namespace WinSerialService
 {
-    public partial class Service1 : ServiceBase
+    public partial class SerialService : ServiceBase
     {
-        public Service1()
+        private Server _server;
+        public SerialService()
         {
             InitializeComponent();
         }
 
         protected override void OnStart(string[] args)
         {
+            _server = SerialServiceNet.ServerConsole.CreateServer();
+            _server.Start();
         }
 
         protected override void OnStop()
         {
+            _server.ShutdownAsync().Wait();
+
         }
     }
 }

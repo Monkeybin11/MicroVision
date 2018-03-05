@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("WindowsSerialSerivce")]
+[assembly: AssemblyTitle("WinSerialService")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("WindowsSerialSerivce")]
+[assembly: AssemblyProduct("WinSerialService")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("db6b7f47-2d68-4830-bfa8-b588c9dc2d41")]
+[assembly: Guid("cd3476e1-b175-4a58-9d66-2ca84e7d995d")]
 
 // Version information for an assembly consists of the following four values:
 //

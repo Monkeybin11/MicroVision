@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ServiceProcess;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
-namespace WindowsSerialSerivce
+namespace WinCameraService
 {
     static class Program
     {
@@ -14,12 +15,18 @@ namespace WindowsSerialSerivce
         /// </summary>
         static void Main()
         {
+#if DEBUG
+            var srv = new CameraService();
+            srv.OnDebug();
+            Thread.Sleep(Timeout.Infinite);
+#else
             ServiceBase[] ServicesToRun;
             ServicesToRun = new ServiceBase[]
             {
-                new Service1()
+                new CameraService()
             };
             ServiceBase.Run(ServicesToRun);
+#endif
         }
     }
 }
