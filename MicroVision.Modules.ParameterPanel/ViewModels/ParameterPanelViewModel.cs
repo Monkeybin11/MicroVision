@@ -9,6 +9,7 @@ using System.Timers;
 using System.Collections.ObjectModel;
 using System.Windows;
 using MicroVision.Core.Events;
+using MicroVision.Core.Models;
 using MicroVision.Services;
 using MicroVision.Services.Models;
 using Prism.Events;

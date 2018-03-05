@@ -10,7 +10,8 @@
         mc:Ignorable="d"
         Title="{Binding Title}" Height="600" Width="700"
         prism:ViewModelLocator.AutoWireViewModel="True">
-	<Grid>
+	<DockPanel>
+        <ContentControl prism:RegionManager.RegionName="Menu" DockPanel.Dock="Top"></ContentControl>
 		<ad:DockingManager
 			BorderBrush="Azure"
 			AllowMixedOrientation="True"
@@ -37,7 +38,7 @@
 				</ad:LayoutPanel>
 			</ad:LayoutRoot>
 		</ad:DockingManager>
-	</Grid>
+    </DockPanel>
 </Window>
 
 

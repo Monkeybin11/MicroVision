@@ -2,6 +2,8 @@
 using Microsoft.Practices.Unity;
 using Prism.Unity;
 using System.Windows;
+using MicroVision.Modules.Menu;
+using MicroVision.Modules.Menu.Views;
 using MicroVision.Modules.ParameterPanel;
 using MicroVision.Modules.StatusPanel;
 using MicroVision.Modules.StatusPanel.Views;
@@ -37,6 +39,8 @@ namespace MicroVision
             Container.RegisterType<IStatusServices, StatusServices>(new ContainerControlledLifetimeManager());
 
             Container.RegisterType<ISerialService, SerialService>(new ContainerControlledLifetimeManager());
+            Container.RegisterType<IMenuServices, MenuServices>(new ContainerControlledLifetimeManager());
+
             // initialize background services
             Container.Resolve<ISerialService>();
         }
@@ -48,6 +52,7 @@ namespace MicroVision
             var catalog = (ModuleCatalog)ModuleCatalog;
             catalog.AddModule(typeof(ParameterPanel));
             catalog.AddModule(typeof(StatusPanelModule));
+            catalog.AddModule(typeof(MenuModule));
         }
     }
 }

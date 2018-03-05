@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using Prism.Mvvm;
 
-namespace MicroVision.Services.Models
+namespace MicroVision.Core.Models
 {
 
     /// <summary>
     /// Base parameter class
     /// </summary>
     /// <typeparam name="T"> value type</typeparam>
+    [Serializable]
     public abstract class Parameter<T> : BindableBase
     {
         private bool _isEnabled;
