@@ -1,6 +1,7 @@
 ﻿using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -58,6 +59,25 @@ namespace MicroVision.Services
         public CheckParameter FanPowerCheck { get; } = new CheckParameter("Fan", false);
         public CheckParameter LaserPowerCheck { get; } = new CheckParameter("Laser", false);
         public CheckParameter MotorPowerCheck { get; } = new CheckParameter("Motor", false);
+
+        public void Serialize(string filename = "settings.xml")
+        {
+            var serializer = new System.Xml.Serialization.XmlSerializer(GetType());
+            
+            using (FileStream fs = new FileStream(filename, FileMode.OpenOrCreate))
+            {
+                serializer.Serialize(fs, this);
+            }
+        }
+
+        public void Load(string filename = "settings.xml")
+        {
+            var deserializer = new System.Xml.Serialization.XmlSerializer(GetType());
+            using (FileStream fs = new FileStream(filename, FileMode.OpenOrCreate))
+            {
+                deserializer.Deserialize(fs);
+            }
+        }
     }
 
 }
