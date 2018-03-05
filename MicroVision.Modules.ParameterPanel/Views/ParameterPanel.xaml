@@ -7,9 +7,12 @@
              xmlns:prism="http://prismlibrary.com/"
              xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:VM="clr-namespace:MicroVision.Modules.ParameterPanel.ViewModels"
              mc:Ignorable="d"
              prism:ViewModelLocator.AutoWireViewModel="True"
-             d:DesignHeight="150" d:DesignWidth="800">
+             d:DesignHeight="150" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance VM:ParameterPanelViewModel}"
+             >
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -45,7 +48,7 @@
         <Button Command="{Binding TestCommand}" DockPanel.Dock="Right" Width="100" Margin="10">Start Capture</Button>
 
         <TabControl Margin="0,5,0,10">
-            <TabItem Header="Backend Server">
+            <!--<TabItem Header="Backend Server" >
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -72,7 +75,7 @@
 
                     </Grid>
                 </ScrollViewer>
-            </TabItem>
+            </TabItem>-->
             <TabItem Header="Connection">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                     <WrapPanel>
@@ -80,8 +83,8 @@
                             <StackPanel>
                                 <DockPanel Style="{StaticResource DockPanelStyle}">
                                     <Label Style="{StaticResource LabelStyle}">COM Port:</Label>
-                                    <ComboBox ItemsSource="{Binding ComSelection.Value}"
-                                              SelectedValue="{Binding ComSelection.Selected}" />
+                                    <ComboBox ItemsSource="{Binding Params.DeviceSelections.ComSelection.Value}"
+                                              SelectedValue="{Binding Params.ComSelection.DeviceSelections.Selected}" />
                                 </DockPanel>
                                 <ToggleButton IsChecked="{Binding ComConnectionStatus.IsConnected, Mode=OneWay}"
                                               Style="{StaticResource ConnectionButtonStyle}"
@@ -93,7 +96,7 @@
                             <StackPanel>
                                 <DockPanel Style="{StaticResource DockPanelStyle}">
                                     <Label Style="{StaticResource LabelStyle}">Camera Name:</Label>
-                                    <ComboBox ItemsSource="{Binding VimbaSelection.Value}" />
+                                    <ComboBox ItemsSource="{Binding Params.DeviceSelections.VimbaSelection.Value}" />
                                 </DockPanel>
                                 <ToggleButton Style="{StaticResource ConnectionButtonStyle}">Connect</ToggleButton>
                             </StackPanel>
@@ -132,15 +135,15 @@
                         </WrapPanel.Resources>
 
                         <ContentControl ContentTemplate="{StaticResource ParameterControlTemplate}"
-                                        Content="{Binding ExposureTime}" />
+                                        Content="{Binding Params.AcquisitionParameters.ExposureTime}" />
                         <ContentControl ContentTemplate="{StaticResource ParameterControlTemplate}"
-                                        Content="{Binding Gain}" />
+                                        Content="{Binding Params.AcquisitionParameters.Gain}" />
                         <ContentControl ContentTemplate="{StaticResource ParameterControlTemplate}"
-                                        Content="{Binding LaserDuration}" />
+                                        Content="{Binding Params.AcquisitionParameters.LaserDuration}" />
                         <ContentControl ContentTemplate="{StaticResource ParameterControlTemplate}"
-                                        Content="{Binding CaptureInterval}" />
+                                        Content="{Binding Params.AcquisitionParameters.CaptureInterval}" />
                         <ContentControl ContentTemplate="{StaticResource ParameterControlTemplate}"
-                                        Content="{Binding OutputDirectory}" />
+                                        Content="{Binding Params.AcquisitionParameters.OutputDirectory}" />
 
                     </WrapPanel>
                 </ScrollViewer>
@@ -159,15 +162,15 @@
                                 </DataTemplate>
                             </GroupBox.Resources>
                             <StackPanel>
-                                <ContentControl Content="{Binding ManualPowerCheck}"
+                                <ContentControl Content="{Binding Params.PowerConfigurations.ManualPowerCheck}"
                                                 ContentTemplate="{StaticResource PowerCheckBoxTemplate}" />
-                                <ContentControl Content="{Binding MasterPowerCheck}"
+                                <ContentControl Content="{Binding Params.PowerConfigurations.MasterPowerCheck}"
                                                 ContentTemplate="{StaticResource PowerCheckBoxTemplate}" />
-                                <ContentControl Content="{Binding FanPowerCheck}"
+                                <ContentControl Content="{Binding Params.PowerConfigurations.FanPowerCheck}"
                                                 ContentTemplate="{StaticResource PowerCheckBoxTemplate}" />
-                                <ContentControl Content="{Binding LaserPowerCheck}"
+                                <ContentControl Content="{Binding Params.PowerConfigurations.LaserPowerCheck}"
                                                 ContentTemplate="{StaticResource PowerCheckBoxTemplate}" />
-                                <ContentControl Content="{Binding MotorPowerCheck}"
+                                <ContentControl Content="{Binding Params.PowerConfigurations.MotorPowerCheck}"
                                                 ContentTemplate="{StaticResource PowerCheckBoxTemplate}" />
                             </StackPanel>
                         </GroupBox>
