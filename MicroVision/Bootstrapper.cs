@@ -8,7 +8,7 @@ using MicroVision.Modules.ParameterPanel;
 using MicroVision.Modules.StatusPanel;
 using MicroVision.Modules.StatusPanel.Views;
 using MicroVision.Services;
-
+using MicroVision.Services.GrpcReference;
 /*
 using MicroVision.Services;
 */
@@ -41,8 +41,11 @@ namespace MicroVision
             Container.RegisterType<ISerialService, SerialService>(new ContainerControlledLifetimeManager());
             Container.RegisterType<IMenuServices, MenuServices>(new ContainerControlledLifetimeManager());
 
+            Container.RegisterType<IRpcService, RpcService>(new ContainerControlledLifetimeManager());
+
             // initialize background services
             Container.Resolve<ISerialService>();
+            Container.Resolve<IRpcService>();
         }
 
         protected override void ConfigureModuleCatalog()
