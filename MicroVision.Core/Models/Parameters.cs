@@ -89,6 +89,7 @@ namespace MicroVision.Core.Models
             set { SetProperty(ref _selected, value); }
         }
 
+        public SelectionParameter() : base("Label", true) { }
         public SelectionParameter(string label, bool isEnabled = true) : base(label, isEnabled){}
     }
     #endregion
@@ -104,7 +105,7 @@ namespace MicroVision.Core.Models
             get { return _value; }
             set { SetProperty(ref _value, value); }
         }
-
+        public CheckParameter(): base("Label", true) { }
         public CheckParameter(string label) : base(label) {}
         public CheckParameter(string label, bool isEnabled):base(label, isEnabled) { }
     }

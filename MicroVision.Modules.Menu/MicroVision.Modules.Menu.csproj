@@ -14,6 +14,7 @@
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -70,6 +71,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -78,12 +80,9 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MicroVision.Services\MicroVision.Services.csproj">
-      <Project>{C2AB6A15-51B1-41FE-8FE5-D61F1DAFBE90}</Project>
-      <Name>MicroVision.Services</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
+    <Page Include="Resources\ParameterMenu.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Menu.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -100,6 +99,16 @@
     <PackageReference Include="Prism.Wpf">
       <Version>6.3.0</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MicroVision.Core\MicroVision.Core.csproj">
+      <Project>{d282d7e2-e6bf-4208-bc87-283d836e94ad}</Project>
+      <Name>MicroVision.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MicroVision.Services\MicroVision.Services.csproj">
+      <Project>{c2ab6a15-51b1-41fe-8fe5-d61f1dafbe90}</Project>
+      <Name>MicroVision.Services</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

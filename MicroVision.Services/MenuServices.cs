@@ -22,10 +22,6 @@ namespace MicroVision.Services
         {
             _menuInstance = new Menu();
             _menuInstance.IsMainMenu = true;
-            MenuItem item = new MenuItem();
-            item.Command = new DelegateCommand(() => MessageBox.Show("Test"));
-            item.Header = "_Test";
-            AddMenuItem(item);
         }
 
         private readonly Menu _menuInstance;
