@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using Grpc.Core;
 using MicroVision.Core.Events;
 using MicroVision.Core.Models;
-using MicroVision.Services.Properties;
 using Prism.Events;
 using RJCP.IO.Ports;
 using static Services.CameraController;
