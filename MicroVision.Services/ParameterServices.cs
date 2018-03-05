@@ -10,6 +10,9 @@ namespace MicroVision.Services
 {
     public interface IParameterServices
     {
+        FieldParameter<string> CameraControllerUri { get; }
+        FieldParameter<string> CameraUri { get; }
+        FieldParameter<string> ProcessorUri { get; }
         FieldParameter<int> ExposureTime { get; }
         FieldParameter<double> Gain { get; }
         FieldParameter<int> LaserDuration { get; }
@@ -38,6 +41,9 @@ namespace MicroVision.Services
             var senderObj = (CheckParameter) sender;
         }
 
+        public FieldParameter<string> CameraControllerUri { get; } = new FieldParameter<string>() {Label = "Camera Controller Server Uri", IsEnabled = true, Value = ""};
+        public FieldParameter<string> CameraUri { get; } = new FieldParameter<string>() {Label = "Camera Server Uri", IsEnabled = true, Value = ""};
+        public FieldParameter<string> ProcessorUri { get; } = new FieldParameter<string>() {Label = "Image Processing Server Uri", IsEnabled = true, Value = ""};
         public FieldParameter<int> ExposureTime { get; } = new FieldParameter<int>(){Label="Exposure Time (us)", Value = 44, Minimum = 44, Maximum = 100000};
         public FieldParameter<double> Gain { get; } = new FieldParameter<double>() {Label = "Gain", Value = 0, Minimum = 0, Maximum = 20};
         public FieldParameter<int> LaserDuration { get; } = new FieldParameter<int>(){Label = "Laser duration (us)", Value = 20, Minimum = 0, Maximum = 100000};

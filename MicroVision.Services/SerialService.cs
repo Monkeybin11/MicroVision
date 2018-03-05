@@ -5,10 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Grpc.Core;
 using MicroVision.Core.Events;
 using MicroVision.Core.Models;
+using MicroVision.Services.Properties;
 using Prism.Events;
 using RJCP.IO.Ports;
+using static Services.CameraController;
 using SerialErrorReceivedEventArgs = System.IO.Ports.SerialErrorReceivedEventArgs;
 
 namespace MicroVision.Services
@@ -23,6 +26,8 @@ namespace MicroVision.Services
         private readonly IEventAggregator _eventAggregator;
         private SerialPortStream _sp;
         private Thread _serialDataParsingThread;
+        private CameraControllerClient _rpcClient;
+        private Channel _rpcChannel;
 
         public SerialService(IParameterServices parameterServices, ILogService log, IEventAggregator eventAggregator)
         {

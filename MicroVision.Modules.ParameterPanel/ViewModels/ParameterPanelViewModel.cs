@@ -22,6 +22,10 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
 
         #region properties
         #region parameter properties
+
+        public FieldParameter<string> CameraUri { get; }
+        public FieldParameter<string> CameraControllerUri { get; }
+        public FieldParameter<string> ImageProcessorUri { get; }
         public FieldParameter<int> ExposureTime { get; }
         public FieldParameter<int> LaserDuration { get; }
         public FieldParameter<int> CaptureInterval { get; }
@@ -74,6 +78,10 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
         {
             _eventAggregator = eventAggregator;
 
+            CameraUri = param.CameraUri;
+            CameraControllerUri = param.CameraControllerUri;
+            ImageProcessorUri = param.ProcessorUri;
+
             ExposureTime = param.ExposureTime;
             LaserDuration = param.LaserDuration;
             CaptureInterval = param.CaptureInterval;
@@ -96,7 +104,7 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
 
             ComConnectionStatus = statusService.ComConnectionStatus;
         }
-
+        
 
         private void ManualPowerCheck_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
