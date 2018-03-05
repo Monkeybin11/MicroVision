@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Google.Protobuf, Version=3.5.1.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Protobuf.3.5.1\lib\net45\Google.Protobuf.dll</HintPath>
+    </Reference>
     <Reference Include="Grpc.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d754f35622e28bad, processorArchitecture=MSIL">
       <HintPath>..\packages\Grpc.Core.1.9.0\lib\net45\Grpc.Core.dll</HintPath>
     </Reference>
@@ -110,6 +113,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GrpcReference\Error.cs" />
+    <Compile Include="GrpcReference\CameraControllerService.cs" />
+    <Compile Include="GrpcReference\CameraControllerServiceGrpc.cs" />
+    <Compile Include="GrpcReference\CameraService.cs" />
+    <Compile Include="GrpcReference\CameraServiceGrpc.cs" />
     <Compile Include="LogService.cs" />
     <Compile Include="ParameterServices.cs" />
     <Compile Include="SerialService.cs" />
@@ -125,17 +133,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CameraServiceNet\CameraServiceNet.csproj">
-      <Project>{6976e890-16ec-413c-9106-62ab4811f6e3}</Project>
-      <Name>CameraServiceNet</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MicroVision.Core\MicroVision.Core.csproj">
       <Project>{D282D7E2-E6BF-4208-BC87-283D836E94AD}</Project>
       <Name>MicroVision.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SerialServiceNet\SerialServiceNet.csproj">
-      <Project>{b02ffa12-e312-46f8-b31d-d29e49c0e981}</Project>
-      <Name>SerialServiceNet</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
