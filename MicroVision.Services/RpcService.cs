@@ -43,36 +43,10 @@ namespace MicroVision.Services.GrpcReference
 
                 // try to initiate the connection to test if the server is alive
                 var timeout = DateTime.UtcNow.AddSeconds(5);
-                new TaskFactory().StartNew(async () =>
-                {
-                    try
-                    {
-                        await _cameraChannel.ConnectAsync(timeout);
-                    }
-                    catch (Exception)
-                    {
-                        _eventAggregator.GetEvent<HardwareRpcConnedtionFailedEvent>()
-                            .Publish("Camera Service Server Not Available");
-                    }
-                });
                 
-
                 _cameraControllerChannel = new Channel(appSettings["CameraControllerRpcServer"],
                     ChannelCredentials.Insecure);
-                CameraControllerClient = new CameraControllerClient(_cameraControllerChannel);
-                new TaskFactory().StartNew(async () =>
-                {
-                    try
-                    {
-                        await _cameraControllerChannel.ConnectAsync(timeout);
-                    }
-                    catch (Exception)
-                    {
-                        _eventAggregator.GetEvent<HardwareRpcConnedtionFailedEvent>()
-                            .Publish("Camera Controller Server Not Available");
-                    }
-                });
-                
+                CameraControllerClient = new CameraControllerClient(_cameraControllerChannel);    
             }
         }
     }
