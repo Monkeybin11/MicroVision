@@ -5,20 +5,26 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:prism="http://prismlibrary.com/"
              xmlns:local="clr-namespace:MicroVision.Modules.Statusbar.Views"
+             xmlns:models="clr-namespace:MicroVision.Modules.Statusbar.Models"
+             xmlns:sampleData="clr-namespace:MicroVision.Modules.Statusbar.SampleData"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300"
+             d:DataContext="{d:DesignInstance sampleData:StatusLogSampleDataSource, IsDesignTimeCreatable=True}">
     <Grid>
-        <ListBox>
+        <ListBox ItemsSource="{Binding StatusItems}">
             <ListBox.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate DataType="{x:Type models:StatusEntry}">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
+                            <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="{Binding Timestamp}"></TextBlock>
-                        <TextBlock Text="{Binding Message}" Grid.Column="1"></TextBlock>
+                        <GridSplitter Grid.Column="1"></GridSplitter>
+                        <TextBlock Text="{Binding Message}" Grid.Column="2"></TextBlock>
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>

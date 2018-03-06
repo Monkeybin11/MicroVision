@@ -14,7 +14,13 @@
     <StatusBar MaxHeight="30">
         <i:Interaction.Triggers>
             <prism:InteractionRequestTrigger SourceObject="{Binding ShowStatusLogRequest}">
-                <prism:PopupWindowAction>
+                <prism:PopupWindowAction WindowStartupLocation="CenterOwner">
+                    <prism:PopupWindowAction.WindowStyle>
+                        <Style TargetType="Window">
+                            <Setter Property="Width" Value="300"></Setter>
+                            <Setter Property="Height" Value="300"></Setter>
+                        </Style>
+                    </prism:PopupWindowAction.WindowStyle>
                     <prism:PopupWindowAction.WindowContent>
                         <local:StatusLog />
                     </prism:PopupWindowAction.WindowContent>

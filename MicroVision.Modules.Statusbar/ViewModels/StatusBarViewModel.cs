@@ -12,12 +12,15 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Prism.Events;
 using MicroVision.Core.Events;
+using MicroVision.Modules.Statusbar.Models;
+using MicroVision.Modules.Statusbar.Notifications;
 using Prism.Interactivity.InteractionRequest;
 
 namespace MicroVision.Modules.Statusbar.ViewModels
 {
     public class StatusBarViewModel : BindableBase
     {
+        private List<StatusEntry> _log = new List<StatusEntry>();
         private readonly IEventAggregator _eventAggregator;
         private ImageSource _statusIcon;
         public ImageSource StatusIcon
@@ -41,7 +44,7 @@ namespace MicroVision.Modules.Statusbar.ViewModels
         void ExecuteShowStatusLogCommand()
         {
             InitializeStatus();
-            ShowStatusLogRequest.Raise(new Notification(){Title = "Status Log"});
+            ShowStatusLogRequest.Raise(new StatusLogNotification(_log));
         }
 
         public StatusBarViewModel(IEventAggregator eventAggregator)
@@ -66,6 +69,7 @@ namespace MicroVision.Modules.Statusbar.ViewModels
         }
         private void NotifyException(Exception exception)
         {
+            _log.Add(new StatusEntry(DateTime.Now, exception.Message));
             StatusIcon = CreateIcon(SystemIcons.Error);
             Status = exception.Message;
         }

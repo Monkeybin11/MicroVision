@@ -52,6 +52,9 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\StatusEntry.cs" />
+    <Compile Include="Notifications\StatusLogNotification.cs" />
+    <Compile Include="SampleData\StatusLogSampleDataSource.cs" />
     <Compile Include="StatusbarModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -67,6 +70,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="ViewModels\StatusBarViewModel.cs" />
+    <Compile Include="ViewModels\StatusLogViewModel.cs" />
     <Compile Include="Views\StatusBar.xaml.cs">
       <DependentUpon>StatusBar.xaml</DependentUpon>
     </Compile>
