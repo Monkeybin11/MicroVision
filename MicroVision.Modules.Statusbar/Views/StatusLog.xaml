@@ -13,22 +13,7 @@
              d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance sampleData:StatusLogSampleDataSource, IsDesignTimeCreatable=True}">
     <Grid>
-        <ListBox ItemsSource="{Binding StatusItems}">
-            <ListBox.ItemTemplate>
-                <DataTemplate DataType="{x:Type models:StatusEntry}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="{Binding Timestamp}"></TextBlock>
-                        <GridSplitter Grid.Column="1"></GridSplitter>
-                        <TextBlock Text="{Binding Message}" Grid.Column="2"></TextBlock>
-                    </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-
-        </ListBox>
+        <DataGrid ItemsSource="{Binding StatusItems}">
+        </DataGrid>
     </Grid>
 </UserControl>
