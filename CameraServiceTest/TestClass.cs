@@ -1,4 +1,4 @@
-﻿#define useWinServer
+﻿//#define useWinServer
 
 using NUnit.Framework;
 using System;

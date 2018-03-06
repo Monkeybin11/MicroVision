@@ -18,23 +18,35 @@ using Prism.Events;
 
 namespace MicroVision.Services
 {
+    public class AcquisitionParameters
+    {
+        public FieldParameter<int> ExposureTime { get; } = new FieldParameter<int>();
+        public FieldParameter<double> Gain { get; } = new FieldParameter<double>();
+        public FieldParameter<int> LaserDuration { get; } = new FieldParameter<int>();
+        public FieldParameter<int> CaptureInterval { get; } = new FieldParameter<int>();
+        public FieldParameter<string> OutputDirectory { get; } = new FieldParameter<string>();
+    }
+
+    public class DeviceSelections
+    {
+        public SelectionParameter<string> ComSelection { get; } = new SelectionParameter<string>();
+        public SelectionParameter<string> VimbaSelection { get; } = new SelectionParameter<string>();
+    }
+
+    public class PowerConfigurations
+    {
+        public CheckParameter ManualPowerCheck { get; } = new CheckParameter();
+        public CheckParameter MasterPowerCheck { get; } = new CheckParameter();
+        public CheckParameter FanPowerCheck { get; } = new CheckParameter();
+        public CheckParameter LaserPowerCheck { get; } = new CheckParameter();
+        public CheckParameter MotorPowerCheck { get; } = new CheckParameter();
+    }
+
     public interface IParameterServices
     {
-        FieldParameter<string> CameraControllerUri { get; set; }
-        FieldParameter<string> CameraUri { get; set; }
-        FieldParameter<string> ProcessorUri { get; set; }
-        FieldParameter<int> ExposureTime { get; set; }
-        FieldParameter<double> Gain { get; set; }
-        FieldParameter<int> LaserDuration { get; set; }
-        FieldParameter<int> CaptureInterval { get; set; }
-        FieldParameter<string> OutputDirectory { get; set; }
-        SelectionParameter<string> ComSelection { get; set; }
-        SelectionParameter<string> VimbaSelection { get; set; }
-        CheckParameter ManualPowerCheck { get; set; }
-        CheckParameter MasterPowerCheck { get; set; }
-        CheckParameter FanPowerCheck { get; set; }
-        CheckParameter LaserPowerCheck { get; set; }
-        CheckParameter MotorPowerCheck { get; set; }
+        AcquisitionParameters AcquisitionParameters { get; set; }
+        DeviceSelections DeviceSelections { get; set; }
+        PowerConfigurations PowerConfigurations { get; set; }
     }
 
     public class ParameterServices : IParameterServices
@@ -43,19 +55,21 @@ namespace MicroVision.Services
         private readonly ILogService _log;
         private readonly IEventAggregator _eventAggregator;
         private const string DefaultFileName = "settings.json";
+
         /// <summary>
         /// Parameterless constructor for xml serialziation
         /// </summary>
-        public ParameterServices() { }
+        public ParameterServices()
+        {
+        }
+
         public ParameterServices(IUnityContainer container, ILogService log, IEventAggregator eventAggregator)
         {
             _container = container;
             _log = log;
             _eventAggregator = eventAggregator;
             _log.ConfigureLogger("ParameterService");
-
-            // set the manual power override logic
-            ManualPowerCheck.PropertyChanged += ManualPowerCheck_PropertyChanged;
+            
             ConfigurationEventHandler();
             ConfigurationInitialization();
         }
@@ -67,65 +81,12 @@ namespace MicroVision.Services
             _eventAggregator.GetEvent<LoadEvent>().Subscribe(filename => Load(filename));
         }
 
-        private void ManualPowerCheck_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            var senderObj = (CheckParameter) sender;
-        }
-
-        public FieldParameter<string> CameraControllerUri { get; set; } =
-            new FieldParameter<string>() {Label = "Camera Controller Server Uri", IsEnabled = true, Value = ""};
-
-        public FieldParameter<string> CameraUri { get; set; } =
-            new FieldParameter<string>() {Label = "Camera Server Uri", IsEnabled = true, Value = ""};
-
-        public FieldParameter<string> ProcessorUri { get; set; } =
-            new FieldParameter<string>() {Label = "Image Processing Server Uri", IsEnabled = true, Value = ""};
-
-        public FieldParameter<int> ExposureTime { get; set; } = new FieldParameter<int>()
-        {
-            Label = "Exposure Time (us)",
-            Value = 44,
-            Minimum = 44,
-            Maximum = 100000
-        };
-
-        public FieldParameter<double> Gain { get; set; } =
-            new FieldParameter<double>() {Label = "Gain", Value = 0, Minimum = 0, Maximum = 20};
-
-        public FieldParameter<int> LaserDuration { get; set; } = new FieldParameter<int>()
-        {
-            Label = "Laser duration (us)",
-            Value = 20,
-            Minimum = 0,
-            Maximum = 100000
-        };
-
-        public FieldParameter<int> CaptureInterval { get; set; } = new FieldParameter<int>()
-        {
-            Label = "Capture Interval (ms)",
-            Value = 1000,
-            Minimum = 100,
-            Maximum = 100000
-        };
-
-        public FieldParameter<string> OutputDirectory { get; set; } =
-            new FieldParameter<string>() {Label = "Output directory", Value = @"C:\"};
-
-        public SelectionParameter<string> ComSelection { get; set; } = new SelectionParameter<string>("COM");
-        public SelectionParameter<string> VimbaSelection { get; set; } = new SelectionParameter<string>("Camera");
-
-        public CheckParameter ManualPowerCheck { get; set; } = new CheckParameter("Manual");
-        public CheckParameter MasterPowerCheck { get; set; } = new CheckParameter("Master", false);
-        public CheckParameter FanPowerCheck { get; set; } = new CheckParameter("Fan", false);
-        public CheckParameter LaserPowerCheck { get; set; } = new CheckParameter("Laser", false);
-        public CheckParameter MotorPowerCheck { get; set; } = new CheckParameter("Motor", false);
-
         public void Serialize(string filename = DefaultFileName)
         {
             using (var file = File.CreateText(filename))
             {
                 var serializer = new JsonSerializer();
-                serializer.Serialize(file, this);
+                serializer.Serialize(file, AcquisitionParameters);
             }
         }
 
@@ -135,17 +96,24 @@ namespace MicroVision.Services
         /// <param name="filename"></param>
         public void Load(string filename = DefaultFileName)
         {
-            ParameterServices obj;
+            AcquisitionParameters obj;
             var serializer = new JsonSerializer();
-            using(var fs = File.OpenRead(filename))
+            using (var fs = File.OpenRead(filename))
             using (var sr = new StreamReader(fs))
             using (var jsonTextReader = new JsonTextReader(sr))
             {
-                obj = (ParameterServices) serializer.Deserialize(jsonTextReader, typeof(ParameterServices));
+                try
+                {
+                    obj = (AcquisitionParameters)serializer.Deserialize(jsonTextReader, typeof(AcquisitionParameters));
+                }
+                catch (Exception e)
+                {
+                    throw new ArgumentException("Profile file is not valid");
+                }
             }
 
-            Mapper.Initialize(config => config.CreateMap(typeof(ParameterServices), typeof(ParameterServices)));
-            Mapper.Map(obj,this);
+            AcquisitionParameters = obj ?? throw new ArgumentException("Profile file is not valid");
+
         }
 
         private void ConfigurationInitialization()
@@ -169,5 +137,52 @@ namespace MicroVision.Services
                 Serialize();
             }
         }
+
+        #region Properties initialization 
+
+        public AcquisitionParameters AcquisitionParameters { get; set; } = new AcquisitionParameters()
+        {
+            ExposureTime =
+            {
+                Label = "Exposure Time (us)",
+                Value = 44,
+                Minimum = 44,
+                Maximum = 100000
+            },
+            CaptureInterval =
+            {
+                Label = "Capture Interval (ms)",
+                Value = 1000,
+                Minimum = 100,
+                Maximum = 100000
+            },
+            LaserDuration =
+            {
+                Label = "Laser duration (us)",
+                Value = 20,
+                Minimum = 0,
+                Maximum = 100000
+            },
+            Gain = {Label = "Gain", Value = 0, Minimum = 0, Maximum = 20},
+            OutputDirectory = {Label = "Output directory", Value = @"C:\"}
+        };
+
+        public DeviceSelections DeviceSelections { get; set; } =
+            new DeviceSelections()
+            {
+                ComSelection = {Label = "COM"},
+                VimbaSelection = { Label = "Camera"}
+            };
+
+        public PowerConfigurations PowerConfigurations { get; set; } = new PowerConfigurations()
+        {
+            ManualPowerCheck = { Label = "Manual", Value = false, IsEnabled = true},
+            FanPowerCheck = { Label = "Fan", Value = false, IsEnabled = false},
+            MotorPowerCheck = { Label = "Motor", Value = false, IsEnabled = false},
+            LaserPowerCheck = { Label = "Laser", Value = false, IsEnabled = false},
+            MasterPowerCheck = { Label = "Master", Value = false, IsEnabled = false}
+        };
+
+        #endregion
     }
 }

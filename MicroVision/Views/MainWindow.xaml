@@ -7,12 +7,20 @@
         xmlns:ad="http://schemas.xceed.com/wpf/xaml/avalondock"
         xmlns:prism="http://prismlibrary.com/"
         xmlns:s="clr-namespace:System;assembly=mscorlib"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:VM="clr-namespace:MicroVision.ViewModels"
         mc:Ignorable="d"
         Title="{Binding Title}" Height="600" Width="700"
-        prism:ViewModelLocator.AutoWireViewModel="True">
+        prism:ViewModelLocator.AutoWireViewModel="True"
+        d:DataContext="{d:DesignInstance VM:MainWindowViewModel}">
+    <i:Interaction.Triggers>
+        <prism:InteractionRequestTrigger SourceObject="{Binding RaiseRpcConnectionFailedDialog}">
+            <prism:PopupWindowAction IsModal="True" CenterOverAssociatedObject="True"></prism:PopupWindowAction>
+        </prism:InteractionRequestTrigger>
+    </i:Interaction.Triggers>
 	<DockPanel>
         <ContentControl prism:RegionManager.RegionName="Menu" DockPanel.Dock="Top"></ContentControl>
-		<ad:DockingManager
+	    <ad:DockingManager
 			BorderBrush="Azure"
 			AllowMixedOrientation="True"
 			BorderThickness="1">

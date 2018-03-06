@@ -118,7 +118,7 @@ namespace MicroVision.Services
         /// </summary>
         private void ConfigureWithParameterService()
         {
-            _sp.PortName = _parameterServices.ComSelection.Selected;
+            _sp.PortName = _parameterServices.DeviceSelections.ComSelection.Selected;
         }
 
         private void DispatchCommand(ISerialCommand serialCommand)
@@ -128,8 +128,8 @@ namespace MicroVision.Services
 
         private void UpdateComList()
         {
-            _parameterServices.ComSelection.Value = new List<string>(SerialPort.GetPortNames());
-            _parameterServices.ComSelection.Selected = _parameterServices.ComSelection.Value[0];
+            _parameterServices.DeviceSelections.ComSelection.Value = new List<string>(SerialPort.GetPortNames());
+            _parameterServices.DeviceSelections.ComSelection.Selected = _parameterServices.DeviceSelections.ComSelection.Value[0];
         }
 
         private void SendCommand(string command) { } //TODO

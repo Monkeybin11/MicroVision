@@ -142,6 +142,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MicroVision.Core\MicroVision.Core.csproj">
+      <Project>{d282d7e2-e6bf-4208-bc87-283d836e94ad}</Project>
+      <Name>MicroVision.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MicroVision.Modules.Menu\MicroVision.Modules.Menu.csproj">
       <Project>{fa8bc10a-a970-40f3-9ff5-c2a651da8ff2}</Project>
       <Name>MicroVision.Modules.Menu</Name>
