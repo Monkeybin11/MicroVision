@@ -67,6 +67,13 @@ namespace MicroVision.Modules.Statusbar.ViewModels
             return Imaging.CreateBitmapSourceFromHIcon(icon.Handle, Int32Rect.Empty,
                 BitmapSizeOptions.FromEmptyOptions());
         }
+
+        private void NotifyOperation(string Operation)
+        {
+            _log.Add(new StatusEntry(DateTime.Now, Operation));
+            StatusIcon = CreateIcon(SystemIcons.Information);
+            Status = Operation;
+        }
         private void NotifyException(Exception exception)
         {
             _log.Add(new StatusEntry(DateTime.Now, exception.Message));

@@ -23,7 +23,7 @@ namespace MicroVision.Core.Events
     /// <summary>
     /// request to connect to the target serial port
     /// </summary>
-    public class ComConnectionRequestedEvent: PubSubEvent {}
+    public class ComConnectionRequestedEvent: PubSubEvent <string>{}
 
     /// <summary>
     /// event for COM being disconnected. The argument represents the disconnection is intentional  (true) or accidental (false)

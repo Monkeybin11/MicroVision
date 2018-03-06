@@ -43,7 +43,12 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
 
         public DelegateCommand ComConnectToggleCommand =>
             _comConnectToggleCommand ??
-            (_comConnectToggleCommand = new DelegateCommand(ExecuteComConnectToggleCommand));
+            (_comConnectToggleCommand = new DelegateCommand(ExecuteComConnectToggleCommand, CanExecuteComConnectToggleCommand)).ObservesProperty(() => Params.DeviceSelections.ComSelection.Selected);
+
+        private bool CanExecuteComConnectToggleCommand()
+        {
+            return Params.DeviceSelections.ComSelection.Selected != null;
+        }
 
         void ExecuteComConnectToggleCommand()
         {
@@ -53,7 +58,8 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
             }
             else
             {
-                _eventAggregator.GetEvent<ComConnectionRequestedEvent>().Publish();
+                var selectedSerialPort = Params.DeviceSelections.ComSelection.Selected;
+                _eventAggregator.GetEvent<ComConnectionRequestedEvent>().Publish(selectedSerialPort);
             }
         }
 

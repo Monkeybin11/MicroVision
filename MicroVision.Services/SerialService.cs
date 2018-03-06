@@ -24,6 +24,7 @@ namespace MicroVision.Services
 
     public class SerialService : ISerialService
     {
+        private const string CameraControllerConnectionErrorPrompt = "Failed to connect to camera controller server. Please check if the server is running and check if the server uri is correct in app.config. Please restart the software";
         private readonly IParameterServices _parameterServices;
         private readonly ILogService _log;
         private readonly IEventAggregator _eventAggregator;
@@ -47,12 +48,68 @@ namespace MicroVision.Services
         /// <summary>
         /// Connect to the serial port
         /// </summary>
-        private void Connect()
+        private void Connect(string s)
         {
+            ConnectionResponse ret = null;
+            try
+            {
+                ret = _rpcService.CameraControllerClient.RequestConnectToPort(new ConnectionRequest() {ComPort = s, Connect = true});
+            }
+            catch (Exception e)
+            {
+                _log.Logger.Error(e);
+                _eventAggregator.GetEvent<ExceptionEvent>().Publish(new CameraControllerRpcServerConnectionException(CameraControllerConnectionErrorPrompt));
+            }
+
+            if (ret == null || ret.Error != null)
+            {
+                _eventAggregator.GetEvent<ExceptionEvent>()
+                    .Publish(new ComListException($"Failed to connect to {s}: {ret?.Error.Message}"));
+                return;
+            }
+
+            if (!ret.IsConnected)
+            {
+                _eventAggregator.GetEvent<ExceptionEvent>()
+                    .Publish(new ComListException("COM port is not connected"));
+            }
+            else
+            {
+                _eventAggregator.GetEvent<ComConnectedEvent>().Publish();
+                _eventAggregator.GetEvent<NotifyOperationEvents>().Publish($"{s} successfully connected");
+            }
         }
 
         private void Disconnect()
         {
+            ConnectionResponse ret = null;
+            try
+            {
+                ret = _rpcService.CameraControllerClient.RequestConnectToPort(new ConnectionRequest() { Connect = false });
+            }
+            catch (Exception e)
+            {
+                _log.Logger.Error(e);
+                _eventAggregator.GetEvent<ExceptionEvent>().Publish(new CameraControllerRpcServerConnectionException(CameraControllerConnectionErrorPrompt));
+            }
+
+            if (ret == null || ret.Error != null)
+            {
+                _eventAggregator.GetEvent<ExceptionEvent>()
+                    .Publish(new ComListException($"Failed to disconnect {ret?.Error.Message}"));
+                return;
+            }
+
+            if (!ret.IsConnected)
+            {
+                _eventAggregator.GetEvent<ExceptionEvent>()
+                    .Publish(new ComListException("COM port is not connected"));
+            }
+            else
+            {
+                _eventAggregator.GetEvent<ComDisconnectedEvent>().Publish(true);
+                _eventAggregator.GetEvent<NotifyOperationEvents>().Publish("COM port successfully closed");
+            }
         }
 
         /// <summary>
@@ -66,8 +123,12 @@ namespace MicroVision.Services
         {
         }
 
+        /// <summary>
+        /// Triggered by the event aggregator. Will call rpc to get the available COM ports
+        /// </summary>
         private void UpdateComList()
         {
+            _parameterServices.DeviceSelections.ComSelection.Value.Clear();
             ComList comList = null;
             try
             {
@@ -75,9 +136,8 @@ namespace MicroVision.Services
             }
             catch (Exception e)
             {
-                _log.Logger.Error("Failed to connect to rpc service RequestComList.", e);
-                _eventAggregator.GetEvent<ExceptionEvent>().Publish(new CameraControllerRpcServerConnectionException(
-                    "Failed to connect to camera controller server. Please check if the server is running and check if the server uri is correct in app.config. Please restart the software"));
+                _log.Logger.Error(e);
+                _eventAggregator.GetEvent<ExceptionEvent>().Publish(new CameraControllerRpcServerConnectionException(CameraControllerConnectionErrorPrompt));
                 return;
             }
 
@@ -87,10 +147,7 @@ namespace MicroVision.Services
                     .Publish(new ComListException("Failed to update the serial port list"));
                 return;
             }
-
-            var list = _parameterServices.DeviceSelections.ComSelection.Value;
-            list.Clear();
-            list.AddRange(comList.ComPort);
+            _parameterServices.DeviceSelections.ComSelection.Value = new List<string>(comList.ComPort);
         }
     }
 }
