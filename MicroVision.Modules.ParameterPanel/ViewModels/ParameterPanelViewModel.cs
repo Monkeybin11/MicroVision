@@ -57,6 +57,15 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
             }
         }
 
+        private DelegateCommand _comUpdateListCommand;
+        public DelegateCommand ComUpdateListCommand =>
+            _comUpdateListCommand ?? (_comUpdateListCommand = new DelegateCommand(ExecuteComUpdateListCommand));
+
+        void ExecuteComUpdateListCommand()
+        {
+            _eventAggregator.GetEvent<ComListUpdateRequestedEvent>().Publish();
+        }
+
         #endregion
 
         public ParameterPanelViewModel(IParameterServices param, IStatusServices statusService,
@@ -66,7 +75,7 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
             Params = param;
 
             // ask for list update for initial value
-            _eventAggregator.GetEvent<ComListUpdateRequestedEvent>().Publish();
+            // _eventAggregator.GetEvent<ComListUpdateRequestedEvent>().Publish();
 
             Params.PowerConfigurations.ManualPowerCheck.PropertyChanged += ManualPowerCheck_PropertyChanged;
 

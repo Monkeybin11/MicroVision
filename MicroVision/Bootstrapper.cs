@@ -5,6 +5,7 @@ using System.Windows;
 using MicroVision.Modules.Menu;
 using MicroVision.Modules.Menu.Views;
 using MicroVision.Modules.ParameterPanel;
+using MicroVision.Modules.Statusbar;
 using MicroVision.Modules.StatusPanel;
 using MicroVision.Modules.StatusPanel.Views;
 using MicroVision.Services;
@@ -56,6 +57,7 @@ namespace MicroVision
             catalog.AddModule(typeof(ParameterPanel));
             catalog.AddModule(typeof(StatusPanelModule));
             catalog.AddModule(typeof(MenuModule));
+            catalog.AddModule(typeof(StatusbarModule));
         }
     }
 }

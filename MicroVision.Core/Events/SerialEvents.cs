@@ -37,7 +37,9 @@ namespace MicroVision.Core.Events
 
     /// <summary>
     /// event for error raise in COM communication
+    /// Obsoleted. Use ExceptionEvents for centralized exception handling.
     /// </summary>
+    [Obsolete]
     public class ComErrorOccuredEvent: PubSubEvent<string> { }
 
     /// <summary>

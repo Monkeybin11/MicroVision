@@ -44,6 +44,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinSerialService", "WinSeri
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SerialServiceInstaller", "SerialServiceInstaller\SerialServiceInstaller.vdproj", "{CF781E4C-0935-4C51-AA55-962F45489BEB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroVision.Modules.Statusbar", "MicroVision.Modules.Statusbar\MicroVision.Modules.Statusbar.csproj", "{048CA23A-2141-4E31-8393-99AD1F639844}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		ServiceShared\ServiceShared.projitems*{6976e890-16ec-413c-9106-62ab4811f6e3}*SharedItemsImports = 4
@@ -107,6 +109,10 @@ Global
 		{CD3476E1-B175-4A58-9D66-2CA84E7D995D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CF781E4C-0935-4C51-AA55-962F45489BEB}.Debug|Any CPU.ActiveCfg = Debug
 		{CF781E4C-0935-4C51-AA55-962F45489BEB}.Release|Any CPU.ActiveCfg = Release
+		{048CA23A-2141-4E31-8393-99AD1F639844}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{048CA23A-2141-4E31-8393-99AD1F639844}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{048CA23A-2141-4E31-8393-99AD1F639844}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{048CA23A-2141-4E31-8393-99AD1F639844}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

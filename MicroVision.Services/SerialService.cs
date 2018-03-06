@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Grpc.Core;
 using MicroVision.Core.Events;
+using MicroVision.Core.Exceptions;
 using MicroVision.Core.Models;
 using MicroVision.Services.GrpcReference;
 using Prism.Events;
@@ -20,6 +21,7 @@ namespace MicroVision.Services
     public interface ISerialService
     {
     }
+
     public class SerialService : ISerialService
     {
         private readonly IParameterServices _parameterServices;
@@ -28,9 +30,9 @@ namespace MicroVision.Services
         private readonly IRpcService _rpcService;
 
 
-        public SerialService(IParameterServices parameterServices, ILogService log, IEventAggregator eventAggregator, IRpcService rpcService)
+        public SerialService(IParameterServices parameterServices, ILogService log, IEventAggregator eventAggregator,
+            IRpcService rpcService)
         {
-
             _parameterServices = parameterServices;
             _log = log;
 
@@ -40,7 +42,6 @@ namespace MicroVision.Services
             _eventAggregator.GetEvent<ComCommandDispatchedEvent>().Subscribe(DispatchCommand);
             _eventAggregator.GetEvent<ComConnectionRequestedEvent>().Subscribe(Connect);
             _eventAggregator.GetEvent<ComDisconnectionRequestedEvent>().Subscribe(Disconnect);
-
         }
 
         /// <summary>
@@ -48,12 +49,10 @@ namespace MicroVision.Services
         /// </summary>
         private void Connect()
         {
-           
         }
 
         private void Disconnect()
         {
-           
         }
 
         /// <summary>
@@ -72,25 +71,26 @@ namespace MicroVision.Services
             ComList comList = null;
             try
             {
-                
                 comList = _rpcService.CameraControllerClient.RequestComList(new ComListRequest());
             }
             catch (Exception e)
             {
-                _log.Logger.Error("Failed to connect to rpc service RequestComList", e);
-                _eventAggregator.GetEvent<HardwareRpcConnedtionFailedEvent>().Publish("Failed to connect to camera controller server");
+                _log.Logger.Error("Failed to connect to rpc service RequestComList.", e);
+                _eventAggregator.GetEvent<ExceptionEvent>().Publish(new CameraControllerRpcServerConnectionException(
+                    "Failed to connect to camera controller server. Please check if the server is running and check if the server uri is correct in app.config. Please restart the software"));
                 return;
             }
 
             if (comList == null || comList.Error != null)
             {
-                _eventAggregator.GetEvent<ComErrorOccuredEvent>().Publish("Failed to update the serial port list");
+                _eventAggregator.GetEvent<ExceptionEvent>()
+                    .Publish(new ComListException("Failed to update the serial port list"));
                 return;
             }
+
             var list = _parameterServices.DeviceSelections.ComSelection.Value;
             list.Clear();
             list.AddRange(comList.ComPort);
         }
-
     }
 }

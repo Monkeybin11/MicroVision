@@ -40,9 +40,6 @@ namespace MicroVision.Services.GrpcReference
             {
                 _cameraChannel = new Channel(appSettings["CameraRpcServer"], ChannelCredentials.Insecure);
                 CameraClient = new VimbaCameraClient(_cameraChannel);
-
-                // try to initiate the connection to test if the server is alive
-                var timeout = DateTime.UtcNow.AddSeconds(5);
                 
                 _cameraControllerChannel = new Channel(appSettings["CameraControllerRpcServer"],
                     ChannelCredentials.Insecure);

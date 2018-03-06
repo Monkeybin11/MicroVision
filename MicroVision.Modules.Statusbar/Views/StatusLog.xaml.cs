@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace MicroVision.Modules.StatusPanel.Views
+namespace MicroVision.Modules.Statusbar.Views
 {
     /// <summary>
-    /// Interaction logic for StatusBar.xaml
+    /// Interaction logic for StatusLog.xaml
     /// </summary>
-    public partial class StatusPanel : UserControl
+    public partial class StatusLog : UserControl
     {
-        public StatusPanel()
+        public StatusLog()
         {
             InitializeComponent();
         }

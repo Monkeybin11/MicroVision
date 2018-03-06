@@ -7,12 +7,12 @@
              xmlns:prism="http://prismlibrary.com/"
              xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-             xmlns:VM="clr-namespace:MicroVision.Modules.ParameterPanel.ViewModels"
+             xmlns:vm="clr-namespace:MicroVision.Modules.ParameterPanel.ViewModels"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              mc:Ignorable="d"
              prism:ViewModelLocator.AutoWireViewModel="True"
              d:DesignHeight="150" d:DesignWidth="800"
-             d:DataContext="{d:DesignInstance VM:ParameterPanelViewModel}"
-             >
+             d:DataContext="{d:DesignInstance vm:ParameterPanelViewModel}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -84,7 +84,13 @@
                                 <DockPanel Style="{StaticResource DockPanelStyle}">
                                     <Label Style="{StaticResource LabelStyle}">COM Port:</Label>
                                     <ComboBox ItemsSource="{Binding Params.DeviceSelections.ComSelection.Value}"
-                                              SelectedValue="{Binding Params.DeviceSelections.ComSelection.Selected}" />
+                                              SelectedValue="{Binding Params.DeviceSelections.ComSelection.Selected}">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="DropDownOpened">
+                                                <i:InvokeCommandAction Command="{Binding ComUpdateListCommand}" />
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </ComboBox>
                                 </DockPanel>
                                 <ToggleButton IsChecked="{Binding ComConnectionStatus.IsConnected, Mode=OneWay}"
                                               Style="{StaticResource ConnectionButtonStyle}"

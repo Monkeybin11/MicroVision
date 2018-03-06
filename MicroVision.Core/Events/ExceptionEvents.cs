@@ -7,8 +7,5 @@ using Prism.Events;
 
 namespace MicroVision.Core.Events
 {
-    [Obsolete]
-    public class HardwareRpcConnedtionFailedEvent : PubSubEvent<string> {}
-    [Obsolete]
-    public class ProcessorRpcConnedtionFailedEvent : PubSubEvent { }
+    public class ExceptionEvent : PubSubEvent<Exception> {} 
 }
