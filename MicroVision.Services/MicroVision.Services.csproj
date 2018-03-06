@@ -129,7 +129,7 @@
     <Compile Include="GrpcReference\CameraControllerServiceGrpc.cs" />
     <Compile Include="GrpcReference\CameraService.cs" />
     <Compile Include="GrpcReference\CameraServiceGrpc.cs" />
-    <Compile Include="GrpcReference\RpcService.cs" />
+    <Compile Include="RpcService.cs" />
     <Compile Include="LogService.cs" />
     <Compile Include="MenuServices.cs" />
     <Compile Include="ParameterServices.cs" />

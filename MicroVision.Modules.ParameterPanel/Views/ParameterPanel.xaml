@@ -45,7 +45,7 @@
     <!-- Body -->
     <DockPanel LastChildFill="True">
         <!-- Big connection button -->
-        <Button Command="{Binding TestCommand}" DockPanel.Dock="Right" Width="100" Margin="10">Start Capture</Button>
+        <Button DockPanel.Dock="Right" Width="100" Margin="10">Start Capture</Button>
 
         <TabControl Margin="0,5,0,10">
             <!--<TabItem Header="Backend Server" >
@@ -84,7 +84,7 @@
                                 <DockPanel Style="{StaticResource DockPanelStyle}">
                                     <Label Style="{StaticResource LabelStyle}">COM Port:</Label>
                                     <ComboBox ItemsSource="{Binding Params.DeviceSelections.ComSelection.Value}"
-                                              SelectedValue="{Binding Params.ComSelection.DeviceSelections.Selected}" />
+                                              SelectedValue="{Binding Params.DeviceSelections.ComSelection.Selected}" />
                                 </DockPanel>
                                 <ToggleButton IsChecked="{Binding ComConnectionStatus.IsConnected, Mode=OneWay}"
                                               Style="{StaticResource ConnectionButtonStyle}"
