@@ -89,8 +89,14 @@ namespace MicroVision.Core.Models
             set { SetProperty(ref _selected, value); }
         }
 
-        public SelectionParameter() : base("Label", true) { }
-        public SelectionParameter(string label, bool isEnabled = true) : base(label, isEnabled){}
+        public SelectionParameter() : base("Label", true)
+        {
+            _value = new List<T>();
+        }
+        public SelectionParameter(string label, bool isEnabled = true) : base(label, isEnabled)
+        {
+            _value = new List<T>();
+        }
     }
     #endregion
 
