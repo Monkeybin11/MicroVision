@@ -142,9 +142,17 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MicroVision.Modules.Menu\MicroVision.Modules.Menu.csproj">
+      <Project>{fa8bc10a-a970-40f3-9ff5-c2a651da8ff2}</Project>
+      <Name>MicroVision.Modules.Menu</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MicroVision.Modules.ParameterPanel\MicroVision.Modules.ParameterPanel.csproj">
       <Project>{7BE9E51B-C04F-46E8-BC02-6CC60E6AE06F}</Project>
       <Name>MicroVision.Modules.ParameterPanel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MicroVision.Modules.StatusPanel\MicroVision.Modules.StatusPanel.csproj">
+      <Project>{FF786C60-F2CA-4B7A-9EE8-F7097734A572}</Project>
+      <Name>MicroVision.Modules.StatusPanel</Name>
     </ProjectReference>
     <ProjectReference Include="..\MicroVision.Services\MicroVision.Services.csproj">
       <Project>{C2AB6A15-51B1-41FE-8FE5-D61F1DAFBE90}</Project>

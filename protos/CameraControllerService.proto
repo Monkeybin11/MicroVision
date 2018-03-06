@@ -1,0 +1,134 @@
+syntax = "proto3";
+
+package Services;
+
+import "google/protobuf/empty.proto";
+import "Error.proto";
+
+service CameraController {
+	// get version information
+	rpc GetInfo(google.protobuf.Empty) returns (VersionInfo);
+
+	// check if connected to the com port
+	rpc IsConnected(google.protobuf.Empty) returns(ConnectionResponse);
+
+	// get available com port list
+	rpc RequestComList(ComListRequest) returns(ComList);
+	
+	// connection
+	rpc RequestConnectToPort(ConnectionRequest) returns (ConnectionResponse);
+	
+	// operation, R/W
+	rpc RequestPowerStatus(PowerStatusRequest) returns (PowerStatusResponse);
+	rpc RequestCurrentStatus(CurrentStatusRequest) returns (CurrentStatusResponse);
+	rpc RequestFocusStatus(FocusStatusRequest) returns (FocusStatusResponse);
+
+	rpc RequestLaserStatus(LaserStatusRequest) returns (LaserStatusResponse);
+	rpc RequestArmTrigger(ArmTriggerRequest) returns (ArmTriggerResponse);
+	
+	rpc RequestSoftwareReset (google.protobuf.Empty) returns (SoftwareResetStatus);
+	
+	// stream invoker
+	rpc StreamRequestArmTrigger(stream ArmTriggerRequest) returns (stream ArmTriggerResponse);
+}
+
+message VersionInfo {
+	string hardwareVersion = 1;
+	string firmwareVersion = 2;
+	string serviceVersion = 3;
+}
+
+message ComListRequest {
+	
+}
+message ComList {
+	Error error = 1;
+	repeated string comPort = 2;
+}
+
+message ConnectionResponse {
+	Error error = 1;
+	bool isConnected = 2;
+}
+// Connection message pair
+message ConnectionRequest {
+	// request made to connect (true) or disconnect (false)
+	bool connect = 1;
+	// which port to connect;
+	string comPort = 2;	
+}
+
+// PowerStatus message pair
+message PowerStatusRequest {
+	// Set write to true to enable write operation
+	bool write = 1;
+
+	// Set power code as the bitwise power configuration
+	int32 powerCode = 2;
+}
+message PowerStatusResponse {
+	Error error = 1;
+	// power code after execution
+	int32 powerCode = 2;
+}
+
+// Current status message pair
+message CurrentStatusRequest {
+}
+message CurrentStatusResponse {
+	Error error = 1;
+	double current = 2;
+}
+
+// Focus status message pair
+message FocusStatusRequest {
+	// true to enable auto power of the stepper driver. This will ignore the driverPower field
+	bool autoPower = 1;
+	
+	// manual setting to control the power of the driver.
+	bool driverPower = 2;
+
+	// positive up, negative down
+	sint32 steps = 3;
+
+	// The greater the slower
+	int32 slowdownFactor = 4;
+
+	// force abort the current step task
+	// bool stop = 5;
+}
+message FocusStatusResponse {
+	Error error = 1;
+	int32 slowdownFactor = 2;
+	
+}
+
+// Laser status pairs
+message LaserStatusRequest {
+	// Microseconds of laser on duration
+	int64 durationUs = 2;
+	int64 intensity = 3;
+}
+message LaserStatusResponse {
+	Error error = 1;
+}
+
+// Arm trigger request pair
+message ArmTriggerRequest {
+	// True to arm the trigger; false to disarm the trigger
+	bool armTrigger = 1;
+	// How many microseconds before the trigger get disarmed automatically
+	int64 maxTriggerTimeUs = 2;
+
+	LaserStatusRequest laserConfiguration = 3;
+}
+message ArmTriggerResponse {
+	Error error = 1;
+
+	// true for no interrupt received and maximum time exceeded
+	bool triggerAutoDisarmed = 2;
+}
+
+message SoftwareResetStatus {
+	Error error = 1;
+}

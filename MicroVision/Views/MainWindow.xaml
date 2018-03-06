@@ -10,7 +10,8 @@
         mc:Ignorable="d"
         Title="{Binding Title}" Height="600" Width="700"
         prism:ViewModelLocator.AutoWireViewModel="True">
-	<Grid>
+	<DockPanel>
+        <ContentControl prism:RegionManager.RegionName="Menu" DockPanel.Dock="Top"></ContentControl>
 		<ad:DockingManager
 			BorderBrush="Azure"
 			AllowMixedOrientation="True"
@@ -19,25 +20,25 @@
 				<ad:LayoutPanel Orientation="Vertical">
 					<ad:LayoutPanel Orientation="Horizontal" DockHeight="5*">
 						<ad:LayoutAnchorablePane DockWidth="1*">
-							<ad:LayoutAnchorable Title="Status" CanHide="False" CanClose="False">
+                            <ad:LayoutAnchorable Title="Status" CanHide="False" CanClose="False" CanAutoHide="False">
 								<ContentControl prism:RegionManager.RegionName="StatusPanel"></ContentControl>
 							</ad:LayoutAnchorable>
 						</ad:LayoutAnchorablePane>
 						<ad:LayoutAnchorablePane DockWidth="4*">
-							<ad:LayoutAnchorable Title="Capture" CanHide="False" CanClose="False">
+                            <ad:LayoutAnchorable Title="Capture" CanHide="False" CanClose="False" CanAutoHide="False">
 								<ContentControl prism:RegionManager.RegionName="CapturePanel"></ContentControl>
 							</ad:LayoutAnchorable>
 						</ad:LayoutAnchorablePane>
 					</ad:LayoutPanel>
-					<ad:LayoutAnchorablePane DockHeight="2*">
-						<ad:LayoutAnchorable Title="Parameters">
+					<ad:LayoutAnchorablePane DockHeight="3*">
+                        <ad:LayoutAnchorable Title="Parameters" CanHide="False" CanClose="False" CanAutoHide="False">
 							<ContentControl prism:RegionManager.RegionName="ParameterPanel"></ContentControl>
 						</ad:LayoutAnchorable>
 					</ad:LayoutAnchorablePane>
 				</ad:LayoutPanel>
 			</ad:LayoutRoot>
 		</ad:DockingManager>
-	</Grid>
+    </DockPanel>
 </Window>
 
 

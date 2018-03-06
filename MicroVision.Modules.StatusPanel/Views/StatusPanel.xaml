@@ -1,0 +1,87 @@
+﻿<UserControl x:Class="MicroVision.Modules.StatusPanel.Views.StatusPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:MicroVision.Modules.StatusPanel.Views"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:prism="http://prismlibrary.com/"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="150"
+             xmlns:statusPanel="clr-namespace:MicroVision.Modules.StatusPanel"
+             prism:ViewModelLocator.AutoWireViewModel="True" >
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Resources/ScrollbarStyle.xaml"></ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <ScrollViewer>
+        <StackPanel HorizontalAlignment="Stretch">
+            <StackPanel.Resources>
+                <DataTemplate x:Key="PowerStatusTemplate">
+                    <StackPanel Orientation="Horizontal">
+                        <Label Width="50" Content="{Binding Label}"></Label>
+                        <Ellipse Width="10" Height="10" Margin="5,0,0,0">
+                            <Ellipse.Resources>
+                                <Style TargetType="Ellipse">
+                                    <Setter Property="Fill" Value="Gray"></Setter>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsPowered}" Value="True">
+                                            <Setter Property="Fill" Value="Green"></Setter>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Ellipse.Resources>
+                        </Ellipse>
+                    </StackPanel>
+                </DataTemplate>
+                <DataTemplate x:Key="StatusIndicatorTemplate">
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel.Resources>
+                            <Style TargetType="StackPanel">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsError}" Value="True">
+                                        <Setter Property="ToolTip" Value="{Binding ErrorMessage}"></Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Resources>
+                        <Label Width="50" Content="{Binding Label}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right"  HorizontalAlignment="Right"/>
+                        <Ellipse Height="10" Width="10" Margin="5,0,0,0">
+                            <Ellipse.Resources>
+                                <Style TargetType="Ellipse">
+                                    <Setter Property="Fill" Value="Gray"></Setter>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsConnected}" Value="True">
+                                            <Setter Property="Fill" Value="Green"></Setter>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsError}" Value="True">
+                                            <Setter Property="Fill" Value="Red"></Setter>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Ellipse.Resources>
+                        </Ellipse>
+                    </StackPanel>
+                </DataTemplate>
+            </StackPanel.Resources>
+            <GroupBox Header="Connection" Margin="5">
+                <StackPanel>
+                    <ContentControl ContentTemplate="{StaticResource StatusIndicatorTemplate}" Content="{Binding ComConnectionStatus}"></ContentControl>
+                    <ContentControl ContentTemplate="{StaticResource StatusIndicatorTemplate}" Content="{Binding VimbaConnectionStatus}" ></ContentControl>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Power" Margin="5">
+                <StackPanel>
+                    <ContentControl ContentTemplate="{StaticResource PowerStatusTemplate}" Content="{Binding MasterPowerStatus}"></ContentControl>
+                    <ContentControl ContentTemplate="{StaticResource PowerStatusTemplate}" Content="{Binding LaserPowerStatus}"></ContentControl>
+                    <ContentControl ContentTemplate="{StaticResource PowerStatusTemplate}" Content="{Binding FanPowerStatus}"></ContentControl>
+                    <ContentControl ContentTemplate="{StaticResource PowerStatusTemplate}" Content="{Binding MotorPowerStatus}"></ContentControl>
+                </StackPanel>
+            </GroupBox>
+            
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
