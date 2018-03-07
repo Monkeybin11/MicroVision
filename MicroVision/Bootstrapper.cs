@@ -2,6 +2,7 @@
 using Microsoft.Practices.Unity;
 using Prism.Unity;
 using System.Windows;
+
 using MicroVision.Modules.Menu;
 using MicroVision.Modules.Menu.Views;
 using MicroVision.Modules.ParameterPanel;
@@ -36,6 +37,7 @@ namespace MicroVision
 
             //Container.RegisterType<IServices, Services.Services>(new InjectionConstructor(typeof(string)));
             Container.RegisterType<ILogService, LogService>(new PerResolveLifetimeManager());
+
             Container.RegisterType<IParameterServices, ParameterServices>(new ContainerControlledLifetimeManager());
             Container.RegisterType<IStatusServices, StatusServices>(new ContainerControlledLifetimeManager());
 
@@ -55,6 +57,7 @@ namespace MicroVision
 
             var catalog = (ModuleCatalog)ModuleCatalog;
             catalog.AddModule(typeof(ParameterPanel));
+
             catalog.AddModule(typeof(StatusPanelModule));
             catalog.AddModule(typeof(MenuModule));
             catalog.AddModule(typeof(StatusbarModule));

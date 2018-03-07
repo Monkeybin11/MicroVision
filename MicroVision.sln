@@ -9,6 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroVision.Services", "Mic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroVision.Modules.ParameterPanel", "MicroVision.Modules.ParameterPanel\MicroVision.Modules.ParameterPanel.csproj", "{7BE9E51B-C04F-46E8-BC02-6CC60E6AE06F}"
 EndProject
+
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroVision.Modules.StatusPanel", "MicroVision.Modules.StatusPanel\MicroVision.Modules.StatusPanel.csproj", "{FF786C60-F2CA-4B7A-9EE8-F7097734A572}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroVision.Core", "MicroVision.Core\MicroVision.Core.csproj", "{D282D7E2-E6BF-4208-BC87-283D836E94AD}"
@@ -71,6 +72,7 @@ Global
 		{7BE9E51B-C04F-46E8-BC02-6CC60E6AE06F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7BE9E51B-C04F-46E8-BC02-6CC60E6AE06F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7BE9E51B-C04F-46E8-BC02-6CC60E6AE06F}.Release|Any CPU.Build.0 = Release|Any CPU
+
 		{FF786C60-F2CA-4B7A-9EE8-F7097734A572}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FF786C60-F2CA-4B7A-9EE8-F7097734A572}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FF786C60-F2CA-4B7A-9EE8-F7097734A572}.Release|Any CPU.ActiveCfg = Release|Any CPU
