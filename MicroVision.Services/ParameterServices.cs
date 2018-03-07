@@ -21,60 +21,81 @@ using Prism.Events;
 
 namespace MicroVision.Services
 {
-    public class AcquisitionParameters : INotifyPropertyChanged
+    public interface IParameterServices
     {
-        public FieldParameter<int> ExposureTime { get; } = new FieldParameter<int>();
+        FieldParameter<int> ExposureTime { get; set; }
+
+        FieldParameter<double> Gain { get; } 
+        FieldParameter<int> LaserDuration { get; } 
+        FieldParameter<int> CaptureInterval { get; } 
+        FieldParameter<string> OutputDirectory { get; }
+
+        SelectionParameter<string> ComSelection { get; }
+        SelectionParameter<string> VimbaSelection { get; } 
+
+        CheckParameter ManualPowerCheck { get; }
+        CheckParameter MasterPowerCheck { get; } 
+        CheckParameter FanPowerCheck { get; }
+        CheckParameter LaserPowerCheck { get; }
+        CheckParameter MotorPowerCheck { get; } 
+    }
+
+    /// <summary>
+    /// Based on bindable base because when the properties are loaded externally, the binding must know it is updated.
+    /// </summary>
+    public class ParameterServices : BindableBase, IParameterServices
+    {
+        //    ExposureTime =
+        //,
+        //CaptureInterval =
+        //{
+        //Label = "Capture Interval (ms)",
+        //Value = 1000,
+        //Minimum = 100,
+        //Maximum = 100000
+        //},
+        //LaserDuration =
+        //{
+        //Label = "Laser duration (us)",
+        //Value = 20,
+        //Minimum = 0,
+        //Maximum = 100000
+        //},
+        //Gain = {Label = "Gain", Value = 0, Minimum = 0, Maximum = 20},
+        //OutputDirectory = {Label = "Output directory", Value = @"C:\"}
+
+        #region Exposed Properties
+
+        private FieldParameter<int> _exposureTime = new FieldParameter<int>()
+        {
+            Label = "Exposure Time (us)",
+            Value = 44,
+            Minimum = 44,
+            Maximum = 100000
+        };
+
+        public FieldParameter<int> ExposureTime
+        {
+            get => _exposureTime;
+            set => SetProperty(ref _exposureTime, value);
+        }
+
         public FieldParameter<double> Gain { get; } = new FieldParameter<double>();
         public FieldParameter<int> LaserDuration { get; } = new FieldParameter<int>();
         public FieldParameter<int> CaptureInterval { get; } = new FieldParameter<int>();
         public FieldParameter<string> OutputDirectory { get; } = new FieldParameter<string>();
-        public event PropertyChangedEventHandler PropertyChanged;
 
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-    }
-
-    public class DeviceSelections : INotifyPropertyChanged
-    {
         public SelectionParameter<string> ComSelection { get; } = new SelectionParameter<string>();
         public SelectionParameter<string> VimbaSelection { get; } = new SelectionParameter<string>();
-        public event PropertyChangedEventHandler PropertyChanged;
 
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-    }
-
-    public class PowerConfigurations : INotifyPropertyChanged
-    {
         public CheckParameter ManualPowerCheck { get; } = new CheckParameter();
         public CheckParameter MasterPowerCheck { get; } = new CheckParameter();
         public CheckParameter FanPowerCheck { get; } = new CheckParameter();
         public CheckParameter LaserPowerCheck { get; } = new CheckParameter();
         public CheckParameter MotorPowerCheck { get; } = new CheckParameter();
-        public event PropertyChangedEventHandler PropertyChanged;
 
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-    }
+        #endregion
 
-    public interface IParameterServices
-    {
-        AcquisitionParameters AcquisitionParameters { get; set; }
-        DeviceSelections DeviceSelections { get; set; }
-        PowerConfigurations PowerConfigurations { get; set; }
-    }
-
-    public class ParameterServices : IParameterServices, INotifyPropertyChanged
-    {
         private readonly IUnityContainer _container;
         private readonly ILogService _log;
         private readonly IEventAggregator _eventAggregator;
@@ -93,7 +114,7 @@ namespace MicroVision.Services
             _log = log;
             _eventAggregator = eventAggregator;
             _log.ConfigureLogger("ParameterService");
-            
+
             ConfigurationEventHandler();
             ConfigurationInitialization();
         }
@@ -110,7 +131,7 @@ namespace MicroVision.Services
             using (var file = File.CreateText(filename))
             {
                 var serializer = new JsonSerializer();
-                serializer.Serialize(file, AcquisitionParameters);
+                serializer.Serialize(file, this);
             }
         }
 
@@ -120,7 +141,7 @@ namespace MicroVision.Services
         /// <param name="filename"></param>
         public void Load(string filename = DefaultFileName)
         {
-            AcquisitionParameters obj;
+            ParameterServices obj;
             var serializer = new JsonSerializer();
             using (var fs = File.OpenRead(filename))
             using (var sr = new StreamReader(fs))
@@ -128,16 +149,17 @@ namespace MicroVision.Services
             {
                 try
                 {
-                    obj = (AcquisitionParameters)serializer.Deserialize(jsonTextReader, typeof(AcquisitionParameters));
+                    obj = (ParameterServices) serializer.Deserialize(jsonTextReader, typeof(ParameterServices));
+                    var mapper = new MapperConfiguration(config =>
+                        config.CreateMap<ParameterServices, ParameterServices>()).CreateMapper();
+                    
+                    mapper.Map(obj, this);
                 }
                 catch (Exception e)
                 {
                     throw new ArgumentException("Profile file is not valid");
                 }
             }
-
-            AcquisitionParameters = obj ?? throw new ArgumentException("Profile file is not valid");
-
         }
 
         private void ConfigurationInitialization()
@@ -164,48 +186,25 @@ namespace MicroVision.Services
 
         #region Properties initialization 
 
-        public AcquisitionParameters AcquisitionParameters { get; set; } = new AcquisitionParameters()
-        {
-            ExposureTime =
-            {
-                Label = "Exposure Time (us)",
-                Value = 44,
-                Minimum = 44,
-                Maximum = 100000
-            },
-            CaptureInterval =
-            {
-                Label = "Capture Interval (ms)",
-                Value = 1000,
-                Minimum = 100,
-                Maximum = 100000
-            },
-            LaserDuration =
-            {
-                Label = "Laser duration (us)",
-                Value = 20,
-                Minimum = 0,
-                Maximum = 100000
-            },
-            Gain = {Label = "Gain", Value = 0, Minimum = 0, Maximum = 20},
-            OutputDirectory = {Label = "Output directory", Value = @"C:\"}
-        };
+        //public AcquisitionParameters AcquisitionParameters { get; set; } = new AcquisitionParameters()
+        //{
+        //};
 
-        public DeviceSelections DeviceSelections { get; set; } =
-            new DeviceSelections()
-            {
-                ComSelection = {Label = "COM"},
-                VimbaSelection = { Label = "Camera"}
-            };
+        //public DeviceSelections DeviceSelections { get; set; } =
+        //    new DeviceSelections()
+        //    {
+        //        ComSelection = {Label = "COM"},
+        //        VimbaSelection = {Label = "Camera"}
+        //    };
 
-        public PowerConfigurations PowerConfigurations { get; set; } = new PowerConfigurations()
-        {
-            ManualPowerCheck = { Label = "Manual", Value = false, IsEnabled = true},
-            FanPowerCheck = { Label = "Fan", Value = false, IsEnabled = false},
-            MotorPowerCheck = { Label = "Motor", Value = false, IsEnabled = false},
-            LaserPowerCheck = { Label = "Laser", Value = false, IsEnabled = false},
-            MasterPowerCheck = { Label = "Master", Value = false, IsEnabled = false}
-        };
+        //public PowerConfigurations PowerConfigurations { get; set; } = new PowerConfigurations()
+        //{
+        //    ManualPowerCheck = {Label = "Manual", Value = false, IsEnabled = true},
+        //    FanPowerCheck = {Label = "Fan", Value = false, IsEnabled = false},
+        //    MotorPowerCheck = {Label = "Motor", Value = false, IsEnabled = false},
+        //    LaserPowerCheck = {Label = "Laser", Value = false, IsEnabled = false},
+        //    MasterPowerCheck = {Label = "Master", Value = false, IsEnabled = false}
+        //};
 
         #endregion
 

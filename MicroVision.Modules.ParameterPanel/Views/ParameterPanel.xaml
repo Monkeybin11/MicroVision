@@ -83,8 +83,8 @@
                             <StackPanel>
                                 <DockPanel Style="{StaticResource DockPanelStyle}">
                                     <Label Style="{StaticResource LabelStyle}">COM Port:</Label>
-                                    <ComboBox ItemsSource="{Binding Params.DeviceSelections.ComSelection.Value}"
-                                              SelectedValue="{Binding Params.DeviceSelections.ComSelection.Selected}">
+                                    <ComboBox ItemsSource="{Binding Params.ComSelection.Value}"
+                                              SelectedValue="{Binding Params.ComSelection.Selected}">
                                         <i:Interaction.Triggers>
                                             <i:EventTrigger EventName="DropDownOpened">
                                                 <i:InvokeCommandAction Command="{Binding ComUpdateListCommand}" />
@@ -102,7 +102,7 @@
                             <StackPanel>
                                 <DockPanel Style="{StaticResource DockPanelStyle}">
                                     <Label Style="{StaticResource LabelStyle}">Camera Name:</Label>
-                                    <ComboBox ItemsSource="{Binding Params.DeviceSelections.VimbaSelection.Value}" />
+                                    <ComboBox ItemsSource="{Binding Params.VimbaSelection.Value}" />
                                 </DockPanel>
                                 <ToggleButton Style="{StaticResource ConnectionButtonStyle}">Connect</ToggleButton>
                             </StackPanel>
@@ -141,16 +141,16 @@
                         </WrapPanel.Resources>
 
                         <ContentControl ContentTemplate="{StaticResource ParameterControlTemplate}"
-                                        Content="{Binding Params.AcquisitionParameters.ExposureTime}" />
+                                        Content="{Binding Params.ExposureTime}" />
                         <ContentControl ContentTemplate="{StaticResource ParameterControlTemplate}"
-                                        Content="{Binding Params.AcquisitionParameters.Gain}" />
+                                        Content="{Binding Params.Gain}" />
                         <ContentControl ContentTemplate="{StaticResource ParameterControlTemplate}"
-                                        Content="{Binding Params.AcquisitionParameters.LaserDuration}" />
+                                        Content="{Binding Params.LaserDuration}" />
                         <ContentControl ContentTemplate="{StaticResource ParameterControlTemplate}"
-                                        Content="{Binding Params.AcquisitionParameters.CaptureInterval}" />
+                                        Content="{Binding Params.CaptureInterval}" />
                         <ContentControl ContentTemplate="{StaticResource ParameterControlTemplate}"
-                                        Content="{Binding Params.AcquisitionParameters.OutputDirectory}" />
-
+                                        Content="{Binding Params.OutputDirectory}" />
+<!--todo use parent datacontext to mask params-->
                     </WrapPanel>
                 </ScrollViewer>
             </TabItem>
@@ -168,15 +168,15 @@
                                 </DataTemplate>
                             </GroupBox.Resources>
                             <StackPanel>
-                                <ContentControl Content="{Binding Params.PowerConfigurations.ManualPowerCheck}"
+                                <ContentControl Content="{Binding Params.ManualPowerCheck}"
                                                 ContentTemplate="{StaticResource PowerCheckBoxTemplate}" />
-                                <ContentControl Content="{Binding Params.PowerConfigurations.MasterPowerCheck}"
+                                <ContentControl Content="{Binding Params.MasterPowerCheck}"
                                                 ContentTemplate="{StaticResource PowerCheckBoxTemplate}" />
-                                <ContentControl Content="{Binding Params.PowerConfigurations.FanPowerCheck}"
+                                <ContentControl Content="{Binding Params.FanPowerCheck}"
                                                 ContentTemplate="{StaticResource PowerCheckBoxTemplate}" />
-                                <ContentControl Content="{Binding Params.PowerConfigurations.LaserPowerCheck}"
+                                <ContentControl Content="{Binding Params.LaserPowerCheck}"
                                                 ContentTemplate="{StaticResource PowerCheckBoxTemplate}" />
-                                <ContentControl Content="{Binding Params.PowerConfigurations.MotorPowerCheck}"
+                                <ContentControl Content="{Binding Params.MotorPowerCheck}"
                                                 ContentTemplate="{StaticResource PowerCheckBoxTemplate}" />
                             </StackPanel>
                         </GroupBox>

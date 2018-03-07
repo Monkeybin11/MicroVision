@@ -129,7 +129,7 @@ namespace MicroVision.Services
         /// </summary>
         private void UpdateComList()
         {
-            _parameterServices.DeviceSelections.ComSelection.Value.Clear();
+            _parameterServices.ComSelection.Value.Clear();
             ComList comList = null;
             try
             {
@@ -148,7 +148,7 @@ namespace MicroVision.Services
                     .Publish(new ComListException("Failed to update the serial port list"));
                 return;
             }
-            _parameterServices.DeviceSelections.ComSelection.Value = new List<string>(comList.ComPort);
+            _parameterServices.ComSelection.Value = new List<string>(comList.ComPort);
         }
     }
 }

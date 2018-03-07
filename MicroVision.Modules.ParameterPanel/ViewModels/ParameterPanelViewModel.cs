@@ -43,11 +43,11 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
 
         public DelegateCommand ComConnectToggleCommand =>
             _comConnectToggleCommand ??
-            (_comConnectToggleCommand = new DelegateCommand(ExecuteComConnectToggleCommand, CanExecuteComConnectToggleCommand)).ObservesProperty(() => Params.DeviceSelections.ComSelection.Selected);
+            (_comConnectToggleCommand = new DelegateCommand(ExecuteComConnectToggleCommand, CanExecuteComConnectToggleCommand)).ObservesProperty(() => Params.ComSelection.Selected);
 
         private bool CanExecuteComConnectToggleCommand()
         {
-            return Params.DeviceSelections.ComSelection.Selected != null;
+            return Params.ComSelection.Selected != null;
         }
 
         void ExecuteComConnectToggleCommand()
@@ -58,7 +58,7 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
             }
             else
             {
-                var selectedSerialPort = Params.DeviceSelections.ComSelection.Selected;
+                var selectedSerialPort = Params.ComSelection.Selected;
                 _eventAggregator.GetEvent<ComConnectionRequestedEvent>().Publish(selectedSerialPort);
             }
         }
@@ -83,7 +83,7 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
             // ask for list update for initial value
             // _eventAggregator.GetEvent<ComListUpdateRequestedEvent>().Publish();
 
-            Params.PowerConfigurations.ManualPowerCheck.PropertyChanged += ManualPowerCheck_PropertyChanged;
+            Params.ManualPowerCheck.PropertyChanged += ManualPowerCheck_PropertyChanged;
 
             ComConnectionStatus = statusService.ComConnectionStatus;
         }
@@ -92,10 +92,9 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
         private void ManualPowerCheck_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             var senderObj = (CheckParameter) sender;
-            var powerConfigurations = Params.PowerConfigurations;
-            powerConfigurations.MasterPowerCheck.IsEnabled = powerConfigurations.FanPowerCheck.IsEnabled =
-                powerConfigurations.LaserPowerCheck.IsEnabled =
-                    powerConfigurations.MotorPowerCheck.IsEnabled = senderObj.Value;
+            Params.MasterPowerCheck.IsEnabled = Params.FanPowerCheck.IsEnabled =
+                Params.LaserPowerCheck.IsEnabled =
+                    Params.MotorPowerCheck.IsEnabled = senderObj.Value;
         }
     }
 }
