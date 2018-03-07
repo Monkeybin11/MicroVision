@@ -44,6 +44,7 @@
     <Compile Include="Events\ParameterEvents.cs" />
     <Compile Include="Events\RpcEvents.cs" />
     <Compile Include="Events\SerialEvents.cs" />
+    <Compile Include="Events\SystemEvents.cs" />
     <Compile Include="Events\VimbaEvents.cs" />
     <Compile Include="Exceptions\RpcExceptions.cs" />
     <Compile Include="Exceptions\SerialExceptions.cs" />

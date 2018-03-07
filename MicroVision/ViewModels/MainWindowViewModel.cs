@@ -27,6 +27,15 @@ namespace MicroVision.ViewModels
         public InteractionRequest<IConfirmation> RaiseRpcConnectionFailedDialog { get; set; } =
             new InteractionRequest<IConfirmation>();
 
+        private DelegateCommand _closingCommand;
+        public DelegateCommand ClosingCommand =>
+            _closingCommand ?? (_closingCommand = new DelegateCommand(ExecuteClosingCommand));
+
+        void ExecuteClosingCommand()
+        {
+            _eventAggregator.GetEvent<ShutDownEvent>().Publish();
+        }
+
 
         public MainWindowViewModel(ILogService logservice, IEventAggregator eventAggregator)
         {

@@ -17,6 +17,9 @@
         <prism:InteractionRequestTrigger SourceObject="{Binding RaiseRpcConnectionFailedDialog}">
             <prism:PopupWindowAction IsModal="True" CenterOverAssociatedObject="True" />
         </prism:InteractionRequestTrigger>
+        <i:EventTrigger EventName="Closing">
+            <i:InvokeCommandAction Command="{Binding ClosingCommand}"></i:InvokeCommandAction>
+        </i:EventTrigger>
     </i:Interaction.Triggers>
     <DockPanel LastChildFill="True">
         <ContentControl prism:RegionManager.RegionName="StatusBar" DockPanel.Dock="Bottom"></ContentControl>

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using MicroVision.Core.Events;
 using MicroVision.Core.Exceptions;
@@ -44,6 +45,13 @@ namespace MicroVision.Services
             _eventAggregator.GetEvent<ComCommandDispatchedEvent>().Subscribe(DispatchCommand);
             _eventAggregator.GetEvent<ComConnectionRequestedEvent>().Subscribe(Connect);
             _eventAggregator.GetEvent<ComDisconnectionRequestedEvent>().Subscribe(Disconnect);
+            _eventAggregator.GetEvent<ShutDownEvent>().Subscribe(RestoreRpcStatus);
+        }
+
+        private void RestoreRpcStatus()
+        {
+            _rpcService.CameraControllerClient.RequestSoftwareReset(new Empty());
+            Disconnect();
         }
 
         /// <summary>
