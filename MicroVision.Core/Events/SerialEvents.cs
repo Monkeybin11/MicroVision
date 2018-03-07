@@ -12,17 +12,19 @@ namespace MicroVision.Core.Events
     /// <summary>
     /// request to update the com list in IParameterService
     /// </summary>
+    [Obsolete]
     public class ComListUpdateRequestedEvent : PubSubEvent {}
 
 
     /// <summary>
     /// event for COM connected successfully
     /// </summary>
-    public class ComConnectedEvent: PubSubEvent {}
+    public class ComConnectedEvent: PubSubEvent { }
 
     /// <summary>
     /// request to connect to the target serial port
     /// </summary>
+    [Obsolete]
     public class ComConnectionRequestedEvent: PubSubEvent <string>{}
 
     /// <summary>
@@ -33,6 +35,7 @@ namespace MicroVision.Core.Events
     /// <summary>
     /// request to disconnect the serial port
     /// </summary>
+    [Obsolete]
     public class ComDisconnectionRequestedEvent: PubSubEvent { }
 
     /// <summary>
@@ -45,7 +48,7 @@ namespace MicroVision.Core.Events
     /// <summary>
     ///  request to send command to the serial port
     /// </summary>
-    public class ComCommandDispatchedEvent: PubSubEvent<ISerialCommand> { }
+    public class ComCommandDispatchedEvent: PubSubEvent<SerialCommand> { }
 
     /// <summary>
     /// event for receiving update from the board. the update will be in the IParameterService
