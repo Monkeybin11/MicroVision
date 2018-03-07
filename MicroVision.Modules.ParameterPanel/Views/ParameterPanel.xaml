@@ -151,7 +151,7 @@
                                         Content="{Binding Params.CaptureInterval}" />
                         <ContentControl ContentTemplate="{StaticResource ParameterControlTemplate}"
                                         Content="{Binding Params.OutputDirectory}" />
-<!--todo use parent datacontext to mask params-->
+                        <!--todo use parent datacontext to mask params-->
                     </WrapPanel>
                 </ScrollViewer>
             </TabItem>
@@ -165,7 +165,8 @@
                                 </Style>
                                 <DataTemplate x:Key="PowerCheckBoxTemplate">
                                     <CheckBox IsChecked="{Binding Value}" IsEnabled="{Binding IsEnabled}"
-                                              Content="{Binding Label}" />
+                                              Content="{Binding Label}"
+                                              Command="{Binding DataContext.PowerConfigurationCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" />
                                 </DataTemplate>
                             </GroupBox.Resources>
                             <StackPanel>

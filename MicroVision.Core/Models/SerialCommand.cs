@@ -11,7 +11,6 @@ namespace MicroVision.Core.Models
         public enum RpcSerialCommand
         {
             GetInfo,
-            SoftwareReset,
             RequestPowerStatus,
             IsConnected,
             RequestCurrentStatus,
@@ -22,6 +21,6 @@ namespace MicroVision.Core.Models
         }
         public RpcSerialCommand Command { get; set; }
 
-        public string Argument { get; set; }
+        public object Argument { get; set; }
     }
 }

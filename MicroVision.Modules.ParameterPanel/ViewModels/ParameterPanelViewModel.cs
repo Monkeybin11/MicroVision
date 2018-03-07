@@ -30,9 +30,17 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
 
 
         #region Commands
+        private DelegateCommand _powerConfigurationCommand;
+        public DelegateCommand PowerConfigurationCommand =>
+            _powerConfigurationCommand ?? (_powerConfigurationCommand = new DelegateCommand(ExecutePowerConfigurationCommand));
+
+        void ExecutePowerConfigurationCommand()
+        {
+            _serialService.ControlPower(Params.MasterPowerCheck.Value, Params.FanPowerCheck.Value,
+                Params.MotorPowerCheck.Value, Params.LaserPowerCheck.Value);
+        }
 
         private DelegateCommand _comConnectToggleCommand;
-
         public DelegateCommand ComConnectToggleCommand =>
             _comConnectToggleCommand ??
             (_comConnectToggleCommand = new DelegateCommand(ExecuteComConnectToggleCommand, CanExecuteComConnectToggleCommand)).ObservesProperty(() => Params.ComSelection.Selected);
