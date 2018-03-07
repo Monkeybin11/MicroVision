@@ -29,7 +29,8 @@ namespace MicroVision.Services
         private readonly ILogService _log;
         private readonly IEventAggregator _eventAggregator;
         private readonly IRpcService _rpcService;
-
+        
+        
 
         public SerialService(IParameterServices parameterServices, ILogService log, IEventAggregator eventAggregator,
             IRpcService rpcService)
@@ -76,7 +77,7 @@ namespace MicroVision.Services
             else
             {
                 _eventAggregator.GetEvent<ComConnectedEvent>().Publish();
-                _eventAggregator.GetEvent<NotifyOperationEvents>().Publish($"{s} successfully connected");
+                _eventAggregator.GetEvent<NotifyOperationEvent>().Publish($"{s} successfully connected");
             }
         }
 
@@ -100,16 +101,8 @@ namespace MicroVision.Services
                 return;
             }
 
-            if (!ret.IsConnected)
-            {
-                _eventAggregator.GetEvent<ExceptionEvent>()
-                    .Publish(new ComListException("COM port is not connected"));
-            }
-            else
-            {
-                _eventAggregator.GetEvent<ComDisconnectedEvent>().Publish(true);
-                _eventAggregator.GetEvent<NotifyOperationEvents>().Publish("COM port successfully closed");
-            }
+            _eventAggregator.GetEvent<ComDisconnectedEvent>().Publish(true);
+            _eventAggregator.GetEvent<NotifyOperationEvent>().Publish("COM port successfully closed");
         }
 
         /// <summary>

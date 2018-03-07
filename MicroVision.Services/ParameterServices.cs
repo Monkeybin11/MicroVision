@@ -2,8 +2,10 @@
 using System;
 using System.CodeDom;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
@@ -12,34 +14,56 @@ using AutoMapper;
 using Microsoft.Practices.Unity;
 using MicroVision.Core.Events;
 using MicroVision.Core.Models;
+using MicroVision.Services.Annotations;
 using MicroVision.Services.Models;
 using Newtonsoft.Json;
 using Prism.Events;
 
 namespace MicroVision.Services
 {
-    public class AcquisitionParameters
+    public class AcquisitionParameters : INotifyPropertyChanged
     {
         public FieldParameter<int> ExposureTime { get; } = new FieldParameter<int>();
         public FieldParameter<double> Gain { get; } = new FieldParameter<double>();
         public FieldParameter<int> LaserDuration { get; } = new FieldParameter<int>();
         public FieldParameter<int> CaptureInterval { get; } = new FieldParameter<int>();
         public FieldParameter<string> OutputDirectory { get; } = new FieldParameter<string>();
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 
-    public class DeviceSelections
+    public class DeviceSelections : INotifyPropertyChanged
     {
         public SelectionParameter<string> ComSelection { get; } = new SelectionParameter<string>();
         public SelectionParameter<string> VimbaSelection { get; } = new SelectionParameter<string>();
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 
-    public class PowerConfigurations
+    public class PowerConfigurations : INotifyPropertyChanged
     {
         public CheckParameter ManualPowerCheck { get; } = new CheckParameter();
         public CheckParameter MasterPowerCheck { get; } = new CheckParameter();
         public CheckParameter FanPowerCheck { get; } = new CheckParameter();
         public CheckParameter LaserPowerCheck { get; } = new CheckParameter();
         public CheckParameter MotorPowerCheck { get; } = new CheckParameter();
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 
     public interface IParameterServices
@@ -49,7 +73,7 @@ namespace MicroVision.Services
         PowerConfigurations PowerConfigurations { get; set; }
     }
 
-    public class ParameterServices : IParameterServices
+    public class ParameterServices : IParameterServices, INotifyPropertyChanged
     {
         private readonly IUnityContainer _container;
         private readonly ILogService _log;
@@ -184,5 +208,13 @@ namespace MicroVision.Services
         };
 
         #endregion
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

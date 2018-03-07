@@ -7,7 +7,7 @@ using Prism.Events;
 
 namespace MicroVision.Core.Events
 {
-    public class NotifyOperationEvents : PubSubEvent<string>
+    public class NotifyOperationEvent : PubSubEvent<string>
     {
     }
 }

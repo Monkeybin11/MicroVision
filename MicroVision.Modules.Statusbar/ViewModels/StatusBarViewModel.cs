@@ -51,7 +51,7 @@ namespace MicroVision.Modules.Statusbar.ViewModels
         {
             _eventAggregator = eventAggregator;
             _eventAggregator.GetEvent<ExceptionEvent>().Subscribe(NotifyException);
-
+            _eventAggregator.GetEvent<NotifyOperationEvent>().Subscribe(NotifyOperation);
 
             InitializeStatus();
         }
@@ -68,11 +68,11 @@ namespace MicroVision.Modules.Statusbar.ViewModels
                 BitmapSizeOptions.FromEmptyOptions());
         }
 
-        private void NotifyOperation(string Operation)
+        private void NotifyOperation(string operation)
         {
-            _log.Add(new StatusEntry(DateTime.Now, Operation));
+            _log.Add(new StatusEntry(DateTime.Now, operation));
             StatusIcon = CreateIcon(SystemIcons.Information);
-            Status = Operation;
+            Status = operation;
         }
         private void NotifyException(Exception exception)
         {
