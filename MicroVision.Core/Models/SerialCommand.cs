@@ -6,24 +6,15 @@ using System.Threading.Tasks;
 
 namespace MicroVision.Core.Models
 {
-    public interface ISerialCommand
+    public class SerialCommand
     {
-        /// <summary>
-        ///  Convert the command to a serialized string that will be sent via serial port
-        /// </summary>
-        /// <returns>target board understandable string command</returns>
-        string BuildCommandString();
-    }
-    public class SerialCommand : ISerialCommand
-    {
-        public SerialCommand()
+        public enum SerialCommands
         {
+            GetInfo,
+            SoftwareReset,
+            PowerStatus,
+            IsConnected,
 
-        }
-
-        public string BuildCommandString()
-        {
-            throw new NotImplementedException();
         }
     }
 }

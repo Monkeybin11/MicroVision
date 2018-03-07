@@ -1,14 +1,5 @@
 ﻿using Prism.Commands;
 using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Timers;
-using System.Collections.ObjectModel;
-using System.Windows;
-using MicroVision.Core.Events;
 using MicroVision.Core.Models;
 using MicroVision.Services;
 using MicroVision.Services.Models;
@@ -18,6 +9,7 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
 {
     public class ParameterPanelViewModel : BindableBase
     {
+        private readonly ISerialService _serialService;
         private readonly IEventAggregator _eventAggregator;
 
         #region properties
@@ -54,12 +46,14 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
         {
             if (ComConnectionStatus.IsConnected) // already connected 
             {
-                _eventAggregator.GetEvent<ComDisconnectionRequestedEvent>().Publish();
+                //_eventAggregator.GetEvent<ComDisconnectionRequestedEvent>().Publish();
+                _serialService.Disconnect();
             }
             else
             {
                 var selectedSerialPort = Params.ComSelection.Selected;
-                _eventAggregator.GetEvent<ComConnectionRequestedEvent>().Publish(selectedSerialPort);
+                //_eventAggregator.GetEvent<ComConnectionRequestedEvent>().Publish(selectedSerialPort);
+                _serialService.Connect(selectedSerialPort);
             }
         }
 
@@ -69,14 +63,16 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
 
         void ExecuteComUpdateListCommand()
         {
-            _eventAggregator.GetEvent<ComListUpdateRequestedEvent>().Publish();
+            //_eventAggregator.GetEvent<ComListUpdateRequestedEvent>().Publish();
+            Params.ComSelection.Value = _serialService.UpdateComList();
         }
 
         #endregion
 
-        public ParameterPanelViewModel(IParameterServices param, IStatusServices statusService,
+        public ParameterPanelViewModel(ISerialService serialService, IParameterServices param, IStatusServices statusService,
             IEventAggregator eventAggregator)
         {
+            _serialService = serialService;
             _eventAggregator = eventAggregator;
             Params = param;
 
