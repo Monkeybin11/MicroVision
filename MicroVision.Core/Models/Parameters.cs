@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using Prism.Mvvm;
 
 namespace MicroVision.Core.Models
@@ -9,11 +10,12 @@ namespace MicroVision.Core.Models
     /// Base parameter class
     /// </summary>
     /// <typeparam name="T"> value type</typeparam>
-    [Serializable]
+    [JsonObject(MemberSerialization.OptIn)]
     public abstract class Parameter<T> : BindableBase
     {
         private bool _isEnabled;
         public string Label { get; set; }
+        [JsonProperty]
         public abstract T Value { get; set; }
 
         public bool IsEnabled
@@ -72,6 +74,7 @@ namespace MicroVision.Core.Models
     #endregion
 
     #region Combobox selection
+    [JsonObject(MemberSerialization.OptIn)]
     public class SelectionParameter<T> : Parameter<List<T>>
     {
         private List<T> _value;
@@ -82,7 +85,7 @@ namespace MicroVision.Core.Models
             get => _value;
             set => SetProperty(ref _value, value);
         }
-
+        [JsonProperty]
         public T Selected
         {
             get { return _selected; }

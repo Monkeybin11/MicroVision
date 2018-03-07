@@ -79,6 +79,7 @@
             <TabItem Header="Connection">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                     <WrapPanel>
+
                         <GroupBox Header="COM" Style="{StaticResource GroupboxStyle}">
                             <StackPanel>
                                 <DockPanel Style="{StaticResource DockPanelStyle}">
