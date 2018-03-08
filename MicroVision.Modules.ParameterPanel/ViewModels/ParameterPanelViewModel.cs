@@ -15,7 +15,7 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
     public class ParameterPanelViewModel : BindableBase
     {
         public ParameterPanelViewModel(
-            ISerialService serialService, 
+            ISerialService serialService,
             ICameraService cameraService,
             IParameterServices param,
             IStatusServices statusService,
@@ -46,7 +46,7 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
 
         private readonly ISerialService _serialService;
         private readonly ICameraService _cameraService;
-        
+
         private readonly IEventAggregator _eventAggregator;
 
         #region properties
@@ -118,12 +118,22 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
 
 
         private DelegateCommand _cameraUpdateListCommand;
+
         public DelegateCommand CameraUpdateListCommand =>
-            _cameraUpdateListCommand ?? (_cameraUpdateListCommand = new DelegateCommand(ExecuteCameraUpdateListCommand));
+            _cameraUpdateListCommand ??
+            (_cameraUpdateListCommand = new DelegateCommand(ExecuteCameraUpdateListCommand));
 
         private DelegateCommand _cameraConnectToggleCommand;
+
         public DelegateCommand CameraConnectToggleCommand =>
-            _cameraConnectToggleCommand ?? (_cameraConnectToggleCommand = new DelegateCommand(ExecuteCameraConnectToggleCommand));
+            _cameraConnectToggleCommand ?? (_cameraConnectToggleCommand =
+                new DelegateCommand(ExecuteCameraConnectToggleCommand, CanCameraConnectToggleExecuteMethod)
+                    .ObservesProperty(() => Params.VimbaSelection.Selected));
+
+        private bool CanCameraConnectToggleExecuteMethod()
+        {
+            return Params.VimbaSelection.Selected != null;
+        }
 
         void ExecuteCameraConnectToggleCommand()
         {
@@ -133,14 +143,14 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
             }
             else
             {
-                if (Params.VimbaSelection.Selected != null) Task.Run(() => _cameraService.Connect(Params.VimbaSelection.Selected));
+                if (Params.VimbaSelection.Selected != null)
+                    Task.Run(() => _cameraService.Connect(Params.VimbaSelection.Selected));
             }
         }
 
         void ExecuteCameraUpdateListCommand()
         {
             Task.Run(() => Params.VimbaSelection.Value = _cameraService.CameraUpdateList());
-
         }
 
         void ExecutePowerConfigurationCommand(bool? b)
