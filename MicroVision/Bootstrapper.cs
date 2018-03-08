@@ -42,6 +42,7 @@ namespace MicroVision
             Container.RegisterType<IStatusServices, StatusServices>(new ContainerControlledLifetimeManager());
 
             Container.RegisterType<ISerialService, SerialService>(new ContainerControlledLifetimeManager());
+            Container.RegisterType<ICameraService, CameraService>(new ContainerControlledLifetimeManager());
             Container.RegisterType<IMenuServices, MenuServices>(new ContainerControlledLifetimeManager());
 
             Container.RegisterType<IRpcService, RpcService>(new ContainerControlledLifetimeManager());

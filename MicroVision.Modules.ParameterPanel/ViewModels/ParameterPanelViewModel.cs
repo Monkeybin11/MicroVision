@@ -7,12 +7,44 @@ using MicroVision.Core.Models;
 using MicroVision.Services;
 using MicroVision.Services.Models;
 using Prism.Events;
+using Services;
 
 namespace MicroVision.Modules.ParameterPanel.ViewModels
 {
     public class ParameterPanelViewModel : BindableBase
     {
+        public ParameterPanelViewModel(
+            ISerialService serialService, 
+            ICameraService cameraService,
+            IParameterServices param,
+            IStatusServices statusService,
+            IEventAggregator eventAggregator)
+        {
+            _serialService = serialService;
+            _cameraService = cameraService;
+            _eventAggregator = eventAggregator;
+            Params = param;
+
+            // ask for list update for initial value
+            // _eventAggregator.GetEvent<ComListUpdateRequestedEvent>().Publish();
+
+            Params.ManualPowerCheck.PropertyChanged += ManualPowerCheck_PropertyChanged;
+
+            ComConnectionStatus = statusService.ComConnectionStatus;
+
+            // restore remote configuration
+            SyncRemoteSerialConfiguration();
+
+            CameraInitialization();
+        }
+
+        private void CameraInitialization()
+        {
+            _cameraService.VimbaInstanceControl(ConnectionCommands.Connect);
+        }
+
         private readonly ISerialService _serialService;
+        private readonly ICameraService _cameraService;
         private readonly IEventAggregator _eventAggregator;
 
         #region properties
@@ -49,8 +81,8 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
             {
                 // ignored
             }
-            
         }
+
         #region Commands
 
         private DelegateCommand<bool?> _powerConfigurationCommand;
@@ -81,6 +113,16 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
             _focusCommand ?? (_focusCommand =
                 new DelegateCommand<string>(ExecuteFocusCommand, CanComOperationExecution).ObservesProperty(() =>
                     ComConnectionStatus.IsConnected));
+
+
+        private DelegateCommand _cameraUpdateListCommand;
+        public DelegateCommand CameraUpdateListCommand =>
+            _cameraUpdateListCommand ?? (_cameraUpdateListCommand = new DelegateCommand(ExecuteCameraUpdateListCommand));
+
+        void ExecuteCameraUpdateListCommand()
+        {
+            Params.VimbaSelection.Value=_cameraService.CameraUpdateList();
+        }
 
         void ExecutePowerConfigurationCommand(bool? b)
         {
@@ -116,7 +158,6 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
 
             // put the blocking action in a separated thread
             Task.Run(() => _serialService.ControlFocus(step));
-
         }
 
         void ExecuteComUpdateListCommand()
@@ -142,29 +183,11 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
 
         #endregion
 
-        public ParameterPanelViewModel(ISerialService serialService, IParameterServices param,
-            IStatusServices statusService,
-            IEventAggregator eventAggregator)
-        {
-            _serialService = serialService;
-            _eventAggregator = eventAggregator;
-            Params = param;
-
-            // ask for list update for initial value
-            // _eventAggregator.GetEvent<ComListUpdateRequestedEvent>().Publish();
-
-            Params.ManualPowerCheck.PropertyChanged += ManualPowerCheck_PropertyChanged;
-
-            ComConnectionStatus = statusService.ComConnectionStatus;
-
-            // restore remote configuration
-            SyncRemoteSerialConfiguration();
-        }
-
 
         private void ManualPowerCheck_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            Params.MasterPowerCheck.Enabled = Params.FanPowerCheck.Enabled = Params.LaserPowerCheck.Enabled = Params.MotorPowerCheck.Enabled = !Params.ManualPowerCheck.Value;
+            Params.MasterPowerCheck.Enabled = Params.FanPowerCheck.Enabled = Params.LaserPowerCheck.Enabled =
+                Params.MotorPowerCheck.Enabled = !Params.ManualPowerCheck.Value;
         }
     }
 }

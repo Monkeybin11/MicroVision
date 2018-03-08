@@ -103,7 +103,14 @@
                             <StackPanel>
                                 <DockPanel Style="{StaticResource DockPanelStyle}">
                                     <Label Style="{StaticResource LabelStyle}">Camera Name:</Label>
-                                    <ComboBox ItemsSource="{Binding Params.VimbaSelection.Value}" />
+                                    <ComboBox ItemsSource="{Binding Params.VimbaSelection.Value}" SelectedValue="{Binding Params.VimbaSelection.Selected}">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="DropDownOpened">
+                                                <i:InvokeCommandAction Command="{Binding CameraUpdateListCommand}">
+                                                </i:InvokeCommandAction>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </ComboBox>
                                 </DockPanel>
                                 <ToggleButton Style="{StaticResource ConnectionButtonStyle}">Connect</ToggleButton>
                             </StackPanel>
@@ -165,7 +172,7 @@
                                 </Style>
                                 <DataTemplate x:Key="PowerCheckBoxTemplate">
                                     <CheckBox IsChecked="{Binding Value}" Content="{Binding Label}"
-                                              Command="{Binding DataContext.PowerConfigurationCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
+                                              Command="{Binding DataContext.PowerConfigurationCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                               CommandParameter="{Binding Enabled}" />
                                 </DataTemplate>
                             </GroupBox.Resources>
@@ -196,8 +203,9 @@
                                 </Grid.RowDefinitions>
                                 <Grid.Resources>
                                     <Style TargetType="Button">
-                                        <Setter Property="Command" Value="{Binding FocusCommand}"></Setter>
-                                        <Setter Property="CommandParameter" Value="{Binding Path=Tag, RelativeSource={RelativeSource Self}}"></Setter>
+                                        <Setter Property="Command" Value="{Binding FocusCommand}" />
+                                        <Setter Property="CommandParameter"
+                                                Value="{Binding Path=Tag, RelativeSource={RelativeSource Self}}" />
                                     </Style>
                                 </Grid.Resources>
                                 <Button Grid.Column="0" Tag="+1"> Up 1 step</Button>

@@ -73,7 +73,6 @@ namespace MicroVision.Services
         private readonly ILogService _log;
         private readonly IEventAggregator _eventAggregator;
         private readonly IRpcService _rpcService;
-        private readonly IStatusServices _statusServices;
 
 
         public SerialService(ILogService log, IEventAggregator eventAggregator,
