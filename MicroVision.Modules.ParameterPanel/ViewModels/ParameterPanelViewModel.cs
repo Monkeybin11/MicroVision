@@ -32,24 +32,45 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
 
 
         #region Commands
-        private DelegateCommand _powerConfigurationCommand;
-        public DelegateCommand PowerConfigurationCommand =>
-            _powerConfigurationCommand ?? (_powerConfigurationCommand = new DelegateCommand(ExecutePowerConfigurationCommand));
 
-        void ExecutePowerConfigurationCommand()
+        private DelegateCommand<bool?> _powerConfigurationCommand;
+
+        public DelegateCommand<bool?> PowerConfigurationCommand =>
+            _powerConfigurationCommand ??
+            (_powerConfigurationCommand =
+                new DelegateCommand<bool?>(ExecutePowerConfigurationCommand, CanPowerConfigurationExecution))
+            .ObservesProperty(() => ComConnectionStatus.IsConnected)
+            .ObservesProperty(() => Params.ManualPowerCheck.Value);
+
+        private bool CanPowerConfigurationExecution(bool? b)
         {
-            _serialService.ControlPower(Params.MasterPowerCheck.Value, Params.FanPowerCheck.Value,
-                Params.MotorPowerCheck.Value, Params.LaserPowerCheck.Value);
+            return b != null && (CanComOperationExecution() && b.Value);
         }
 
         private DelegateCommand _comConnectToggleCommand;
+
         public DelegateCommand ComConnectToggleCommand =>
             _comConnectToggleCommand ??
-            (_comConnectToggleCommand = new DelegateCommand(ExecuteComConnectToggleCommand, CanExecuteComConnectToggleCommand)).ObservesProperty(() => Params.ComSelection.Selected);
+            (_comConnectToggleCommand =
+                new DelegateCommand(ExecuteComConnectToggleCommand, CanExecuteComConnectToggleCommand))
+            .ObservesProperty(() => Params.ComSelection.Selected);
 
-        private bool CanExecuteComConnectToggleCommand()
+        private DelegateCommand _comUpdateListCommand;
+
+        public DelegateCommand ComUpdateListCommand =>
+            _comUpdateListCommand ?? (_comUpdateListCommand = new DelegateCommand(ExecuteComUpdateListCommand));
+
+        private DelegateCommand<string> _focusCommand;
+
+        public DelegateCommand<string> FocusCommand =>
+            _focusCommand ?? (_focusCommand =
+                new DelegateCommand<string>(ExecuteFocusCommand, CanComOperationExecution).ObservesProperty(() =>
+                    ComConnectionStatus.IsConnected));
+
+        void ExecutePowerConfigurationCommand(bool? b)
         {
-            return Params.ComSelection.Selected != null;
+            _serialService.ControlPower(Params.MasterPowerCheck.Value, Params.FanPowerCheck.Value,
+                Params.MotorPowerCheck.Value, Params.LaserPowerCheck.Value);
         }
 
         void ExecuteComConnectToggleCommand()
@@ -67,13 +88,15 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
             }
         }
 
-        private DelegateCommand _comUpdateListCommand;
-        public DelegateCommand ComUpdateListCommand =>
-            _comUpdateListCommand ?? (_comUpdateListCommand = new DelegateCommand(ExecuteComUpdateListCommand));
+        private bool CanExecuteComConnectToggleCommand()
+        {
+            return Params.ComSelection.Selected != null;
+        }
 
-        private DelegateCommand<string> _focusCommand;
-        public DelegateCommand<string> FocusCommand =>
-            _focusCommand ?? (_focusCommand = new DelegateCommand<string>(ExecuteFocusCommand));
+        private bool CanComOperationExecution(string s = null)
+        {
+            return ComConnectionStatus.IsConnected;
+        }
 
         void ExecuteFocusCommand(string s)
         {
@@ -81,11 +104,12 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
             int step;
             if (!Int32.TryParse(s, out step))
             {
-                _eventAggregator.GetEvent<ExceptionEvent>().Publish(new ArgumentException("Cannot parse the movement steps"));
+                _eventAggregator.GetEvent<ExceptionEvent>()
+                    .Publish(new ArgumentException("Cannot parse the movement steps"));
                 return;
             }
+
             _serialService.ControlFocus(step);
-            
         }
 
         void ExecuteComUpdateListCommand()
@@ -96,7 +120,8 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
 
         #endregion
 
-        public ParameterPanelViewModel(ISerialService serialService, IParameterServices param, IStatusServices statusService,
+        public ParameterPanelViewModel(ISerialService serialService, IParameterServices param,
+            IStatusServices statusService,
             IEventAggregator eventAggregator)
         {
             _serialService = serialService;
@@ -109,15 +134,16 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
             Params.ManualPowerCheck.PropertyChanged += ManualPowerCheck_PropertyChanged;
 
             ComConnectionStatus = statusService.ComConnectionStatus;
+
+            // Determine if the server is already connected
+            if (_serialService.IsConnected())
+                _eventAggregator.GetEvent<ComConnectedEvent>().Publish();
         }
 
 
         private void ManualPowerCheck_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            var senderObj = (CheckParameter) sender;
-            Params.MasterPowerCheck.IsEnabled = Params.FanPowerCheck.IsEnabled =
-                Params.LaserPowerCheck.IsEnabled =
-                    Params.MotorPowerCheck.IsEnabled = senderObj.Value;
+            Params.MasterPowerCheck.Enabled = Params.FanPowerCheck.Enabled = Params.LaserPowerCheck.Enabled = Params.MotorPowerCheck.Enabled = !Params.ManualPowerCheck.Value;
         }
     }
 }

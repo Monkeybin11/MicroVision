@@ -164,9 +164,9 @@
                                     <Setter Property="Margin" Value="5,5,5,0" />
                                 </Style>
                                 <DataTemplate x:Key="PowerCheckBoxTemplate">
-                                    <CheckBox IsChecked="{Binding Value}" IsEnabled="{Binding IsEnabled}"
-                                              Content="{Binding Label}"
-                                              Command="{Binding DataContext.PowerConfigurationCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" />
+                                    <CheckBox IsChecked="{Binding Value}" Content="{Binding Label}"
+                                              Command="{Binding DataContext.PowerConfigurationCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
+                                              CommandParameter="{Binding Enabled}" />
                                 </DataTemplate>
                             </GroupBox.Resources>
                             <StackPanel>

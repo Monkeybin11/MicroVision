@@ -87,12 +87,6 @@ namespace MicroVision.Services
             //_eventAggregator.GetEvent<ComConnectionRequestedEvent>().Subscribe(Connect);
             //_eventAggregator.GetEvent<ComDisconnectionRequestedEvent>().Subscribe(Disconnect);
             _eventAggregator.GetEvent<ShutDownEvent>().Subscribe(RestoreRpcStatus);
-
-            // Check if the port of the backend is already in open state
-            if (IsConnected())
-            {
-                _eventAggregator.GetEvent<ComConnectedEvent>().Publish();
-            }
         }
 
         /// <summary>
