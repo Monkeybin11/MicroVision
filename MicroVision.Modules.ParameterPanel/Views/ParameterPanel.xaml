@@ -202,10 +202,10 @@
                                 </Grid.Resources>
                                 <Button Grid.Column="0" Tag="+1"> Up 1 step</Button>
                                 <Button Grid.Column="1" Tag="+10">Up 10 steps</Button>
-                                <Button Grid.Column="2" Tag="+200">Up 200 steps</Button>
+                                <Button Grid.Column="2" Tag="+100">Up 100 steps</Button>
                                 <Button Grid.Column="0" Tag="-1" Grid.Row="1">Down 1 step</Button>
                                 <Button Grid.Column="1" Tag="-10" Grid.Row="1">Down 10 steps</Button>
-                                <Button Grid.Column="2" Tag="-200" Grid.Row="1">Down 200 steps</Button>
+                                <Button Grid.Column="2" Tag="-100" Grid.Row="1">Down 100 steps</Button>
                             </Grid>
                         </GroupBox>
                     </WrapPanel>

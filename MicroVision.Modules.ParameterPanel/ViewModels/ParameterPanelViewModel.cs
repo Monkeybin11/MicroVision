@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using MicroVision.Core.Events;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -30,7 +31,26 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
 
         #endregion
 
+        public void SyncRemoteSerialConfiguration()
+        {
+            try
+            {
+                if (_serialService.IsConnected()) ComConnectionStatus.SetConnected(true);
 
+                var powerCode = _serialService.ReadPower();
+                bool master, fan, laser, motor;
+                SerialService.ParsePowerCode(powerCode, out master, out fan, out motor, out laser);
+                Params.MasterPowerCheck.Value = master;
+                Params.FanPowerCheck.Value = fan;
+                Params.MotorPowerCheck.Value = motor;
+                Params.LaserPowerCheck.Value = laser;
+            }
+            catch (Exception e)
+            {
+                // ignored
+            }
+            
+        }
         #region Commands
 
         private DelegateCommand<bool?> _powerConfigurationCommand;
@@ -94,7 +114,9 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
                 return;
             }
 
-            _serialService.ControlFocus(step);
+            // put the blocking action in a separated thread
+            Task.Run(() => _serialService.ControlFocus(step));
+
         }
 
         void ExecuteComUpdateListCommand()
@@ -135,9 +157,8 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
 
             ComConnectionStatus = statusService.ComConnectionStatus;
 
-            // Determine if the server is already connected
-            if (_serialService.IsConnected())
-                _eventAggregator.GetEvent<ComConnectedEvent>().Publish();
+            // restore remote configuration
+            SyncRemoteSerialConfiguration();
         }
 
 

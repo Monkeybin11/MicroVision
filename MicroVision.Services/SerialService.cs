@@ -62,7 +62,7 @@ namespace MicroVision.Services
         /// <param name="slowdown">Slow down factor</param>
         /// <param name="autoPower">Always true</param>
         /// <param name="driverPower">Always true</param>
-        void ControlFocus(int steps, int slowdown = 1, bool autoPower = true, bool driverPower = true);
+        void ControlFocus(int steps, int slowdown = 1000, bool autoPower = true, bool driverPower = true);
     }
 
     public class SerialService : ISerialService
@@ -73,6 +73,7 @@ namespace MicroVision.Services
         private readonly ILogService _log;
         private readonly IEventAggregator _eventAggregator;
         private readonly IRpcService _rpcService;
+        private readonly IStatusServices _statusServices;
 
 
         public SerialService(ILogService log, IEventAggregator eventAggregator,
@@ -88,6 +89,7 @@ namespace MicroVision.Services
             //_eventAggregator.GetEvent<ComDisconnectionRequestedEvent>().Subscribe(Disconnect);
             _eventAggregator.GetEvent<ShutDownEvent>().Subscribe(RestoreRpcStatus);
         }
+
 
         /// <summary>
         /// Rpc invocation wrapper
@@ -162,6 +164,16 @@ namespace MicroVision.Services
             }
 
             Disconnect();
+        }
+
+        public static void ParsePowerCode(int powerCode, out bool master, out bool fan, out bool motor, out bool laser)
+        {
+            //int powerCode = Convert.ToInt32(master) << 0 | Convert.ToInt32(laser) << 1 | Convert.ToInt32(motor) << 2 |
+            //                Convert.ToInt32(fan) << 3;
+            master = Convert.ToBoolean(powerCode & (1 << 0));
+            laser = Convert.ToBoolean(powerCode & (1 << 1));
+            motor = Convert.ToBoolean(powerCode & (1 << 2));
+            fan = Convert.ToBoolean(powerCode & (1 << 3));
         }
 
         #region Service methods
@@ -338,7 +350,7 @@ namespace MicroVision.Services
         /// <param name="slowdown">Slow down factor</param>
         /// <param name="autoPower">Always true</param>
         /// <param name="driverPower">Always true</param>
-        public void ControlFocus(int steps, int slowdown = 1, bool autoPower = true, bool driverPower = true)
+        public void ControlFocus(int steps, int slowdown = 1000, bool autoPower = true, bool driverPower = true)
         {
             if (steps == 0) return;
             var ret = DispatchCommand(new SerialCommand()
@@ -351,7 +363,7 @@ namespace MicroVision.Services
                     DriverPower = driverPower,
                     AutoPower = autoPower
                 }
-            }) as PowerStatusResponse;
+            }) as FocusStatusResponse;
             if (ret == null || ret?.Error != null) throw new ComRuntimeException("Cannot control focus");
         }
 
