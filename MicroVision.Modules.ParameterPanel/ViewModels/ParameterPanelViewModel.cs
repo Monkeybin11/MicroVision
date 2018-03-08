@@ -129,11 +129,11 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
         {
             if (Status.VimbaConnectionStatus.IsConnected)
             {
-                _cameraService.Disconnect();
+                Task.Run(() => _cameraService.Disconnect());
             }
             else
             {
-                if (Params.VimbaSelection.Selected != null) _cameraService.Connect(Params.VimbaSelection.Selected);
+                if (Params.VimbaSelection.Selected != null) Task.Run(() => _cameraService.Connect(Params.VimbaSelection.Selected));
             }
         }
 
