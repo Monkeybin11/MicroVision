@@ -34,8 +34,35 @@ namespace MicroVision.Services
         /// <returns>null for failure</returns>
         List<string> UpdateComList();
 
+        /// <summary>
+        /// Assert if serial port is already connected
+        /// </summary>
+        /// <returns></returns>
         bool IsConnected();
+
+        /// <summary>
+        /// Control the power configuration.
+        /// </summary>
+        /// <param name="master">Master power</param>
+        /// <param name="fan">Fan power</param>
+        /// <param name="motor">Motor power</param>
+        /// <param name="laser">Laser power</param>
         void ControlPower(bool master, bool fan, bool motor, bool laser);
+
+        /// <summary>
+        /// Read the power code. Throw ComRunTimeException if error occured.
+        /// </summary>
+        /// <returns>power code</returns>
+        int ReadPower();
+
+        /// <summary>
+        /// Control the focus motor
+        /// </summary>
+        /// <param name="steps">Movement steps</param>
+        /// <param name="slowdown">Slow down factor</param>
+        /// <param name="autoPower">Always true</param>
+        /// <param name="driverPower">Always true</param>
+        void ControlFocus(int steps, int slowdown = 1, bool autoPower = true, bool driverPower = true);
     }
 
     public class SerialService : ISerialService
@@ -60,6 +87,12 @@ namespace MicroVision.Services
             //_eventAggregator.GetEvent<ComConnectionRequestedEvent>().Subscribe(Connect);
             //_eventAggregator.GetEvent<ComDisconnectionRequestedEvent>().Subscribe(Disconnect);
             _eventAggregator.GetEvent<ShutDownEvent>().Subscribe(RestoreRpcStatus);
+
+            // Check if the port of the backend is already in open state
+            if (IsConnected())
+            {
+                _eventAggregator.GetEvent<ComConnectedEvent>().Publish();
+            }
         }
 
         /// <summary>
@@ -98,7 +131,8 @@ namespace MicroVision.Services
             {
                 try
                 {
-                    error = (Error) typeof(TReturnType).GetProperty("Error").GetValue(ret);
+                    // what will happen if the object does not contain error at all?
+                    error = (Error) typeof(TReturnType).GetProperty("Error")?.GetValue(ret);
                     if (error != null) hasError = true;
                 }
                 catch (Exception e)
@@ -148,7 +182,7 @@ namespace MicroVision.Services
             var ret = TryInvoke(() => _rpcService.CameraControllerClient.RequestConnectToPort(
                 new ConnectionRequest() {ComPort = s, Connect = true}), $"Failed to connect to {s}");
 
-            if (ret == null || ret.Error != null) return false;
+            if (ret == null || ret?.Error != null) return false;
 
             if (!ret.IsConnected)
             {
@@ -172,7 +206,7 @@ namespace MicroVision.Services
         {
             var ret = TryInvoke(() => _rpcService.CameraControllerClient.RequestConnectToPort(
                 new ConnectionRequest() {Connect = false}), "Failed to disconnect");
-            if (ret.Error != null || ret == null) return false;
+            if (ret?.Error != null || ret == null) return false;
             _eventAggregator.GetEvent<ComDisconnectedEvent>().Publish(true);
             _eventAggregator.GetEvent<NotifyOperationEvent>().Publish("COM port successfully closed");
             return true;
@@ -253,25 +287,78 @@ namespace MicroVision.Services
 
         #region Invocation helpers
 
+        /// <summary>
+        /// Assert if serial port is already connected
+        /// </summary>
+        /// <returns></returns>
         public bool IsConnected()
         {
             var ret =
                 DispatchCommand(new SerialCommand() {Command = SerialCommand.RpcSerialCommand.IsConnected}) as
                     ConnectionResponse;
-            if (ret == null || ret.Error != null) throw new ComRuntimeException("Cannot get connection status");
+            if (ret == null || ret?.Error != null) throw new ComRuntimeException("Cannot get connection status");
             return ret.IsConnected;
         }
 
+        /// <summary>
+        /// Control the power configuration.
+        /// </summary>
+        /// <param name="master">Master power</param>
+        /// <param name="fan">Fan power</param>
+        /// <param name="motor">Motor power</param>
+        /// <param name="laser">Laser power</param>
         public void ControlPower(bool master, bool fan, bool motor, bool laser)
         {
-            int powerCode = Convert.ToInt32(master) << 0 | Convert.ToInt32(laser) << 1 | Convert.ToInt32(motor) << 2 | Convert.ToInt32(fan) << 3;
+            int powerCode = Convert.ToInt32(master) << 0 | Convert.ToInt32(laser) << 1 | Convert.ToInt32(motor) << 2 |
+                            Convert.ToInt32(fan) << 3;
             var ret =
                 DispatchCommand(new SerialCommand()
                     {
                         Command = SerialCommand.RpcSerialCommand.RequestPowerStatus,
-                        Argument = new PowerStatusRequest() { PowerCode = powerCode ,Write = true}
+                        Argument = new PowerStatusRequest() {PowerCode = powerCode, Write = true}
                     }) as
                     PowerStatusResponse;
+            if (ret == null || ret?.Error != null) throw new ComRuntimeException("Cannot control power");
+        }
+
+        /// <summary>
+        /// Read the power code. Throw ComRunTimeException if error occured.
+        /// </summary>
+        /// <returns>power code</returns>
+        public int ReadPower()
+        {
+            var ret = DispatchCommand(new SerialCommand()
+            {
+                Command = SerialCommand.RpcSerialCommand.RequestPowerStatus,
+                Argument = new PowerStatusRequest() {Write = false}
+            }) as PowerStatusResponse;
+            if (ret == null || ret?.Error != null) throw new ComRuntimeException("Cannot get power code");
+
+            return ret.PowerCode;
+        }
+
+        /// <summary>
+        /// Control the focus motor
+        /// </summary>
+        /// <param name="steps">Movement steps</param>
+        /// <param name="slowdown">Slow down factor</param>
+        /// <param name="autoPower">Always true</param>
+        /// <param name="driverPower">Always true</param>
+        public void ControlFocus(int steps, int slowdown = 1, bool autoPower = true, bool driverPower = true)
+        {
+            if (steps == 0) return;
+            var ret = DispatchCommand(new SerialCommand()
+            {
+                Command = SerialCommand.RpcSerialCommand.RequestFocusStatus,
+                Argument = new FocusStatusRequest()
+                {
+                    Steps = steps,
+                    SlowdownFactor = slowdown,
+                    DriverPower = driverPower,
+                    AutoPower = autoPower
+                }
+            }) as PowerStatusResponse;
+            if (ret == null || ret?.Error != null) throw new ComRuntimeException("Cannot control focus");
         }
 
         #endregion

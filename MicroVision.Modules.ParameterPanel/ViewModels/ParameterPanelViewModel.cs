@@ -1,4 +1,6 @@
-﻿using Prism.Commands;
+﻿using System;
+using MicroVision.Core.Events;
+using Prism.Commands;
 using Prism.Mvvm;
 using MicroVision.Core.Models;
 using MicroVision.Services;
@@ -68,6 +70,23 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
         private DelegateCommand _comUpdateListCommand;
         public DelegateCommand ComUpdateListCommand =>
             _comUpdateListCommand ?? (_comUpdateListCommand = new DelegateCommand(ExecuteComUpdateListCommand));
+
+        private DelegateCommand<string> _focusCommand;
+        public DelegateCommand<string> FocusCommand =>
+            _focusCommand ?? (_focusCommand = new DelegateCommand<string>(ExecuteFocusCommand));
+
+        void ExecuteFocusCommand(string s)
+        {
+            // TODO: power status check
+            int step;
+            if (!Int32.TryParse(s, out step))
+            {
+                _eventAggregator.GetEvent<ExceptionEvent>().Publish(new ArgumentException("Cannot parse the movement steps"));
+                return;
+            }
+            _serialService.ControlFocus(step);
+            
+        }
 
         void ExecuteComUpdateListCommand()
         {
