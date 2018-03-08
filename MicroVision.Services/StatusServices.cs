@@ -47,11 +47,11 @@ namespace MicroVision.Services
         public StatusServices(IEventAggregator ea)
         {
             _ea = ea;
-            _ea.GetEvent<ComConnectedEvent>().Subscribe(ComConnectedHandler, ThreadOption.UIThread);
-            _ea.GetEvent<ComDisconnectedEvent>().Subscribe(ComDisconnectedHandler, ThreadOption.UIThread);
+            _ea.GetEvent<ComConnectedEvent>().Subscribe(ComConnectedHandler);
+            _ea.GetEvent<ComDisconnectedEvent>().Subscribe(ComDisconnectedHandler);
 
-            _ea.GetEvent<VimbaConnectedEvent>().Subscribe(VimbaConnectionHandler, ThreadOption.UIThread);
-            _ea.GetEvent<VimbaDisconnectedEvent>().Subscribe(VimbaDisconnectionHandler, ThreadOption.UIThread);
+            _ea.GetEvent<VimbaConnectedEvent>().Subscribe(VimbaConnectionHandler);
+            _ea.GetEvent<VimbaDisconnectedEvent>().Subscribe(VimbaDisconnectionHandler);
         }
 
         private void VimbaDisconnectionHandler()

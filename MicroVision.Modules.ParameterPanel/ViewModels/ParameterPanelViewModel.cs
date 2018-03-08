@@ -139,7 +139,8 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
 
         void ExecuteCameraUpdateListCommand()
         {
-            Params.VimbaSelection.Value=_cameraService.CameraUpdateList();
+            Task.Run(() => Params.VimbaSelection.Value = _cameraService.CameraUpdateList());
+
         }
 
         void ExecutePowerConfigurationCommand(bool? b)
