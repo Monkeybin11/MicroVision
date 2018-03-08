@@ -42,11 +42,6 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
             .ObservesProperty(() => ComConnectionStatus.IsConnected)
             .ObservesProperty(() => Params.ManualPowerCheck.Value);
 
-        private bool CanPowerConfigurationExecution(bool? b)
-        {
-            return b != null && (CanComOperationExecution() && b.Value);
-        }
-
         private DelegateCommand _comConnectToggleCommand;
 
         public DelegateCommand ComConnectToggleCommand =>
@@ -88,16 +83,6 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
             }
         }
 
-        private bool CanExecuteComConnectToggleCommand()
-        {
-            return Params.ComSelection.Selected != null;
-        }
-
-        private bool CanComOperationExecution(string s = null)
-        {
-            return ComConnectionStatus.IsConnected;
-        }
-
         void ExecuteFocusCommand(string s)
         {
             // TODO: power status check
@@ -116,6 +101,21 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
         {
             //_eventAggregator.GetEvent<ComListUpdateRequestedEvent>().Publish();
             Params.ComSelection.Value = _serialService.UpdateComList();
+        }
+
+        private bool CanExecuteComConnectToggleCommand()
+        {
+            return Params.ComSelection.Selected != null;
+        }
+
+        private bool CanComOperationExecution(string s = null)
+        {
+            return ComConnectionStatus.IsConnected;
+        }
+
+        private bool CanPowerConfigurationExecution(bool? b)
+        {
+            return b != null && (CanComOperationExecution() && b.Value);
         }
 
         #endregion
