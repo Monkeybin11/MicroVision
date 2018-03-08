@@ -93,7 +93,7 @@
                                         </i:Interaction.Triggers>
                                     </ComboBox>
                                 </DockPanel>
-                                <ToggleButton IsChecked="{Binding ComConnectionStatus.IsConnected, Mode=OneWay}"
+                                <ToggleButton IsChecked="{Binding Status.ComConnectionStatus.IsConnected}"
                                               Style="{StaticResource ConnectionButtonStyle}"
                                               Command="{Binding ComConnectToggleCommand}" Content="Connect" />
 
@@ -112,7 +112,7 @@
                                         </i:Interaction.Triggers>
                                     </ComboBox>
                                 </DockPanel>
-                                <ToggleButton Style="{StaticResource ConnectionButtonStyle}">Connect</ToggleButton>
+                                <ToggleButton IsChecked="{Binding Status.VimbaConnectionStatus.IsConnected}" Command="{Binding CameraConnectToggleCommand}"  Style="{StaticResource ConnectionButtonStyle}">Connect</ToggleButton>
                             </StackPanel>
                         </GroupBox>
 

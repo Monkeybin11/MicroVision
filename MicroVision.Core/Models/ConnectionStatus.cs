@@ -14,7 +14,10 @@ namespace MicroVision.Services.Models
         public bool IsConnected
         {
             get { return _isConnected; }
-            private set { SetProperty(ref _isConnected, value); }
+            set
+            { 
+                //ignored
+            }
         }
 
         private bool _isError;
@@ -22,7 +25,7 @@ namespace MicroVision.Services.Models
         public bool IsError
         {
             get { return _isError; }
-            private set { SetProperty(ref _isError, value); }
+            set { SetProperty(ref _isError, value); }
         }
 
         private string _errorMessage;
@@ -49,7 +52,7 @@ namespace MicroVision.Services.Models
         /// set the connection state
         /// </summary>
         /// <param name="connected">boolean standing for whether the com port is connected</param>
-        public void SetConnected(bool connected) => IsConnected = connected;
+        public void SetConnected(bool connected) => SetProperty(ref _isConnected, connected, "IsConnected");
 
         public ConnectionStatus(string label) : base(label)
         {

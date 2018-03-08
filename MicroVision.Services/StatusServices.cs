@@ -23,10 +23,17 @@ namespace MicroVision.Services
         ValueStatus<double> CurrentValueStatus { get; }
     }
 
-    public class StatusServices : IStatusServices
+    public class StatusServices : BindableBase, IStatusServices
     {
         private readonly IEventAggregator _ea;
-        public ConnectionStatus VimbaConnectionStatus { get; } = new ConnectionStatus("Vimba");
+        private ConnectionStatus _vimbaConnectionStatus = new ConnectionStatus("Vimba");
+
+        public ConnectionStatus VimbaConnectionStatus
+        {
+            get => _vimbaConnectionStatus;
+            private set { SetProperty(ref _vimbaConnectionStatus, value); }
+        }
+
         public ConnectionStatus ComConnectionStatus { get; } = new ConnectionStatus("COM");
 
         public PowerStatus MasterPowerStatus { get; } = new PowerStatus("Master");
@@ -42,6 +49,21 @@ namespace MicroVision.Services
             _ea = ea;
             _ea.GetEvent<ComConnectedEvent>().Subscribe(ComConnectedHandler);
             _ea.GetEvent<ComDisconnectedEvent>().Subscribe(ComDisconnectedHandler);
+
+            _ea.GetEvent<VimbaConnectedEvent>().Subscribe(VimbaConnectionHandler);
+            _ea.GetEvent<VimbaDisconnectedEvent>().Subscribe(VimbaDisconnectionHandler);
+        }
+
+        private void VimbaDisconnectionHandler()
+        {
+            VimbaConnectionStatus.SetConnected(false);
+            VimbaConnectionStatus.ResetError();
+        }
+
+        private void VimbaConnectionHandler()
+        {
+            VimbaConnectionStatus.SetConnected(true);
+            VimbaConnectionStatus.ResetError();
         }
 
         private void ComDisconnectedHandler(bool b)

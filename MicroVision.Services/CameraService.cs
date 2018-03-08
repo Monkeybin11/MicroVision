@@ -17,6 +17,8 @@ namespace MicroVision.Services
     {
         List<string> CameraUpdateList();
         void VimbaInstanceControl(ConnectionCommands command);
+        void Connect(string cameraId);
+        void Disconnect();
     }
 
     public class CameraService : ICameraService
@@ -116,6 +118,35 @@ namespace MicroVision.Services
                 _rpcService.CameraClient.VimbaInstanceControl(new VimbaInstanceControlRequest() {Command = command}), "Failed to control the Vimba instance");
         }
 
+        public void Connect(string cameraId)
+        {
+            var runtimeExceptionPrompt = $"Failed to connect {cameraId}";
+            var ret = TryInvoke(() =>
+                    _rpcService.CameraClient.RequestCameraConnection(
+                        new CameraConnectionRequest() {Command = ConnectionCommands.Connect, CameraID = cameraId}),
+                runtimeExceptionPrompt);
+
+            if (ret.IsConnected)
+            {
+                _eventAggregator.GetEvent<VimbaConnectedEvent>().Publish();
+                _eventAggregator.GetEvent<NotifyOperationEvent>().Publish($"Connected to camera: {cameraId}");
+            }
+        }
+
+        public void Disconnect()
+        {
+            var runtimeExceptionPrompt = $"Failed to disconnect the camera";
+            var ret = TryInvoke(() =>
+                    _rpcService.CameraClient.RequestCameraConnection(
+                        new CameraConnectionRequest() { Command = ConnectionCommands.Disconnect }),
+                runtimeExceptionPrompt);
+
+            if (!ret.IsConnected)
+            {
+                _eventAggregator.GetEvent<VimbaDisconnectedEvent>().Publish();
+                _eventAggregator.GetEvent<NotifyOperationEvent>().Publish("Camera disconnected");
+            }
+        }
         #endregion
     }
 }

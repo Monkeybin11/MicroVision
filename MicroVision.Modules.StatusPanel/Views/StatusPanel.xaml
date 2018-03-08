@@ -68,16 +68,16 @@
             </StackPanel.Resources>
             <GroupBox Header="Connection" Margin="5">
                 <StackPanel>
-                    <ContentControl ContentTemplate="{StaticResource StatusIndicatorTemplate}" Content="{Binding ComConnectionStatus}"></ContentControl>
-                    <ContentControl ContentTemplate="{StaticResource StatusIndicatorTemplate}" Content="{Binding VimbaConnectionStatus}" ></ContentControl>
+                    <ContentControl ContentTemplate="{StaticResource StatusIndicatorTemplate}" Content="{Binding Status.ComConnectionStatus}"></ContentControl>
+                    <ContentControl ContentTemplate="{StaticResource StatusIndicatorTemplate}" Content="{Binding Status.VimbaConnectionStatus}" ></ContentControl>
                 </StackPanel>
             </GroupBox>
             <GroupBox Header="Power" Margin="5">
                 <StackPanel>
-                    <ContentControl ContentTemplate="{StaticResource PowerStatusTemplate}" Content="{Binding MasterPowerStatus}"></ContentControl>
-                    <ContentControl ContentTemplate="{StaticResource PowerStatusTemplate}" Content="{Binding LaserPowerStatus}"></ContentControl>
-                    <ContentControl ContentTemplate="{StaticResource PowerStatusTemplate}" Content="{Binding FanPowerStatus}"></ContentControl>
-                    <ContentControl ContentTemplate="{StaticResource PowerStatusTemplate}" Content="{Binding MotorPowerStatus}"></ContentControl>
+                    <ContentControl ContentTemplate="{StaticResource PowerStatusTemplate}" Content="{Binding Status.MasterPowerStatus}"></ContentControl>
+                    <ContentControl ContentTemplate="{StaticResource PowerStatusTemplate}" Content="{Binding Status.LaserPowerStatus}"></ContentControl>
+                    <ContentControl ContentTemplate="{StaticResource PowerStatusTemplate}" Content="{Binding Status.FanPowerStatus}"></ContentControl>
+                    <ContentControl ContentTemplate="{StaticResource PowerStatusTemplate}" Content="{Binding Status.MotorPowerStatus}"></ContentControl>
                 </StackPanel>
             </GroupBox>
             

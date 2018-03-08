@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Timers;
 using MicroVision.Core.Events;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -22,6 +23,7 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
         {
             _serialService = serialService;
             _cameraService = cameraService;
+            Status = statusService;
             _eventAggregator = eventAggregator;
             Params = param;
 
@@ -30,7 +32,6 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
 
             Params.ManualPowerCheck.PropertyChanged += ManualPowerCheck_PropertyChanged;
 
-            ComConnectionStatus = statusService.ComConnectionStatus;
 
             // restore remote configuration
             SyncRemoteSerialConfiguration();
@@ -45,6 +46,7 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
 
         private readonly ISerialService _serialService;
         private readonly ICameraService _cameraService;
+        
         private readonly IEventAggregator _eventAggregator;
 
         #region properties
@@ -57,7 +59,7 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
 
         #region status properties
 
-        public ConnectionStatus ComConnectionStatus { get; }
+        public IStatusServices Status { get; }
 
         #endregion
 
@@ -67,7 +69,7 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
         {
             try
             {
-                if (_serialService.IsConnected()) ComConnectionStatus.SetConnected(true);
+                if (_serialService.IsConnected()) Status.ComConnectionStatus.SetConnected(true);
 
                 var powerCode = _serialService.ReadPower();
                 bool master, fan, laser, motor;
@@ -91,7 +93,7 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
             _powerConfigurationCommand ??
             (_powerConfigurationCommand =
                 new DelegateCommand<bool?>(ExecutePowerConfigurationCommand, CanPowerConfigurationExecution))
-            .ObservesProperty(() => ComConnectionStatus.IsConnected)
+            .ObservesProperty(() => Status.ComConnectionStatus.IsConnected)
             .ObservesProperty(() => Params.ManualPowerCheck.Value);
 
         private DelegateCommand _comConnectToggleCommand;
@@ -112,12 +114,28 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
         public DelegateCommand<string> FocusCommand =>
             _focusCommand ?? (_focusCommand =
                 new DelegateCommand<string>(ExecuteFocusCommand, CanComOperationExecution).ObservesProperty(() =>
-                    ComConnectionStatus.IsConnected));
+                    Status.ComConnectionStatus.IsConnected));
 
 
         private DelegateCommand _cameraUpdateListCommand;
         public DelegateCommand CameraUpdateListCommand =>
             _cameraUpdateListCommand ?? (_cameraUpdateListCommand = new DelegateCommand(ExecuteCameraUpdateListCommand));
+
+        private DelegateCommand _cameraConnectToggleCommand;
+        public DelegateCommand CameraConnectToggleCommand =>
+            _cameraConnectToggleCommand ?? (_cameraConnectToggleCommand = new DelegateCommand(ExecuteCameraConnectToggleCommand));
+
+        void ExecuteCameraConnectToggleCommand()
+        {
+            if (Status.VimbaConnectionStatus.IsConnected)
+            {
+                _cameraService.Disconnect();
+            }
+            else
+            {
+                if (Params.VimbaSelection.Selected != null) _cameraService.Connect(Params.VimbaSelection.Selected);
+            }
+        }
 
         void ExecuteCameraUpdateListCommand()
         {
@@ -132,7 +150,7 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
 
         void ExecuteComConnectToggleCommand()
         {
-            if (ComConnectionStatus.IsConnected) // already connected 
+            if (Status.ComConnectionStatus.IsConnected) // already connected 
             {
                 //_eventAggregator.GetEvent<ComDisconnectionRequestedEvent>().Publish();
                 _serialService.Disconnect();
@@ -173,7 +191,7 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
 
         private bool CanComOperationExecution(string s = null)
         {
-            return ComConnectionStatus.IsConnected;
+            return Status.ComConnectionStatus.IsConnected;
         }
 
         private bool CanPowerConfigurationExecution(bool? b)
