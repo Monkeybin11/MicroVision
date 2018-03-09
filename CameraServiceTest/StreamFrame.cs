@@ -62,7 +62,7 @@ namespace CameraServiceTest
         {
             var ret = _client.RequestCameraParameters(new CameraParametersRequest()
             {
-                Params = new CameraParameters() {NumFrames = 1, ExposureTime = 100000, Gain = 10, FrameRate = 30}
+                Params = new CameraParameters() {NumFrames = 1, ExposureTime = 1000000, Gain = 10, FrameRate = 30}
             });
             Assert.IsNull(ret.Error);
 

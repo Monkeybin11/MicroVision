@@ -55,17 +55,13 @@ namespace CameraServiceNet
 
     public class CameraServiceImpl : Services.VimbaCamera.VimbaCameraBase
     {
+        private object _acquisitionLock = new object();
         private Vimba _vimbaInstance = new Vimba();
         private Camera _cameraInstance = null;
         private int _numFrames = 1;
-        private List<FrameData> _frameBuffer = new List<FrameData>();
+        private Frame[] _frames = new Frame[1];
         private object _frameStreamWriterLock = new object();
         private IServerStreamWriter<BufferedFramesResponse> _frameStreamWriter = null;
-        private int _receivedCounter=0;
-
-        public CameraServiceImpl()
-        {
-        }
 
         ~CameraServiceImpl()
         {
@@ -151,12 +147,16 @@ namespace CameraServiceNet
             var ret = new BufferedFramesResponse();
             try
             {
-                foreach (var frameData in _frameBuffer)
+                foreach (var frame in _frames)
                 {
-                    var output = MakeImageBuffer(frameData);
-                    var bs = ByteString.FromStream(output);
-
-                    ret.Images.Add(bs);
+                    if (frame.ReceiveStatus == VmbFrameStatusType.VmbFrameStatusComplete)
+                    {
+                        var output = MakeImageBuffer(new FrameData(frame));
+                        var bs = ByteString.FromStream(output);
+                        
+                        ret.Images.Add(bs);
+                    }
+                    
                 }
             }
             catch (Exception e)
@@ -188,8 +188,29 @@ namespace CameraServiceNet
             var ret = new CameraAcquisitionResponse();
             try
             {
-                _frameBuffer.Clear();
-                _cameraInstance.StartContinuousImageAcquisition(_numFrames);
+                lock (_acquisitionLock)
+                {
+                    if (_frames.Length != _numFrames)
+                    {
+                        _frames = new Frame[_numFrames];
+                    }
+                    _cameraInstance.AcquireMultipleImages(ref _frames, 10000);
+                    if (_frameStreamWriter != null)
+                    {
+                        lock (_frameStreamWriterLock)
+                        {
+                            BufferedFramesResponse bufferedFrames = null;
+                            foreach (var frame in _frames)
+                            {
+                                var ms = MakeImageBuffer(new FrameData(frame));
+                                var bs = ByteString.FromStream(ms);
+                                bufferedFrames = new BufferedFramesResponse();
+                                bufferedFrames.Images.Add(bs);
+                            }
+                            _frameStreamWriter.WriteAsync(bufferedFrames);
+                        }
+                    }  
+                }
             }
             catch (Exception e)
             {
@@ -216,7 +237,6 @@ namespace CameraServiceNet
                     {
                         _cameraInstance =
                             _vimbaInstance.OpenCameraByID(request.CameraID, VmbAccessModeType.VmbAccessModeFull);
-                        _cameraInstance.OnFrameReceived += FrameReceivedHandler;
                         ConfigureCommonParameters();
                         ret.IsConnected = true;
                     }
@@ -320,31 +340,6 @@ namespace CameraServiceNet
             }
 
             return Task.FromResult(ret);
-        }
-
-        private void FrameReceivedHandler(Frame frame)
-        {
-            lock (_frameStreamWriterLock)
-            {
-                if (_frameStreamWriter == null)
-                {
-                    _frameBuffer.Add(new FrameData(frame));
-                }
-                else
-                {
-                    var ms = MakeImageBuffer(new FrameData(frame));
-                    var bs = ByteString.FromStream(ms);
-                    var ret = new BufferedFramesResponse();
-                    ret.Images.Add(bs);
-                    _frameStreamWriter.WriteAsync(ret);
-                }
-            }
-            _receivedCounter++;
-            if (_receivedCounter >= _numFrames)
-            {
-                _cameraInstance.FlushQueue();
-                _receivedCounter = 0;
-            }
         }
 
         public override async Task RequestFrameStream(
