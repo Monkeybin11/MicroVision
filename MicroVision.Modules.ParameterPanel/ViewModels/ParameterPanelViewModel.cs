@@ -86,7 +86,39 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
         }
 
         #region Commands
+        private DelegateCommand _disconnectAllCommand;
+        public DelegateCommand DisconnectAllCommand =>
+            _disconnectAllCommand ?? (_disconnectAllCommand = new DelegateCommand(ExecuteDisconnectAllCommand));
 
+        void ExecuteDisconnectAllCommand()
+        {
+            if (Status.VimbaConnectionStatus.IsConnected)
+            {
+                CameraConnectToggleCommand.Execute();
+            }
+
+            if (Status.ComConnectionStatus.IsConnected)
+            {
+                ComConnectToggleCommand.Execute();
+            }
+        }
+
+        private DelegateCommand _connectAllCommand;
+        public DelegateCommand ConnectAllCommand =>
+            _connectAllCommand ?? (_connectAllCommand = new DelegateCommand(ExecuteConnectAllCommand));
+
+        void ExecuteConnectAllCommand()
+        {
+            if (!Status.VimbaConnectionStatus.IsConnected)
+            {
+                CameraConnectToggleCommand.Execute();
+            }
+
+            if (!Status.ComConnectionStatus.IsConnected)
+            {
+                ComConnectToggleCommand.Execute();
+            }
+        }
         private DelegateCommand<bool?> _powerConfigurationCommand;
 
         public DelegateCommand<bool?> PowerConfigurationCommand =>
@@ -130,11 +162,6 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
                 new DelegateCommand(ExecuteCameraConnectToggleCommand, CanCameraConnectToggleExecuteMethod)
                     .ObservesProperty(() => Params.VimbaSelection.Selected));
 
-        private bool CanCameraConnectToggleExecuteMethod()
-        {
-            return Params.VimbaSelection.Selected != null;
-        }
-
         void ExecuteCameraConnectToggleCommand()
         {
             if (Status.VimbaConnectionStatus.IsConnected)
@@ -155,23 +182,26 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
 
         void ExecutePowerConfigurationCommand(bool? b)
         {
-            _serialService.ControlPower(Params.MasterPowerCheck.Value, Params.FanPowerCheck.Value,
-                Params.MotorPowerCheck.Value, Params.LaserPowerCheck.Value);
+            Task.Run(() => _serialService.ControlPower(Params.MasterPowerCheck.Value, Params.FanPowerCheck.Value,
+                Params.MotorPowerCheck.Value, Params.LaserPowerCheck.Value));
         }
 
         void ExecuteComConnectToggleCommand()
         {
-            if (Status.ComConnectionStatus.IsConnected) // already connected 
+            Task.Run(() =>
             {
-                //_eventAggregator.GetEvent<ComDisconnectionRequestedEvent>().Publish();
-                _serialService.Disconnect();
-            }
-            else
-            {
-                var selectedSerialPort = Params.ComSelection.Selected;
-                //_eventAggregator.GetEvent<ComConnectionRequestedEvent>().Publish(selectedSerialPort);
-                _serialService.Connect(selectedSerialPort);
-            }
+                if (Status.ComConnectionStatus.IsConnected) // already connected 
+                {
+                    //_eventAggregator.GetEvent<ComDisconnectionRequestedEvent>().Publish();
+                    _serialService.Disconnect();
+                }
+                else
+                {
+                    var selectedSerialPort = Params.ComSelection.Selected;
+                    //_eventAggregator.GetEvent<ComConnectionRequestedEvent>().Publish(selectedSerialPort);
+                    _serialService.Connect(selectedSerialPort);
+                }
+            });
         }
 
         void ExecuteFocusCommand(string s)
@@ -192,7 +222,12 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
         void ExecuteComUpdateListCommand()
         {
             //_eventAggregator.GetEvent<ComListUpdateRequestedEvent>().Publish();
-            Params.ComSelection.Value = _serialService.UpdateComList();
+            Task.Run(() => Params.ComSelection.Value = _serialService.UpdateComList());
+        }
+
+        private bool CanCameraConnectToggleExecuteMethod()
+        {
+            return Params.VimbaSelection.Selected != null;
         }
 
         private bool CanExecuteComConnectToggleCommand()

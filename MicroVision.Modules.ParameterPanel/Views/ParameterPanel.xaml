@@ -96,8 +96,8 @@
                                 <StackPanel.Resources>
                                     <Style BasedOn="{StaticResource MasterControlButtonStyle}" TargetType="Button" />
                                 </StackPanel.Resources>
-                                <Button>Connect</Button>
-                                <Button>Disconnect</Button>
+                                <Button Command="{Binding ConnectAllCommand}">Connect</Button>
+                                <Button Command="{Binding DisconnectAllCommand}">Disconnect</Button>
                             </StackPanel>
                         </GroupBox>
                     </WrapPanel>
