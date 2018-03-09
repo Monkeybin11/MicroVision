@@ -19,6 +19,7 @@ namespace MicroVision.Services
         void VimbaInstanceControl(ConnectionCommands command);
         void Connect(string cameraId);
         void Disconnect();
+        double GetTemperature();
     }
 
     public class CameraService : ICameraService
@@ -146,6 +147,17 @@ namespace MicroVision.Services
                 _eventAggregator.GetEvent<VimbaDisconnectedEvent>().Publish();
                 _eventAggregator.GetEvent<NotifyOperationEvent>().Publish("Camera disconnected");
             }
+        }
+
+        public double GetTemperature()
+        {
+            var runtimeExceptionPrompt = $"Failed to disconnect the camera";
+            var ret = TryInvoke(() =>
+                    _rpcService.CameraClient.RequestTemperature(
+                        new TemperatureRequest()),
+                runtimeExceptionPrompt);
+
+            return ret.Temperature;
         }
         #endregion
     }

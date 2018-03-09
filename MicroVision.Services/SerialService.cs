@@ -63,6 +63,8 @@ namespace MicroVision.Services
         /// <param name="autoPower">Always true</param>
         /// <param name="driverPower">Always true</param>
         void ControlFocus(int steps, int slowdown = 1000, bool autoPower = true, bool driverPower = true);
+
+        double GetCurrent();
     }
 
     public class SerialService : ISerialService
@@ -366,6 +368,15 @@ namespace MicroVision.Services
             if (ret == null || ret?.Error != null) throw new ComRuntimeException("Cannot control focus");
         }
 
+        public double GetCurrent()
+        {
+            var ret = DispatchCommand(new SerialCommand()
+            {
+                Command = SerialCommand.RpcSerialCommand.RequestCurrentStatus
+            }) as CurrentStatusResponse;
+            if (ret == null || ret?.Error != null) throw new ComRuntimeException("Cannot get current");
+            return ret.Current;
+        }
         #endregion
 
         #endregion
