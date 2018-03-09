@@ -38,7 +38,7 @@
                         </ad:LayoutAnchorablePane>
                         <ad:LayoutAnchorablePane DockWidth="4*">
                             <ad:LayoutAnchorable Title="Capture" CanHide="False" CanClose="False" CanAutoHide="False">
-                                <ContentControl prism:RegionManager.RegionName="CapturePanel" />
+                                <ContentControl prism:RegionManager.RegionName="ImagePanel" />
                             </ad:LayoutAnchorable>
                         </ad:LayoutAnchorablePane>
                     </ad:LayoutPanel>

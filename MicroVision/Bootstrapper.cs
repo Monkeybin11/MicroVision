@@ -2,7 +2,7 @@
 using Microsoft.Practices.Unity;
 using Prism.Unity;
 using System.Windows;
-
+using MicroVision.Modules.ImagePanel;
 using MicroVision.Modules.Menu;
 using MicroVision.Modules.Menu.Views;
 using MicroVision.Modules.ParameterPanel;
@@ -62,6 +62,7 @@ namespace MicroVision
             catalog.AddModule(typeof(StatusPanelModule));
             catalog.AddModule(typeof(MenuModule));
             catalog.AddModule(typeof(StatusbarModule));
+            catalog.AddModule(typeof(ImagePanelModule));
         }
     }
 }
