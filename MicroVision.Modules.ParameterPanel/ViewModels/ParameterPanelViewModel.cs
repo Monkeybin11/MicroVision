@@ -95,10 +95,16 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
 
         void ExecuteCaptureCommand()
         {
-            if(_captureService.Capturing)
+            if (_captureService.Capturing)
+            {
                 _captureService.Stop();
+                _eventAggregator.GetEvent<StopCaptureEvent>().Publish();
+            }
             else
+            {
                 _captureService.Capture(1000, -1);
+                _eventAggregator.GetEvent<StartCaptureEvent>().Publish();
+            }
         }
 
         private DelegateCommand _disconnectAllCommand;

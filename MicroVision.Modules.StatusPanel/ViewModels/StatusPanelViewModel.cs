@@ -28,7 +28,8 @@ namespace MicroVision.Modules.StatusPanel.ViewModels
         private readonly ICameraService _cameraService;
 
         public IStatusServices Status => _statusService;
-
+        private bool _serialWasOpen = false;
+        private bool _cameraWasOpen = false;
         public StatusPanelViewModel(IUnityContainer container,IStatusServices statusService, ILogService logService, IEventAggregator ea, ISerialService serialService, ICameraService cameraService)
         {
             _container = container;
@@ -54,12 +55,39 @@ namespace MicroVision.Modules.StatusPanel.ViewModels
             _ea.GetEvent<VimbaConnectedEvent>().Subscribe(StartCameraStatusSynchronization);
             _ea.GetEvent<VimbaDisconnectedEvent>().Subscribe(StopCameraStatusSynchronization);
             _ea.GetEvent<ShutDownEvent>().Subscribe(Shutdown);
+            _ea.GetEvent<StartCaptureEvent>().Subscribe(Shutdown);
+            _ea.GetEvent<StopCaptureEvent>().Subscribe(Restart);
+        }
+
+        private void Restart()
+        {
+            if (_serialWasOpen)
+            {
+                StartComStatusSynchronization();
+            }
+
+            if (_cameraWasOpen)
+            {
+                StartCameraStatusSynchronization();
+            }
         }
 
         private void Shutdown()
         {
-            StopCameraStatusSynchronization();
-            StopComStatusSynchronization();
+            _serialWasOpen = _cameraWasOpen = false;
+            if (_serialCurrentStatusTimer.Enabled)
+            {
+                StopComStatusSynchronization();
+                _serialWasOpen = true;
+            }
+
+            if (_syncCameraTemperatureTimer.Enabled)
+            {
+                StopCameraStatusSynchronization();
+                _cameraWasOpen = true;
+            }
+            
+            
         }
 
         private void StopCameraStatusSynchronization()

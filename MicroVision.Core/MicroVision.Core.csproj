@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Converter\InvertBooleanConverter.cs" />
+    <Compile Include="Events\CaptureEvents.cs" />
     <Compile Include="Events\ExceptionEvents.cs" />
     <Compile Include="Events\NotifyOperationEvents.cs" />
     <Compile Include="Events\ParameterEvents.cs" />
