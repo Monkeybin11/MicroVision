@@ -279,7 +279,7 @@ namespace SerialServiceNet
             string stepResponse = "";
             // This timeout should be extremely long or even disabled
             focusStatusResponse.Error =
-                InvokeCommandWithResponse("S", new[] {request.Steps.ToString()}, ref stepResponse, 10000);
+                InvokeCommandWithResponse("S", new[] {request.Steps.ToString()}, ref stepResponse, -1);
             if (autoPower) focusStatusResponse.Error = InvokeCommand("v", null);
             return Task.FromResult(focusStatusResponse);
         }

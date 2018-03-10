@@ -56,7 +56,7 @@ namespace SerialServiceNet
                         }
                     }
 
-                    _timeLimiter.Perform(() => _serialPort.Write(stringToSend)).Wait();
+                    _serialPort.Write(stringToSend);
                 }
 
                 if (responseTask != null)
