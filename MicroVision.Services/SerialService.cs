@@ -14,14 +14,9 @@ using Services;
 
 namespace MicroVision.Services
 {
-    public class Trigger
+    public partial class CameraControllerTrigger : ITrigger
     {
         public delegate void ErrorEvent(object sender, OnErrorArgs args);
-
-        public class OnErrorArgs
-        {
-            public string Message;
-        }
 
         private object _triggerLock = new object();
         private AsyncDuplexStreamingCall<ArmTriggerRequest, ArmTriggerResponse> _stream;
@@ -49,7 +44,7 @@ namespace MicroVision.Services
             }
         }
 
-        public Trigger(AsyncDuplexStreamingCall<ArmTriggerRequest, ArmTriggerResponse> stream)
+        public CameraControllerTrigger(AsyncDuplexStreamingCall<ArmTriggerRequest, ArmTriggerResponse> stream)
         {
             _stream = stream;
             Task.Run(() => HandleResponse());
@@ -138,7 +133,7 @@ namespace MicroVision.Services
         void ControlFocus(int steps, int slowdown = 1000, bool autoPower = true, bool driverPower = true);
 
         double GetCurrent();
-        Trigger StreamTrigger();
+        CameraControllerTrigger StreamTrigger();
     }
 
     public class SerialService : ISerialService
@@ -366,10 +361,10 @@ namespace MicroVision.Services
             return comList?.ComPort == null ? new List<string>() : new List<string>(comList.ComPort);
         }
 
-        public Trigger StreamTrigger()
+        public CameraControllerTrigger StreamTrigger()
         {
             var trigger = _rpcService.CameraControllerClient.StreamRequestArmTrigger();
-            return new Trigger(trigger);
+            return new CameraControllerTrigger(trigger);
         }
 
         #region Invocation helpers

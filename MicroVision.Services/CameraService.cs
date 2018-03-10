@@ -1,32 +1,101 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using Google.Protobuf.WellKnownTypes;
+using Grpc.Core;
 using MicroVision.Core.Events;
 using MicroVision.Core.Exceptions;
 using MicroVision.Services.Annotations;
 using MicroVision.Services.GrpcReference;
 using Prism.Events;
+using Prism.Mvvm;
 using Services;
 
 namespace MicroVision.Services
 {
-    public interface ICameraService
+    public class CameraTrigger : ITrigger
+    {
+        private AsyncDuplexStreamingCall<CameraAcquisitionRequest, BufferedFramesResponse> _stream = null;
+        private CameraAcquisitionRequest _buf = new CameraAcquisitionRequest();
+        private object _lock = new object();
+        private async void HandleResponse()
+        {
+            try
+            {
+                while (await _stream.ResponseStream.MoveNext(System.Threading.CancellationToken.None))
+                {
+                    var current = _stream.ResponseStream.Current;
+                    if (current.Error != null)
+                    {
+                        OnError?.Invoke(this, new OnErrorArgs() { Message = current.Error.Message });
+                    }
+
+                    if (current.Error != null)
+                    {
+                        OnError?.Invoke(this,
+                            new OnErrorArgs() { Message = "Failed to acquire image" });
+                    }
+                    
+                }
+            }
+            catch (Exception e)
+            {
+                OnError?.Invoke(this, new OnErrorArgs() { Message = e.Message });
+            }
+        }
+        public CameraTrigger(AsyncDuplexStreamingCall<CameraAcquisitionRequest, BufferedFramesResponse> stream)
+        {
+            _stream = stream;
+        }
+
+        public void InvokeTrigger()
+        {
+            lock (_lock)
+            {
+                _stream.RequestStream.WriteAsync(_buf);
+            }
+        }
+
+        public void DestroyTrigger()
+        {
+            lock (_lock)
+            {
+                _stream.RequestStream.CompleteAsync().Wait();
+            }
+        }
+
+        public event CameraControllerTrigger.ErrorEvent OnError;
+    }
+    public interface ICameraService : INotifyPropertyChanged
     {
         List<string> CameraUpdateList();
         void VimbaInstanceControl(ConnectionCommands command);
         void Connect(string cameraId);
         void Disconnect();
         double GetTemperature();
+        CameraTrigger StreamAcquisition();
+        byte[] Image { get; set; }
     }
 
-    public class CameraService : ICameraService
+    public class CameraService : ICameraService, INotifyPropertyChanged
     {
+        private byte[] _image;
+        public byte[] Image
+        {
+            get => _image;
+            set { _image = value; OnPropertyChanged();}
+        }
+
         private readonly IEventAggregator _eventAggregator;
         private readonly IRpcService _rpcService;
         private readonly ILogService _log;
+        
         private const string CameraConnectionErrorPrompt = "Failed to connect to camera rpc server";
 
         public CameraService(IEventAggregator eventAggregator, IRpcService rpcService, ILogService log)
@@ -37,6 +106,20 @@ namespace MicroVision.Services
 
 
             _eventAggregator.GetEvent<ShutDownEvent>().Subscribe(RestoreCameraRpcStatus);
+
+            var timer = new Timer(5000);
+            timer.Elapsed += test;
+            timer.Start();
+        }
+
+        private void test(object sender, ElapsedEventArgs e)
+        {
+            using (var fs = File.OpenRead(@"C:\Users\wuyua\imgoutput\2018_02_06_17_24_49_435033.png"))
+            {
+                var buf = new byte[fs.Length];
+                fs.Read(buf, 0, (int) fs.Length);
+                Image = buf;
+            }
         }
 
         private void RestoreCameraRpcStatus()
@@ -159,6 +242,20 @@ namespace MicroVision.Services
 
             return ret.Temperature;
         }
+
+        public CameraTrigger StreamAcquisition()
+        {
+            return new  CameraTrigger(_rpcService.CameraClient.RequestFrameStream());
+        }
+
         #endregion
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

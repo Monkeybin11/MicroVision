@@ -36,7 +36,8 @@ namespace MicroVision.Services
 
         private void TriggerTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
         {
-            _streamTrigger.InvokeTrigger();
+            _streamCameraControllerTrigger.InvokeTrigger();
+            _streamImage.InvokeTrigger();
             if (_remains > 0)
             {
                 // counted capture
@@ -51,13 +52,16 @@ namespace MicroVision.Services
 
         private bool _capturing;
         private Timer _triggerTimer = null;
-        private Trigger _streamTrigger;
+        private CameraControllerTrigger _streamCameraControllerTrigger;
+        private CameraTrigger _streamImage;
+
         private int _remains = 0;
 
         public void Capture(int interval, int count)
         {
             _capturing = true;
-            _streamTrigger = _serialService.StreamTrigger();
+            _streamCameraControllerTrigger = _serialService.StreamTrigger();
+            _streamImage = _cameraService.StreamAcquisition();
             _triggerTimer.Interval = interval;
             _remains = count;
             _triggerTimer.Start();
@@ -71,7 +75,7 @@ namespace MicroVision.Services
         {
             _capturing = false;
             _triggerTimer.Stop();
-            _streamTrigger.DestroyTrigger();
+            _streamCameraControllerTrigger.DestroyTrigger();
         }
     }
 }
