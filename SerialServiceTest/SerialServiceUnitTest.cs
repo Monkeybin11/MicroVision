@@ -12,32 +12,8 @@ using Services;
 namespace SerialServiceTest
 {
     [TestFixture]
-    public class SerialServiceBasicUnitTest
+    public class SerialServiceBasicUnitTest : SerialTestBase
     {
-        private string Uri = "localhost";
-        private int Port = 39945;
-
-        private Channel channel;
-        private CameraController.CameraControllerClient client;
-        private TestContext testContextInstance;
-
-        public TestContext TestContext
-        {
-            get { return testContextInstance; }
-            set { testContextInstance = value; }
-        }
-
-        private string _comPort = "COM23";
-        private TextWriter _writer;
-
-
-        [SetUp]
-        public void Init()
-        {
-            _writer = TestContext.Out;
-            channel = new Channel(Uri, Port, ChannelCredentials.Insecure);
-            client = new CameraController.CameraControllerClient(channel);
-        }
 
         [Category("Basic")]
         [Test]
@@ -284,15 +260,6 @@ namespace SerialServiceTest
 
             var result = client.RequestSoftwareReset(new Empty());
             Assert.IsNull(result.Error);
-        }
-
-        [TearDown]
-        public void Cleanup()
-        {
-            // shutdown the COM connection
-            client.RequestPowerStatus(new PowerStatusRequest() {Write = true, PowerCode = 0});
-            client.RequestConnectToPort(new ConnectionRequest() {Connect = false});
-            channel.ShutdownAsync().Wait();
         }
     }
 }

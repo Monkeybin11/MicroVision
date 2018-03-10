@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Grpc.Core.Logging;
+using RateLimiter;
 using RJCP.IO.Ports;
 using Services;
 using static Services.Error.Types;
@@ -25,9 +26,11 @@ namespace SerialServiceNet
         private ResponseDispatcher _resp = new ResponseDispatcher();
         private int _cancellationTimeout = 1000;
         private Task _dataListener;
+        private TimeLimiter _timeLimiter;
 
         public SerialSericeImpl()
         {
+            _timeLimiter = TimeLimiter.GetFromMaxCountByInterval(1, TimeSpan.FromMilliseconds(10));
             _serialPort = new SerialPortStream();
         }
 

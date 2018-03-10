@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RateLimiter;
 using Services;
 using static Services.ServiceHelper;
 
@@ -39,22 +40,29 @@ namespace SerialServiceNet
                 : command + "\n";
             try
             {
+                Task<string> responseTask = null;
                 lock (_invokeLock)
                 {
-                    _serialPort.Write(stringToSend);
+                    if (timeout != 0)
+                    {
+                        // deprecated return GetImmediateResponse(ref response, timeout);
+                        try
+                        {
+                            responseTask = _resp.WaitForResultAsync(command, timeout);
+                        }
+                        catch (Exception e)
+                        {
+                            return BuildError(e, Error.Types.Level.Error);
+                        }
+                    }
+
+                    _timeLimiter.Perform(() => _serialPort.Write(stringToSend)).Wait();
                 }
 
-                if (timeout != 0)
+                if (responseTask != null)
                 {
-                    // deprecated return GetImmediateResponse(ref response, timeout);
-                    try
-                    {
-                        response = _resp.WaitForResult(command, timeout);
-                    }
-                    catch (Exception e)
-                    {
-                        return BuildError(e, Error.Types.Level.Error);
-                    }
+                    responseTask.Wait();
+                    response = responseTask.Result;
                 }
             }
             catch (Exception e)

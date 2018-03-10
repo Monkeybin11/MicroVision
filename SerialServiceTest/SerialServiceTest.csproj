@@ -61,9 +61,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ContinuousReadTest.cs" />
     <Compile Include="ResponseDispatcherTest.cs" />
     <Compile Include="SerialServiceUnitTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SerialTestBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
