@@ -47,7 +47,7 @@
     <!-- Body -->
     <DockPanel LastChildFill="True">
         <!-- Big connection button -->
-        <Button DockPanel.Dock="Right" Width="100" Margin="10">Start Capture</Button>
+        <Button DockPanel.Dock="Right" Width="100" Margin="10" Command="{Binding CaptureCommand}">Start Capture</Button>
 
         <TabControl Margin="0,5,0,10">
             <TabItem Header="Connection">

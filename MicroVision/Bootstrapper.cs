@@ -46,7 +46,7 @@ namespace MicroVision
             Container.RegisterType<IMenuServices, MenuServices>(new ContainerControlledLifetimeManager());
 
             Container.RegisterType<IRpcService, RpcService>(new ContainerControlledLifetimeManager());
-
+            Container.RegisterType<ICaptureService, CaptureService>();
             // initialize background services
             Container.Resolve<ISerialService>();
             Container.Resolve<IRpcService>();

@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Google.Protobuf.WellKnownTypes;
+using Grpc.Core;
 using MicroVision.Core.Events;
 using MicroVision.Core.Exceptions;
 using MicroVision.Core.Models;
@@ -11,6 +14,67 @@ using Services;
 
 namespace MicroVision.Services
 {
+    public class Trigger
+    {
+        public delegate void ErrorEvent(object sender, OnErrorArgs args);
+
+        public class OnErrorArgs
+        {
+            public string Message;
+        }
+
+        private object _triggerLock = new object();
+        private AsyncDuplexStreamingCall<ArmTriggerRequest, ArmTriggerResponse> _stream;
+        private ArmTriggerRequest _requestBuffer = new ArmTriggerRequest();
+        public void InvokeTrigger()
+        {
+            lock (_triggerLock)
+            {
+                _stream.RequestStream.WriteAsync(_requestBuffer);
+            }
+        }
+
+        public void DestroyTrigger()
+        {
+            lock (_triggerLock)
+            {
+                _stream.RequestStream.CompleteAsync().Wait();
+            }
+        }
+
+        public Trigger(AsyncDuplexStreamingCall<ArmTriggerRequest, ArmTriggerResponse> stream)
+        {
+            _stream = stream;
+            Task.Run(() => HandleResponse());
+        }
+
+        private async void HandleResponse()
+        {
+            try
+            {
+                while (await _stream.ResponseStream.MoveNext(CancellationToken.None))
+                {
+                    var current = _stream.ResponseStream.Current;
+                    if (current.Error != null)
+                    {
+                        OnError?.Invoke(this, new OnErrorArgs() { Message = current.Error.Message });
+                    }
+
+                    if (current.TriggerAutoDisarmed)
+                    {
+                        OnError?.Invoke(this, new OnErrorArgs() { Message = "Laser not reset. Check the wiring to the camera" });
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                OnError?.Invoke(this, new OnErrorArgs(){Message = e.Message});
+            }
+        }
+        public event ErrorEvent OnError;
+    }
+
+
     public interface ISerialService
     {
         /// <summary>
@@ -65,6 +129,7 @@ namespace MicroVision.Services
         void ControlFocus(int steps, int slowdown = 1000, bool autoPower = true, bool driverPower = true);
 
         double GetCurrent();
+        Trigger StreamTrigger();
     }
 
     public class SerialService : ISerialService
@@ -292,6 +357,11 @@ namespace MicroVision.Services
             return comList?.ComPort == null ? new List<string>() : new List<string>(comList.ComPort);
         }
 
+        public Trigger StreamTrigger()
+        {
+            var trigger = _rpcService.CameraControllerClient.StreamRequestArmTrigger();
+            return new Trigger(trigger);
+        }
         #region Invocation helpers
 
         /// <summary>

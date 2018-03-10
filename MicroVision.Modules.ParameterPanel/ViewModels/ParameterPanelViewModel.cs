@@ -19,10 +19,12 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
             ICameraService cameraService,
             IParameterServices param,
             IStatusServices statusService,
+            ICaptureService captureService,
             IEventAggregator eventAggregator)
         {
             _serialService = serialService;
             _cameraService = cameraService;
+            _captureService = captureService;
             Status = statusService;
             _eventAggregator = eventAggregator;
             Params = param;
@@ -46,6 +48,7 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
 
         private readonly ISerialService _serialService;
         private readonly ICameraService _cameraService;
+        private readonly ICaptureService _captureService;
 
         private readonly IEventAggregator _eventAggregator;
 
@@ -86,6 +89,18 @@ namespace MicroVision.Modules.ParameterPanel.ViewModels
         }
 
         #region Commands
+        private DelegateCommand _captureCommand;
+        public DelegateCommand CaptureCommand =>
+            _captureCommand ?? (_captureCommand = new DelegateCommand(ExecuteCaptureCommand));
+
+        void ExecuteCaptureCommand()
+        {
+            if(_captureService.Capturing)
+                _captureService.Stop();
+            else
+                _captureService.Capture(1000, -1);
+        }
+
         private DelegateCommand _disconnectAllCommand;
         public DelegateCommand DisconnectAllCommand =>
             _disconnectAllCommand ?? (_disconnectAllCommand = new DelegateCommand(ExecuteDisconnectAllCommand));

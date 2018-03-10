@@ -126,6 +126,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CameraService.cs" />
+    <Compile Include="CaptureService.cs" />
     <Compile Include="GrpcReference\Error.cs" />
     <Compile Include="GrpcReference\CameraControllerService.cs" />
     <Compile Include="GrpcReference\CameraControllerServiceGrpc.cs" />
