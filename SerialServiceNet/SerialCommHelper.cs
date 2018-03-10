@@ -13,10 +13,10 @@ namespace SerialServiceNet
     {
         private Object _invokeLock = new Object();
 
-        private Error InvokeCommand(string command, string[] param)
+        private Error InvokeCommand(string command, string[] param, bool calledByArmTrigger = false)
         {
             string tmp = "";
-            return InvokeCommandWithResponse(command, param, ref tmp, 0);
+            return InvokeCommandWithResponse(command, param, ref tmp, 0, calledByArmTrigger);
         }
 
         /// <summary>
@@ -28,8 +28,12 @@ namespace SerialServiceNet
         /// <param name="response">immediate response after the command is sent</param>
         /// <param name="timeout">wait for milliseconds before LF arrives. negative is infinite and 0 for no response</param>
         /// <returns></returns>
-        private Error InvokeCommandWithResponse(string command, string[] param, ref string response, int timeout = 1000)
+        private Error InvokeCommandWithResponse(string command, string[] param, ref string response, int timeout = 1000, bool calledByArmTrigger = false)
         {
+            if (captureMonopoly && !calledByArmTrigger)
+            {
+                return BuildError("Hardware accessing is disabled during capture", Error.Types.Level.Warning);
+            }
             if (!IsSerialPortAvailable())
             {
                 return BuildError("COM Port not available", Error.Types.Level.Error);

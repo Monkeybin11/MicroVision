@@ -26,16 +26,16 @@ namespace SerialServiceNet
         private ResponseDispatcher _resp = new ResponseDispatcher();
         private int _cancellationTimeout = 1000;
         private Task _dataListener;
-        private TimeLimiter _timeLimiter;
+        private bool captureMonopoly = false;
 
         public SerialSericeImpl()
         {
-            _timeLimiter = TimeLimiter.GetFromMaxCountByInterval(1, TimeSpan.FromMilliseconds(10));
             _serialPort = new SerialPortStream();
         }
 
         private void ReadStreamListener()
         {
+            _serialPort.Flush();
             while (IsSerialPortAvailable())
             {
                 try
@@ -90,26 +90,30 @@ namespace SerialServiceNet
 
         public override Task<ArmTriggerResponse> RequestArmTrigger(ArmTriggerRequest request, ServerCallContext context)
         {
+            captureMonopoly = true;
             var response = new ArmTriggerResponse();
             var laserConfiguration = request.LaserConfiguration;
-            response.Error = InvokeCommand("P", new[] {laserConfiguration.Intensity.ToString()});
-            if (response.Error != null) return Task.FromResult(response);
+            response.Error = InvokeCommand("P", new[] {laserConfiguration.Intensity.ToString()}, true);
+            if (response.Error != null) goto exit;
 
-            response.Error = InvokeCommand("D", new[] { laserConfiguration.DurationUs.ToString() });
-            if (response.Error != null) return Task.FromResult(response);
+            response.Error = InvokeCommand("D", new[] { laserConfiguration.DurationUs.ToString() }, true);
+            if (response.Error != null) goto exit;
 
-            response.Error = InvokeCommand("M", new[] { request.MaxTriggerTimeUs.ToString() });
-            if (response.Error != null) return Task.FromResult(response);
+            response.Error = InvokeCommand("M", new[] { request.MaxTriggerTimeUs.ToString() }, true);
+            if (response.Error != null) goto exit;
 
             response.TriggerAutoDisarmed = false;
             if (request.ArmTrigger)
             {
                 string outString = "";
-                response.Error = InvokeCommandWithResponse("B", null, ref outString);
-                if (response.Error != null) return Task.FromResult(response);
+                response.Error = InvokeCommandWithResponse("B", null, ref outString, calledByArmTrigger:true);
+                if (response.Error != null) goto exit;
 
                 response.TriggerAutoDisarmed = outString == "1";
             }
+
+            exit:
+            captureMonopoly = false;
             return Task.FromResult(response);
         }
 

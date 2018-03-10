@@ -53,6 +53,13 @@ namespace MicroVision.Modules.StatusPanel.ViewModels
 
             _ea.GetEvent<VimbaConnectedEvent>().Subscribe(StartCameraStatusSynchronization);
             _ea.GetEvent<VimbaDisconnectedEvent>().Subscribe(StopCameraStatusSynchronization);
+            _ea.GetEvent<ShutDownEvent>().Subscribe(Shutdown);
+        }
+
+        private void Shutdown()
+        {
+            StopCameraStatusSynchronization();
+            StopComStatusSynchronization();
         }
 
         private void StopCameraStatusSynchronization()
@@ -67,7 +74,7 @@ namespace MicroVision.Modules.StatusPanel.ViewModels
             _syncCameraTemperatureTimer.Start();
         }
 
-        private void StopComStatusSynchronization(bool obj)
+        private void StopComStatusSynchronization(bool obj = false)
         {
             _serialCurrentStatusTimer.Stop();
             _serialPowerStatusTimer.Stop();

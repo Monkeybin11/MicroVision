@@ -24,22 +24,13 @@ namespace MicroVision.Modules.ImagePanel.ViewModels
             set { SetProperty(ref _display, value);  }
         }
 
-        private string[] files;
-        private static Random rnd = new Random();
+
 
         public ImagePanelViewModel()
         {
-            files = Directory.GetFiles(@"C:\Users\wuyua\imgoutput", "*.png");
             
-            var t = new Timer(1000);
-            t.Elapsed += T_Elapsed;
-            t.Start();
+
         }
 
-        private void T_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            int r = rnd.Next(files.Length);
-            Application.Current.Dispatcher.Invoke(() => Display = new BitmapImage(new Uri( files[r])));
-        }
     }
 }

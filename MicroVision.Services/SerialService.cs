@@ -25,7 +25,14 @@ namespace MicroVision.Services
 
         private object _triggerLock = new object();
         private AsyncDuplexStreamingCall<ArmTriggerRequest, ArmTriggerResponse> _stream;
-        private ArmTriggerRequest _requestBuffer = new ArmTriggerRequest();
+
+        private ArmTriggerRequest _requestBuffer = new ArmTriggerRequest()
+        {
+            ArmTrigger = true,
+            MaxTriggerTimeUs = 10000,
+            LaserConfiguration = new LaserStatusRequest() {DurationUs = 30, Intensity = 255}
+        };
+
         public void InvokeTrigger()
         {
             lock (_triggerLock)
@@ -57,20 +64,22 @@ namespace MicroVision.Services
                     var current = _stream.ResponseStream.Current;
                     if (current.Error != null)
                     {
-                        OnError?.Invoke(this, new OnErrorArgs() { Message = current.Error.Message });
+                        OnError?.Invoke(this, new OnErrorArgs() {Message = current.Error.Message});
                     }
 
                     if (current.TriggerAutoDisarmed)
                     {
-                        OnError?.Invoke(this, new OnErrorArgs() { Message = "Laser not reset. Check the wiring to the camera" });
+                        OnError?.Invoke(this,
+                            new OnErrorArgs() {Message = "Laser not reset. Check the wiring to the camera"});
                     }
                 }
             }
             catch (Exception e)
             {
-                OnError?.Invoke(this, new OnErrorArgs(){Message = e.Message});
+                OnError?.Invoke(this, new OnErrorArgs() {Message = e.Message});
             }
         }
+
         public event ErrorEvent OnError;
     }
 
@@ -362,6 +371,7 @@ namespace MicroVision.Services
             var trigger = _rpcService.CameraControllerClient.StreamRequestArmTrigger();
             return new Trigger(trigger);
         }
+
         #region Invocation helpers
 
         /// <summary>
@@ -447,6 +457,7 @@ namespace MicroVision.Services
             if (ret == null || ret?.Error != null) throw new ComRuntimeException("Cannot get current");
             return ret.Current;
         }
+
         #endregion
 
         #endregion
