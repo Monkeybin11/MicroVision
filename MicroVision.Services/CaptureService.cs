@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -66,7 +67,7 @@ namespace MicroVision.Services
             _triggerTimer.Interval = interval;
             _remains = count;
             _triggerTimer.Start();
-            _cameraService.ConfigureCamera(new CameraParametersRequest() { Params = new CameraParameters() { NumFrames = 1, ExposureTime = 45, FrameRate = 390, Gain = 0 }, Write = true });
+            Initialize();
         }
 
         private void TriggerTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
@@ -91,11 +92,25 @@ namespace MicroVision.Services
             _parameterService.ExposureTime.PropertyChanged += CameraPropertyChangedHandler;
 
             _parameterService.LaserDuration.PropertyChanged += LaserPropertyChangedHandler;
+
+            _parameterService.CaptureInterval.PropertyChanged += CaptureConfigurationChangedHandler;
         }
 
-
-
+        private void Initialize()
+        {
+            CaptureConfigurationChangedHandler(null, null);
+            CameraPropertyChangedHandler(null, null);
+            LaserPropertyChangedHandler(null, null);
+        }
         #region Parameter changed monitor
+        private void CaptureConfigurationChangedHandler(object sender, PropertyChangedEventArgs e)
+        {
+            lock (_configurationLock)
+            {
+                _triggerTimer.Interval = _parameterService.CaptureInterval.Value;
+            }
+        }
+
         private void CameraPropertyChangedHandler(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             lock (_configurationLock)
