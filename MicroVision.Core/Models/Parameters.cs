@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using Prism.Mvvm;
 
 namespace MicroVision.Core.Models
@@ -9,23 +10,24 @@ namespace MicroVision.Core.Models
     /// Base parameter class
     /// </summary>
     /// <typeparam name="T"> value type</typeparam>
-    [Serializable]
+    [JsonObject(MemberSerialization.OptIn)]
     public abstract class Parameter<T> : BindableBase
     {
-        private bool _isEnabled;
+        private bool _enabled;
         public string Label { get; set; }
+        [JsonProperty]
         public abstract T Value { get; set; }
 
-        public bool IsEnabled
+        public bool Enabled
         {
-            get => _isEnabled;
-            set => SetProperty(ref _isEnabled, value);
+            get => _enabled;
+            set => SetProperty(ref _enabled, !value);
         }
 
         public Parameter(string label, bool isEnabled = true)
         {
             Label = label;
-            IsEnabled = isEnabled;
+            Enabled = !isEnabled;
         }
     }
 
@@ -72,6 +74,7 @@ namespace MicroVision.Core.Models
     #endregion
 
     #region Combobox selection
+    [JsonObject(MemberSerialization.OptIn)]
     public class SelectionParameter<T> : Parameter<List<T>>
     {
         private List<T> _value;
@@ -82,15 +85,21 @@ namespace MicroVision.Core.Models
             get => _value;
             set => SetProperty(ref _value, value);
         }
-
+        [JsonProperty]
         public T Selected
         {
             get { return _selected; }
             set { SetProperty(ref _selected, value); }
         }
 
-        public SelectionParameter() : base("Label", true) { }
-        public SelectionParameter(string label, bool isEnabled = true) : base(label, isEnabled){}
+        public SelectionParameter() : base("Label", true)
+        {
+            _value = new List<T>();
+        }
+        public SelectionParameter(string label, bool isEnabled = true) : base(label, isEnabled)
+        {
+            _value = new List<T>();
+        }
     }
     #endregion
 

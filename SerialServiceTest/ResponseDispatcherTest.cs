@@ -19,7 +19,8 @@ namespace SerialServiceNet
             var feedLine = prefix + " " + message;
 
             var responseDispatcher = new ResponseDispatcher();
-            var taskAwaiter = responseDispatcher.WaitForResultAsync(prefix).GetAwaiter();
+            var item = responseDispatcher.RegisterAwaiter(prefix);
+            var taskAwaiter = responseDispatcher.WaitForResultAsync(item).GetAwaiter();
             taskAwaiter.OnCompleted(() =>
             {
                 Assert.AreEqual(taskAwaiter.GetResult(), message);
@@ -60,9 +61,12 @@ namespace SerialServiceNet
         {
             var responseDispatcher = new ResponseDispatcher();
             var tasks = new List<Task<string>>();
-            tasks.Add(responseDispatcher.WaitForResultAsync("r", -1));
-            tasks.Add(responseDispatcher.WaitForResultAsync("e", -1));
-            tasks.Add(responseDispatcher.WaitForResultAsync("S", -1));
+            var item_r = responseDispatcher.RegisterAwaiter("r");
+            var item_e = responseDispatcher.RegisterAwaiter("e");
+            var item_S = responseDispatcher.RegisterAwaiter("S");
+            tasks.Add(responseDispatcher.WaitForResultAsync(item_r, -1));
+            tasks.Add(responseDispatcher.WaitForResultAsync(item_e, -1));
+            tasks.Add(responseDispatcher.WaitForResultAsync(item_S, -1));
             await Task.Delay(10);
             responseDispatcher.FeedMessage("S SParam");
             responseDispatcher.FeedMessage("e eParam");

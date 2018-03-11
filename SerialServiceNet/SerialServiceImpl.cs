@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Grpc.Core.Logging;
+using RateLimiter;
 using RJCP.IO.Ports;
 using Services;
 using static Services.Error.Types;
@@ -25,20 +27,34 @@ namespace SerialServiceNet
         private ResponseDispatcher _resp = new ResponseDispatcher();
         private int _cancellationTimeout = 1000;
         private Task _dataListener;
+        private bool captureMonopoly = false;
 
+#if DEBUG
+        private SerialConversationLogger _conversationLogger;
+        private FileStream _conversationFileStream;
+#endif
         public SerialSericeImpl()
         {
             _serialPort = new SerialPortStream();
+
+#if DEBUG
+            _conversationFileStream = new FileStream("conversation_log.txt", FileMode.Create);
+            _conversationLogger = new SerialConversationLogger(_conversationFileStream);
+#endif
         }
 
         private void ReadStreamListener()
         {
+            _serialPort.Flush();
             while (IsSerialPortAvailable())
             {
                 try
                 {
                     var line = _serialPort.ReadLine();
                     _resp.FeedMessage(line);
+#if DEBUG
+                    _conversationLogger.ReceivedBySerial(line);
+#endif
                 }
                 catch (Exception)
                 {
@@ -87,26 +103,30 @@ namespace SerialServiceNet
 
         public override Task<ArmTriggerResponse> RequestArmTrigger(ArmTriggerRequest request, ServerCallContext context)
         {
+            captureMonopoly = true;
             var response = new ArmTriggerResponse();
             var laserConfiguration = request.LaserConfiguration;
-            response.Error = InvokeCommand("P", new[] {laserConfiguration.Intensity.ToString()});
-            if (response.Error != null) return Task.FromResult(response);
+            response.Error = InvokeCommand("P", new[] {laserConfiguration.Intensity.ToString()}, true);
+            if (response.Error != null) goto exit;
 
-            response.Error = InvokeCommand("D", new[] { laserConfiguration.DurationUs.ToString() });
-            if (response.Error != null) return Task.FromResult(response);
+            response.Error = InvokeCommand("D", new[] {laserConfiguration.DurationUs.ToString()}, true);
+            if (response.Error != null) goto exit;
 
-            response.Error = InvokeCommand("M", new[] { request.MaxTriggerTimeUs.ToString() });
-            if (response.Error != null) return Task.FromResult(response);
+            response.Error = InvokeCommand("M", new[] {request.MaxTriggerTimeUs.ToString()}, true);
+            if (response.Error != null) goto exit;
 
             response.TriggerAutoDisarmed = false;
             if (request.ArmTrigger)
             {
                 string outString = "";
-                response.Error = InvokeCommandWithResponse("B", null, ref outString);
-                if (response.Error != null) return Task.FromResult(response);
+                response.Error = InvokeCommandWithResponse("B", null, ref outString, calledByArmTrigger: true);
+                if (response.Error != null) goto exit;
 
                 response.TriggerAutoDisarmed = outString == "1";
             }
+
+            exit:
+            captureMonopoly = false;
             return Task.FromResult(response);
         }
 
@@ -276,7 +296,7 @@ namespace SerialServiceNet
             string stepResponse = "";
             // This timeout should be extremely long or even disabled
             focusStatusResponse.Error =
-                InvokeCommandWithResponse("S", new[] {request.Steps.ToString()}, ref stepResponse, 10000);
+                InvokeCommandWithResponse("S", new[] {request.Steps.ToString()}, ref stepResponse, -1);
             if (autoPower) focusStatusResponse.Error = InvokeCommand("v", null);
             return Task.FromResult(focusStatusResponse);
         }
@@ -361,7 +381,8 @@ namespace SerialServiceNet
             return Task.FromResult(powerStatusResponse);
         }
 
-        public override async Task StreamRequestArmTrigger(IAsyncStreamReader<ArmTriggerRequest> requestStream, IServerStreamWriter<ArmTriggerResponse> responseStream, ServerCallContext context)
+        public override async Task StreamRequestArmTrigger(IAsyncStreamReader<ArmTriggerRequest> requestStream,
+            IServerStreamWriter<ArmTriggerResponse> responseStream, ServerCallContext context)
         {
             while (await requestStream.MoveNext())
             {

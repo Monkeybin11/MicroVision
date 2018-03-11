@@ -47,19 +47,21 @@ namespace CameraServiceNet
                 {
                     entries[i] = Color.FromArgb(i, i, i);
                 }
+
                 return cp;
             }
         }
     }
+
     public class CameraServiceImpl : Services.VimbaCamera.VimbaCameraBase
     {
+        private object _acquisitionLock = new object();
         private Vimba _vimbaInstance = new Vimba();
         private Camera _cameraInstance = null;
         private int _numFrames = 1;
-        private List<FrameData> _frameBuffer = new List<FrameData>();
-        public CameraServiceImpl()
-        {
-        }
+        private Frame[] _frames = new Frame[1];
+        private object _frameStreamWriterLock = new object();
+        private IServerStreamWriter<BufferedFramesResponse> _frameStreamWriter = null;
 
         ~CameraServiceImpl()
         {
@@ -83,6 +85,7 @@ namespace CameraServiceNet
             {
                 throw new ApplicationException($"camera is not at correct state");
             }
+
             var features = _cameraInstance.Features;
 
             features["AcquisitionStop"].RunCommand();
@@ -95,13 +98,15 @@ namespace CameraServiceNet
             features["AcquisitionFrameCount"].IntValue = _numFrames;
             features["AcquisitionFrameRateMode"].StringValue = "Basic";
         }
+
         /// <summary>
         /// Control the start up and shut down behavior of the vimba instance
         /// </summary>
         /// <param name="request"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public override Task<VimbaInstanceControlResponse> VimbaInstanceControl(VimbaInstanceControlRequest request, Grpc.Core.ServerCallContext context)
+        public override Task<VimbaInstanceControlResponse> VimbaInstanceControl(VimbaInstanceControlRequest request,
+            Grpc.Core.ServerCallContext context)
         {
             var ret = new VimbaInstanceControlResponse();
             switch (request.Command)
@@ -117,6 +122,7 @@ namespace CameraServiceNet
                         ret.Error = ServiceHelper.BuildError(e, Error.Types.Level.Error);
                         return Task.FromResult(ret);
                     }
+
                     break;
                 case ConnectionCommands.Disconnect:
                     try
@@ -128,32 +134,29 @@ namespace CameraServiceNet
                     {
                         ret.Error = ServiceHelper.BuildError(e, Error.Types.Level.Error);
                     }
+
                     break;
             }
 
             return Task.FromResult(ret);
         }
 
-        public override Task<BufferedFramesResponse> RequestBufferedFrames(BufferedFramesRequest request, Grpc.Core.ServerCallContext context)
+        public override Task<BufferedFramesResponse> RequestBufferedFrames(BufferedFramesRequest request,
+            Grpc.Core.ServerCallContext context)
         {
             var ret = new BufferedFramesResponse();
             try
             {
-                foreach (var frameData in _frameBuffer)
+                foreach (var frame in _frames)
                 {
-                    var image = new Bitmap((int)frameData.Width, (int)frameData.Height, PixelFormat.Format8bppIndexed);
-                    image.Palette = GrayscalePalette.GetGrayScalePalette();
-                    var wholeBitmap = new Rectangle(0, 0, image.Width, image.Height);
-                    var bitmapData = image.LockBits(wholeBitmap, ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed);
-                    Marshal.Copy(frameData.Buffer,0 , bitmapData.Scan0, frameData.Buffer.Length);
-                    image.UnlockBits(bitmapData);
-
-                    var output = new MemoryStream();
-                    image.Save(output, ImageFormat.Png);
-                    output.Seek(0, 0);
-                    var bs = ByteString.FromStream(output);
-
-                    ret.Images.Add(bs);
+                    if (frame.ReceiveStatus == VmbFrameStatusType.VmbFrameStatusComplete)
+                    {
+                        var output = MakeImageBuffer(new FrameData(frame));
+                        var bs = ByteString.FromStream(output);
+                        
+                        ret.Images.Add(bs);
+                    }
+                    
                 }
             }
             catch (Exception e)
@@ -164,13 +167,50 @@ namespace CameraServiceNet
             return Task.FromResult(ret);
         }
 
-        public override Task<CameraAcquisitionResponse> RequestCameraAcquisition(CameraAcquisitionRequest request, Grpc.Core.ServerCallContext context)
+        private static MemoryStream MakeImageBuffer(FrameData frameData)
+        {
+            var image = new Bitmap((int) frameData.Width, (int) frameData.Height, PixelFormat.Format8bppIndexed);
+            image.Palette = GrayscalePalette.GetGrayScalePalette();
+            var wholeBitmap = new Rectangle(0, 0, image.Width, image.Height);
+            var bitmapData = image.LockBits(wholeBitmap, ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed);
+            Marshal.Copy(frameData.Buffer, 0, bitmapData.Scan0, frameData.Buffer.Length);
+            image.UnlockBits(bitmapData);
+
+            var output = new MemoryStream();
+            image.Save(output, ImageFormat.Png);
+            output.Seek(0, 0);
+            return output;
+        }
+
+        public override Task<CameraAcquisitionResponse> RequestCameraAcquisition(CameraAcquisitionRequest request,
+            Grpc.Core.ServerCallContext context)
         {
             var ret = new CameraAcquisitionResponse();
             try
             {
-                _frameBuffer.Clear();
-                _cameraInstance.StartContinuousImageAcquisition(_numFrames);
+                lock (_acquisitionLock)
+                {
+                    if (_frames.Length != _numFrames)
+                    {
+                        _frames = new Frame[_numFrames];
+                    }
+                    _cameraInstance.AcquireMultipleImages(ref _frames, 10000);
+                    if (_frameStreamWriter != null)
+                    {
+                        lock (_frameStreamWriterLock)
+                        {
+                            BufferedFramesResponse bufferedFrames = null;
+                            foreach (var frame in _frames)
+                            {
+                                var ms = MakeImageBuffer(new FrameData(frame));
+                                var bs = ByteString.FromStream(ms);
+                                bufferedFrames = new BufferedFramesResponse();
+                                bufferedFrames.Images.Add(bs);
+                            }
+                            _frameStreamWriter.WriteAsync(bufferedFrames);
+                        }
+                    }  
+                }
             }
             catch (Exception e)
             {
@@ -186,7 +226,8 @@ namespace CameraServiceNet
         /// <param name="request"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public override Task<CameraConnectionResponse> RequestCameraConnection(CameraConnectionRequest request, Grpc.Core.ServerCallContext context)
+        public override Task<CameraConnectionResponse> RequestCameraConnection(CameraConnectionRequest request,
+            Grpc.Core.ServerCallContext context)
         {
             var ret = new CameraConnectionResponse();
             switch (request.Command)
@@ -195,8 +236,7 @@ namespace CameraServiceNet
                     try
                     {
                         _cameraInstance =
-                                        _vimbaInstance.OpenCameraByID(request.CameraID, VmbAccessModeType.VmbAccessModeFull);
-                        _cameraInstance.OnFrameReceived += FrameReceivedHandler;
+                            _vimbaInstance.OpenCameraByID(request.CameraID, VmbAccessModeType.VmbAccessModeFull);
                         ConfigureCommonParameters();
                         ret.IsConnected = true;
                     }
@@ -204,6 +244,7 @@ namespace CameraServiceNet
                     {
                         ret.Error = ServiceHelper.BuildError(e, Error.Types.Level.Error);
                     }
+
                     break;
                 case ConnectionCommands.Disconnect:
                     try
@@ -215,8 +256,10 @@ namespace CameraServiceNet
                     {
                         ret.Error = ServiceHelper.BuildError(e, Error.Types.Level.Error);
                     }
+
                     break;
             }
+
             return Task.FromResult(ret);
         }
 
@@ -226,7 +269,8 @@ namespace CameraServiceNet
         /// <param name="request"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public override Task<CameraListResponse> RequestCameraList(CameraListRequest request, Grpc.Core.ServerCallContext context)
+        public override Task<CameraListResponse> RequestCameraList(CameraListRequest request,
+            Grpc.Core.ServerCallContext context)
         {
             var ret = new CameraListResponse();
             try
@@ -236,6 +280,7 @@ namespace CameraServiceNet
                 {
                     camList.Add(camera.Id);
                 }
+
                 ret.CameraList.AddRange(camList);
             }
             catch (Exception e)
@@ -252,7 +297,8 @@ namespace CameraServiceNet
         /// <param name="request"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public override Task<CameraParametersResponse> RequestCameraParameters(CameraParametersRequest request, Grpc.Core.ServerCallContext context)
+        public override Task<CameraParametersResponse> RequestCameraParameters(CameraParametersRequest request,
+            Grpc.Core.ServerCallContext context)
         {
             var ret = new CameraParametersResponse();
             if (request.Write)
@@ -292,20 +338,42 @@ namespace CameraServiceNet
                     return Task.FromResult(ret);
                 }
             }
+
             return Task.FromResult(ret);
         }
 
-        private void FrameReceivedHandler(Frame frame)
+        public override async Task RequestFrameStream(
+            Grpc.Core.IAsyncStreamReader<CameraAcquisitionRequest> requestStream,
+            Grpc.Core.IServerStreamWriter<BufferedFramesResponse> responseStream, Grpc.Core.ServerCallContext context)
         {
-            _frameBuffer.Add(new FrameData(frame));
+            lock (_frameStreamWriterLock)
+            {
+                _frameStreamWriter = responseStream;
+            }
+
+            while (await requestStream.MoveNext() && !context.CancellationToken.IsCancellationRequested)
+            {
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                var result = await RequestCameraAcquisition(requestStream.Current, context);
+                if (result.Error != null)
+                {
+                    lock (_frameStreamWriterLock)
+                    {
+                        responseStream.WriteAsync(new BufferedFramesResponse() {Error = result.Error});
+                        break;
+                    }
+                }
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            }
+
+            lock (_frameStreamWriterLock)
+            {
+                _frameStreamWriter = null;
+            }
         }
 
-        public override Task RequestFrameStream(Grpc.Core.IAsyncStreamReader<CameraAcquisitionRequest> requestStream, Grpc.Core.IServerStreamWriter<BufferedFramesResponse> responseStream, Grpc.Core.ServerCallContext context)
-        {
-            return base.RequestFrameStream(requestStream, responseStream, context);
-        }
-
-        public override Task<TemperatureResponse> RequestTemperature(TemperatureRequest request, ServerCallContext context)
+        public override Task<TemperatureResponse> RequestTemperature(TemperatureRequest request,
+            ServerCallContext context)
         {
             var ret = new TemperatureResponse();
             try
@@ -331,6 +399,7 @@ namespace CameraServiceNet
             {
                 ret.Error = ServiceHelper.BuildError(e, Error.Types.Level.Error);
             }
+
             return Task.FromResult(ret);
         }
     }

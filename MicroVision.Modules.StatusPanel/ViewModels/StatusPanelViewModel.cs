@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+using System.Windows.Media.Media3D;
 using Microsoft.Practices.Unity;
 using MicroVision.Core.Events;
 using MicroVision.Services;
@@ -14,42 +15,152 @@ using Prism.Events;
 
 namespace MicroVision.Modules.StatusPanel.ViewModels
 {
+    /// <summary>
+    /// Status panel will actively pull status data from the services
+    /// </summary>
     public class StatusPanelViewModel : BindableBase
     {
         private readonly IUnityContainer _container;
+        private readonly IStatusServices _statusService;
         private readonly ILogService _logService;
         private readonly IEventAggregator _ea;
+        private readonly ISerialService _serialService;
+        private readonly ICameraService _cameraService;
 
-
-        public StatusPanelViewModel(IUnityContainer container,IStatusServices statusService, ILogService logService, IEventAggregator ea)
+        public IStatusServices Status => _statusService;
+        private bool _serialWasOpen = false;
+        private bool _cameraWasOpen = false;
+        public StatusPanelViewModel(IUnityContainer container,IStatusServices statusService, ILogService logService, IEventAggregator ea, ISerialService serialService, ICameraService cameraService)
         {
             _container = container;
+            _statusService = statusService;
             _logService = logService;
             _ea = ea;
+            _serialService = serialService;
+            _cameraService = cameraService;
             _logService.ConfigureLogger("StatusPanel");
 
-            ComConnectionStatus = statusService.ComConnectionStatus;
-            VimbaConnectionStatus = statusService.VimbaConnectionStatus;
+            _serialPowerStatusTimer = new Timer(_serialPowerStatusTimerInterval);
+            _serialPowerStatusTimer.Elapsed += (sender, args) => SyncSerialPowerStatus();
 
-            MasterPowerStatus = statusService.MasterPowerStatus;
-            FanPowerStatus = statusService.FanPowerStatus;
-            MotorPowerStatus = statusService.MotorPowerStatus;
-            LaserPowerStatus = statusService.LaserPowerStatus;
+            _serialCurrentStatusTimer = new Timer(_serialCurrentStatusTimerInterval);
+            _serialCurrentStatusTimer.Elapsed += (sender, args) => SyncCurrentStatus();
 
-            CurrentValueStatus = statusService.CurrentValueStatus;
-            CameraTemperatureValueStatus = statusService.CameraTemperatureValueStatus;
+            _syncCameraTemperatureTimer = new Timer(_syncCameraTemperatureTimerInterval);
+            _syncCameraTemperatureTimer.Elapsed += (sender, args) => SyncCameraTemperature();
 
+            _ea.GetEvent<ComConnectedEvent>().Subscribe(StartComStatusSynchronization);
+            _ea.GetEvent<ComDisconnectedEvent>().Subscribe(StopComStatusSynchronization);
 
+            _ea.GetEvent<VimbaConnectedEvent>().Subscribe(StartCameraStatusSynchronization);
+            _ea.GetEvent<VimbaDisconnectedEvent>().Subscribe(StopCameraStatusSynchronization);
+            _ea.GetEvent<ShutDownEvent>().Subscribe(Shutdown);
+            _ea.GetEvent<StartCaptureEvent>().Subscribe(Shutdown);
+            _ea.GetEvent<StopCaptureEvent>().Subscribe(Restart);
         }
 
+        private void Restart()
+        {
+            if (_serialWasOpen)
+            {
+                StartComStatusSynchronization();
+            }
 
-        public ConnectionStatus ComConnectionStatus { get; }
-        public ConnectionStatus VimbaConnectionStatus { get; }
-        public PowerStatus MasterPowerStatus { get; }
-        public PowerStatus FanPowerStatus { get; }
-        public PowerStatus MotorPowerStatus { get; }
-        public PowerStatus LaserPowerStatus { get; }
-        public ValueStatus<double> CurrentValueStatus { get; }
-        public ValueStatus<double> CameraTemperatureValueStatus { get; }      
+            if (_cameraWasOpen)
+            {
+                StartCameraStatusSynchronization();
+            }
+        }
+
+        private void Shutdown()
+        {
+            _serialWasOpen = _cameraWasOpen = false;
+            if (_serialCurrentStatusTimer.Enabled)
+            {
+                StopComStatusSynchronization();
+                _serialWasOpen = true;
+            }
+
+            if (_syncCameraTemperatureTimer.Enabled)
+            {
+                StopCameraStatusSynchronization();
+                _cameraWasOpen = true;
+            }
+            
+            
+        }
+
+        private void StopCameraStatusSynchronization()
+        {
+
+            _syncCameraTemperatureTimer.Stop();
+        }
+
+        private void StartCameraStatusSynchronization()
+        {
+            
+            _syncCameraTemperatureTimer.Start();
+        }
+
+        private void StopComStatusSynchronization(bool obj = false)
+        {
+            _serialCurrentStatusTimer.Stop();
+            _serialPowerStatusTimer.Stop();
+        }
+
+        private void StartComStatusSynchronization()
+        {
+            _serialCurrentStatusTimer.Start();
+            _serialPowerStatusTimer.Start();
+        }
+
+        private double _serialPowerStatusTimerInterval = 1000;
+        private Timer _serialPowerStatusTimer;
+        public void SyncSerialPowerStatus()
+        {
+            bool master, fan, motor, laser;
+            master = fan = motor = laser = false;
+            try
+            {
+                SerialService.ParsePowerCode(_serialService.ReadPower(), out master, out fan, out motor, out laser);
+
+            }
+            catch (Exception e)
+            {
+                //ignored 
+            }
+            Status.FanPowerStatus.IsPowered = fan;
+            Status.MasterPowerStatus.IsPowered = master;
+            Status.MotorPowerStatus.IsPowered = motor;
+            Status.LaserPowerStatus.IsPowered = laser;
+        }
+
+        private double _serialCurrentStatusTimerInterval = 500;
+        private Timer _serialCurrentStatusTimer;
+        public void SyncCurrentStatus()
+        {
+            try
+            {
+                Status.CurrentValueStatus.Value = _serialService.GetCurrent();
+            }
+            catch (Exception e)
+            {
+                // ignored
+            }
+        }
+
+        private double _syncCameraTemperatureTimerInterval = 1000;
+        private Timer _syncCameraTemperatureTimer;
+        public void SyncCameraTemperature()
+        {
+            try
+            {
+                Status.CameraTemperatureValueStatus.Value = _cameraService.GetTemperature();
+            }
+            catch (Exception e)
+            {
+                // ignored
+            }
+        }
     }
 }

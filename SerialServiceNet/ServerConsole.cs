@@ -10,17 +10,21 @@ namespace SerialServiceNet
 {
     public static class ServerConsole
     {
-        static int Main(string[] args)
+        public static Server CreateServer()
         {
             string Uri = "localhost";
             int Port = 39945;
             var server = new Server()
             {
-                Services = {CameraController.BindService(new SerialSericeImpl())},
-                Ports = {new ServerPort(Uri, Port, ServerCredentials.Insecure)}
+                Services = { CameraController.BindService(new SerialSericeImpl()) },
+                Ports = { new ServerPort(Uri, Port, ServerCredentials.Insecure) }
             };
+            return server;
+        }
+        public static int Main(string[] args)
+        {
+            var server = CreateServer();
             server.Start();
-            Console.WriteLine($"Camera controller rpc server listens on {Uri}:{Port}");
             Console.ReadKey();
             return 0;
         }

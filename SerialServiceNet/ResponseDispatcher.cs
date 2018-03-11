@@ -10,30 +10,23 @@ namespace SerialServiceNet
 {
     public class ResponseDispatcher
     {
-        private class SignalDictItem
+        public class QueuedResponseHandler
         {
+            public string Identifier = null;
             public ManualResetEvent Signal = new ManualResetEvent(false);
             public string MessageBody = null;
         }
 
-        private Dictionary<string, SignalDictItem> _pool = new Dictionary<string, SignalDictItem>();
+        private List<QueuedResponseHandler> _pool = new List<QueuedResponseHandler>();
         private Dictionary<string, object> _lock = new Dictionary<string, object>();
 
-        private Dictionary<string, SignalDictItem> Pool
-        {
-            get
-            {
-                lock (_poolLock)
-                {
-                    return _pool;
-                }
-            }
-        }
 
         private object _poolLock = new object();
-        private object _lockProt = new object();
 
-        // some function that accept the stream in, and get the prefix, and return the corresponding waiting thread
+        /// <summary>
+        /// Called by serial receive dispatcher and resolve the waiting items
+        /// </summary>
+        /// <param name="message"></param>
         public void FeedMessage(string message)
         {
             //separate the prefix
@@ -50,51 +43,67 @@ namespace SerialServiceNet
 
             lock (_poolLock)
             {
-                if (Pool.ContainsKey(prefix))
+                QueuedResponseHandler foundItem = null;
+                try
                 {
-                    Pool[prefix].MessageBody = msgbody;
-                    Pool[prefix].Signal.Set();
+                    foundItem = _pool.Where(handler => handler.Identifier == prefix).First();
+                }
+                catch (Exception e)
+                {
+                    // ignored
+                }
+
+                if (foundItem != null)
+                {
+                    // resolve the target
+                    foundItem.MessageBody = msgbody;
+                    foundItem.Signal.Set();
                 }
             }
         }
 
-        public Task<string> WaitForResultAsync(string responsePrefix, int timeout = 1000)
+        /// <summary>
+        /// This sync function ensure the message is successfully queued into the buffer
+        /// </summary>
+        /// <param name="responsePrefix"></param>
+        /// <param name="timeout"></param>
+        public QueuedResponseHandler RegisterAwaiter(string responsePrefix)
+        {
+            var item = new QueuedResponseHandler()
+            {
+                Identifier = responsePrefix,
+                Signal = new ManualResetEvent(false)
+            };
+            lock (_poolLock)
+            {
+                _pool.Add(item);
+            }
+
+            return item;
+        }
+
+        public Task<string> WaitForResultAsync(QueuedResponseHandler item,int timeout = 1000)
         {
             return Task.Run(() =>
             {
-                lock (_lockProt)
+                var triggered = item.Signal.WaitOne(timeout);
+
+                lock (_poolLock)
                 {
-                    if (!_lock.ContainsKey(responsePrefix))
-                    {
-                        _lock[responsePrefix] = new object();
-                    }
+                    _pool.Remove(item);
                 }
 
-                lock (_lock[responsePrefix])
-                {
-                    var signalDictItem = new SignalDictItem();
-                    lock (_poolLock)
-                    {
-                        signalDictItem.Signal.Reset();
-                        Pool[responsePrefix] = signalDictItem;
-                    }
-
-                    var triggered = signalDictItem.Signal.WaitOne(timeout);
-                    lock (_poolLock)
-                    {
-                        Pool.Remove(responsePrefix);
-                    }
-
-                    if (!triggered) throw new TimeoutException("Wait for result time out");
-                    return signalDictItem.MessageBody;
-                }
+                if (!triggered) throw new TimeoutException($"Wait for result of command {item.Identifier} time out");
+                return Task.FromResult(item.MessageBody);
+                
             });
             
         }
 
         public string WaitForResult(string responsePrefix, int timeout = 1000)
         {
-            var task = WaitForResultAsync(responsePrefix, timeout);
+            var item = RegisterAwaiter(responsePrefix);
+            var task = WaitForResultAsync(item, timeout);
             task.Wait();
             return task.Result;
         }

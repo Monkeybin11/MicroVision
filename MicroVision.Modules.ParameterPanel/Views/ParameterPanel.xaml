@@ -7,14 +7,19 @@
              xmlns:prism="http://prismlibrary.com/"
              xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:vm="clr-namespace:MicroVision.Modules.ParameterPanel.ViewModels"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:converter="clr-namespace:MicroVision.Core.Converter;assembly=MicroVision.Core"
              mc:Ignorable="d"
              prism:ViewModelLocator.AutoWireViewModel="True"
-             d:DesignHeight="150" d:DesignWidth="800">
+             d:DesignHeight="150" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance vm:ParameterPanelViewModel}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../Resources/ScrollbarStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <converter:InvertBooleanConverter x:Key="InvertBooleanConverter"/>
             <Style x:Key="DockPanelStyle" TargetType="DockPanel">
                 <Setter Property="Width" Value="180" />
                 <Setter Property="Margin" Value="5" />
@@ -42,48 +47,28 @@
     <!-- Body -->
     <DockPanel LastChildFill="True">
         <!-- Big connection button -->
-        <Button Command="{Binding TestCommand}" DockPanel.Dock="Right" Width="100" Margin="10">Start Capture</Button>
+        <Button DockPanel.Dock="Right" Width="100" Margin="10" Command="{Binding CaptureCommand}">Start Capture</Button>
 
         <TabControl Margin="0,5,0,10">
-            <TabItem Header="Backend Server">
-                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition></ColumnDefinition>
-                            <ColumnDefinition></ColumnDefinition>
-                            <ColumnDefinition></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition></RowDefinition>
-                            <RowDefinition></RowDefinition>
-                            <RowDefinition></RowDefinition>
-                        </Grid.RowDefinitions>
-                        <Label Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center">Camera Server</Label>
-                        <Label Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center">Camera Controller Server</Label>
-                        <Label Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center">Image Processing Server</Label>
-                        
-                        <TextBox Grid.Row="0" Grid.Column="1" Height="20" Text ="{Binding CameraUri.Value}"></TextBox>
-                        <TextBox Grid.Row="1" Grid.Column="1" Height="20" Text ="{Binding CameraControllerUri.Value}"></TextBox>
-                        <TextBox Grid.Row="2" Grid.Column="1" Height="20" Text ="{Binding ImageProcessorUri.Value}"></TextBox>
-
-                        <Button Grid.Row="0" Grid.Column="2" Margin="5" Height="25" Width="100">Connect</Button>
-                        <Button Grid.Row="1" Grid.Column="2" Margin="5" Height="25" Width="100">Connect</Button>
-                        <Button Grid.Row="2" Grid.Column="2" Margin="5" Height="25" Width="100">Connect</Button>
-
-                    </Grid>
-                </ScrollViewer>
-            </TabItem>
             <TabItem Header="Connection">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                     <WrapPanel>
+
                         <GroupBox Header="COM" Style="{StaticResource GroupboxStyle}">
                             <StackPanel>
                                 <DockPanel Style="{StaticResource DockPanelStyle}">
                                     <Label Style="{StaticResource LabelStyle}">COM Port:</Label>
-                                    <ComboBox ItemsSource="{Binding ComSelection.Value}"
-                                              SelectedValue="{Binding ComSelection.Selected}" />
+                                    <ComboBox ItemsSource="{Binding Params.ComSelection.Value}"
+                                              SelectedValue="{Binding Params.ComSelection.Selected}"
+                                              IsEnabled="{Binding Status.ComConnectionStatus.IsConnected, Converter={StaticResource InvertBooleanConverter}}">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="DropDownOpened">
+                                                <i:InvokeCommandAction Command="{Binding ComUpdateListCommand}" />
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </ComboBox>
                                 </DockPanel>
-                                <ToggleButton IsChecked="{Binding ComConnectionStatus.IsConnected, Mode=OneWay}"
+                                <ToggleButton IsChecked="{Binding Status.ComConnectionStatus.IsConnected}"
                                               Style="{StaticResource ConnectionButtonStyle}"
                                               Command="{Binding ComConnectToggleCommand}" Content="Connect" />
 
@@ -93,9 +78,16 @@
                             <StackPanel>
                                 <DockPanel Style="{StaticResource DockPanelStyle}">
                                     <Label Style="{StaticResource LabelStyle}">Camera Name:</Label>
-                                    <ComboBox ItemsSource="{Binding VimbaSelection.Value}" />
+                                    <ComboBox IsEnabled="{Binding Status.VimbaConnectionStatus.IsConnected, Converter={StaticResource InvertBooleanConverter}}" ItemsSource="{Binding Params.VimbaSelection.Value}" SelectedValue="{Binding Params.VimbaSelection.Selected}">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="DropDownOpened">
+                                                <i:InvokeCommandAction Command="{Binding CameraUpdateListCommand}">
+                                                </i:InvokeCommandAction>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </ComboBox>
                                 </DockPanel>
-                                <ToggleButton Style="{StaticResource ConnectionButtonStyle}">Connect</ToggleButton>
+                                <ToggleButton IsChecked="{Binding Status.VimbaConnectionStatus.IsConnected}" Command="{Binding CameraConnectToggleCommand}"  Style="{StaticResource ConnectionButtonStyle}">Connect</ToggleButton>
                             </StackPanel>
                         </GroupBox>
 
@@ -104,8 +96,8 @@
                                 <StackPanel.Resources>
                                     <Style BasedOn="{StaticResource MasterControlButtonStyle}" TargetType="Button" />
                                 </StackPanel.Resources>
-                                <Button>Connect</Button>
-                                <Button>Disconnect</Button>
+                                <Button Command="{Binding ConnectAllCommand}">Connect</Button>
+                                <Button Command="{Binding DisconnectAllCommand}">Disconnect</Button>
                             </StackPanel>
                         </GroupBox>
                     </WrapPanel>
@@ -132,16 +124,16 @@
                         </WrapPanel.Resources>
 
                         <ContentControl ContentTemplate="{StaticResource ParameterControlTemplate}"
-                                        Content="{Binding ExposureTime}" />
+                                        Content="{Binding Params.ExposureTime}" />
                         <ContentControl ContentTemplate="{StaticResource ParameterControlTemplate}"
-                                        Content="{Binding Gain}" />
+                                        Content="{Binding Params.Gain}" />
                         <ContentControl ContentTemplate="{StaticResource ParameterControlTemplate}"
-                                        Content="{Binding LaserDuration}" />
+                                        Content="{Binding Params.LaserDuration}" />
                         <ContentControl ContentTemplate="{StaticResource ParameterControlTemplate}"
-                                        Content="{Binding CaptureInterval}" />
+                                        Content="{Binding Params.CaptureInterval}" />
                         <ContentControl ContentTemplate="{StaticResource ParameterControlTemplate}"
-                                        Content="{Binding OutputDirectory}" />
-
+                                        Content="{Binding Params.OutputDirectory}" />
+                        <!--todo use parent datacontext to mask params-->
                     </WrapPanel>
                 </ScrollViewer>
             </TabItem>
@@ -154,20 +146,21 @@
                                     <Setter Property="Margin" Value="5,5,5,0" />
                                 </Style>
                                 <DataTemplate x:Key="PowerCheckBoxTemplate">
-                                    <CheckBox IsChecked="{Binding Value}" IsEnabled="{Binding IsEnabled}"
-                                              Content="{Binding Label}" />
+                                    <CheckBox IsChecked="{Binding Value}" Content="{Binding Label}"
+                                              Command="{Binding DataContext.PowerConfigurationCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                              CommandParameter="{Binding Enabled}" />
                                 </DataTemplate>
                             </GroupBox.Resources>
                             <StackPanel>
-                                <ContentControl Content="{Binding ManualPowerCheck}"
+                                <ContentControl Content="{Binding Params.ManualPowerCheck}"
                                                 ContentTemplate="{StaticResource PowerCheckBoxTemplate}" />
-                                <ContentControl Content="{Binding MasterPowerCheck}"
+                                <ContentControl Content="{Binding Params.MasterPowerCheck}"
                                                 ContentTemplate="{StaticResource PowerCheckBoxTemplate}" />
-                                <ContentControl Content="{Binding FanPowerCheck}"
+                                <ContentControl Content="{Binding Params.FanPowerCheck}"
                                                 ContentTemplate="{StaticResource PowerCheckBoxTemplate}" />
-                                <ContentControl Content="{Binding LaserPowerCheck}"
+                                <ContentControl Content="{Binding Params.LaserPowerCheck}"
                                                 ContentTemplate="{StaticResource PowerCheckBoxTemplate}" />
-                                <ContentControl Content="{Binding MotorPowerCheck}"
+                                <ContentControl Content="{Binding Params.MotorPowerCheck}"
                                                 ContentTemplate="{StaticResource PowerCheckBoxTemplate}" />
                             </StackPanel>
                         </GroupBox>
@@ -183,12 +176,19 @@
                                     <RowDefinition />
                                     <RowDefinition />
                                 </Grid.RowDefinitions>
-                                <Button Grid.Column="0"> Up 1 step</Button>
-                                <Button Grid.Column="1">Up 10 steps</Button>
-                                <Button Grid.Column="2">Up 200 steps</Button>
-                                <Button Grid.Column="0" Grid.Row="1">Down 1 step</Button>
-                                <Button Grid.Column="1" Grid.Row="1">Down 10 steps</Button>
-                                <Button Grid.Column="2" Grid.Row="1">Down 200 steps</Button>
+                                <Grid.Resources>
+                                    <Style TargetType="Button">
+                                        <Setter Property="Command" Value="{Binding FocusCommand}" />
+                                        <Setter Property="CommandParameter"
+                                                Value="{Binding Path=Tag, RelativeSource={RelativeSource Self}}" />
+                                    </Style>
+                                </Grid.Resources>
+                                <Button Grid.Column="0" Tag="+1"> Up 1 step</Button>
+                                <Button Grid.Column="1" Tag="+10">Up 10 steps</Button>
+                                <Button Grid.Column="2" Tag="+100">Up 100 steps</Button>
+                                <Button Grid.Column="0" Tag="-1" Grid.Row="1">Down 1 step</Button>
+                                <Button Grid.Column="1" Tag="-10" Grid.Row="1">Down 10 steps</Button>
+                                <Button Grid.Column="2" Tag="-100" Grid.Row="1">Down 100 steps</Button>
                             </Grid>
                         </GroupBox>
                     </WrapPanel>

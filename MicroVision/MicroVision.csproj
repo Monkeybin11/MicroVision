@@ -49,8 +49,8 @@
     <Reference Include="Microsoft.Practices.Unity.RegistrationByConvention, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
       <HintPath>..\packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
     </Reference>
-    <Reference Include="Prism, Version=6.3.0.0, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
-      <HintPath>..\packages\Prism.Core.6.3.0\lib\net45\Prism.dll</HintPath>
+    <Reference Include="Prism, Version=7.0.0.396, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
+      <HintPath>..\packages\Prism.Core.7.0.0.396\lib\net45\Prism.dll</HintPath>
     </Reference>
     <Reference Include="Prism.Unity.Wpf, Version=6.3.0.0, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.Unity.6.3.0\lib\net45\Prism.Unity.Wpf.dll</HintPath>
@@ -142,6 +142,14 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MicroVision.Core\MicroVision.Core.csproj">
+      <Project>{d282d7e2-e6bf-4208-bc87-283d836e94ad}</Project>
+      <Name>MicroVision.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MicroVision.Modules.ImagePanel\MicroVision.Modules.ImagePanel.csproj">
+      <Project>{0E73ABBB-C5DC-4CEE-9E47-39EC5DDCB2D8}</Project>
+      <Name>MicroVision.Modules.ImagePanel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MicroVision.Modules.Menu\MicroVision.Modules.Menu.csproj">
       <Project>{fa8bc10a-a970-40f3-9ff5-c2a651da8ff2}</Project>
       <Name>MicroVision.Modules.Menu</Name>
@@ -149,6 +157,10 @@
     <ProjectReference Include="..\MicroVision.Modules.ParameterPanel\MicroVision.Modules.ParameterPanel.csproj">
       <Project>{7BE9E51B-C04F-46E8-BC02-6CC60E6AE06F}</Project>
       <Name>MicroVision.Modules.ParameterPanel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MicroVision.Modules.Statusbar\MicroVision.Modules.Statusbar.csproj">
+      <Project>{048ca23a-2141-4e31-8393-99ad1f639844}</Project>
+      <Name>MicroVision.Modules.Statusbar</Name>
     </ProjectReference>
     <ProjectReference Include="..\MicroVision.Modules.StatusPanel\MicroVision.Modules.StatusPanel.csproj">
       <Project>{FF786C60-F2CA-4B7A-9EE8-F7097734A572}</Project>
