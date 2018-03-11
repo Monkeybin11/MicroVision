@@ -39,6 +39,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Behaviors\InputBindingsManager.cs" />
     <Compile Include="Converter\InvertBooleanConverter.cs" />
     <Compile Include="Events\CaptureEvents.cs" />
     <Compile Include="Events\ExceptionEvents.cs" />
