@@ -134,6 +134,7 @@
     <Compile Include="GrpcReference\CameraControllerServiceGrpc.cs" />
     <Compile Include="GrpcReference\CameraService.cs" />
     <Compile Include="GrpcReference\CameraServiceGrpc.cs" />
+    <Compile Include="Models\GrpcConnectionEstablisher.cs" />
     <Compile Include="Models\ITrigger.cs" />
     <Compile Include="OnErrorArgs.cs" />
     <Compile Include="Properties\Annotations.cs" />

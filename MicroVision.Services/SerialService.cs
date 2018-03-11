@@ -25,7 +25,6 @@ namespace MicroVision.Services
             IRpcService rpcService)
         {
             _log = log;
-
             _eventAggregator = eventAggregator;
             _rpcService = rpcService;
             _eventAggregator.GetEvent<ShutDownEvent>().Subscribe(RestoreRpcStatus);
@@ -97,6 +96,7 @@ namespace MicroVision.Services
             return ret;
         }
 
+        // should be removed 
         private void RestoreRpcStatus()
         {
             try

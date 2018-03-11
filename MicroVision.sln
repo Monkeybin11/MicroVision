@@ -50,6 +50,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MicroVisionWpfProject", "Mi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroVision.Modules.ImagePanel", "MicroVision.Modules.ImagePanel\MicroVision.Modules.ImagePanel.csproj", "{0E73ABBB-C5DC-4CEE-9E47-39EC5DDCB2D8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroVision.Test", "MicroVision.Test\MicroVision.Test.csproj", "{CDA261AA-38A7-408D-934A-D562E3EBC315}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		ServiceShared\ServiceShared.projitems*{6976e890-16ec-413c-9106-62ab4811f6e3}*SharedItemsImports = 4
@@ -121,6 +123,10 @@ Global
 		{0E73ABBB-C5DC-4CEE-9E47-39EC5DDCB2D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E73ABBB-C5DC-4CEE-9E47-39EC5DDCB2D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E73ABBB-C5DC-4CEE-9E47-39EC5DDCB2D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDA261AA-38A7-408D-934A-D562E3EBC315}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDA261AA-38A7-408D-934A-D562E3EBC315}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDA261AA-38A7-408D-934A-D562E3EBC315}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDA261AA-38A7-408D-934A-D562E3EBC315}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -143,6 +149,7 @@ Global
 		{CF781E4C-0935-4C51-AA55-962F45489BEB} = {F3770C02-533C-4D14-9D37-7A9E6A8BB674}
 		{048CA23A-2141-4E31-8393-99AD1F639844} = {2B025595-0C1C-499A-8F17-07C29EABDD33}
 		{0E73ABBB-C5DC-4CEE-9E47-39EC5DDCB2D8} = {2B025595-0C1C-499A-8F17-07C29EABDD33}
+		{CDA261AA-38A7-408D-934A-D562E3EBC315} = {2B025595-0C1C-499A-8F17-07C29EABDD33}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0848A97E-E3F5-4BF1-899F-F6EB1A95927D}
