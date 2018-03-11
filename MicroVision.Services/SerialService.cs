@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using Google.Protobuf.WellKnownTypes;
-using Grpc.Core;
 using MicroVision.Core.Events;
 using MicroVision.Core.Exceptions;
 using MicroVision.Core.Models;
@@ -14,71 +11,6 @@ using Services;
 
 namespace MicroVision.Services
 {
-    public class CameraControllerTrigger : ITrigger
-    {
-        public delegate void ErrorEvent(object sender, OnErrorArgs args);
-
-        private object _triggerLock = new object();
-        private AsyncDuplexStreamingCall<ArmTriggerRequest, ArmTriggerResponse> _stream;
-
-        private ArmTriggerRequest _requestBuffer = new ArmTriggerRequest()
-        {
-            ArmTrigger = true,
-            MaxTriggerTimeUs = 100000,
-            LaserConfiguration = new LaserStatusRequest() {DurationUs = 30, Intensity = 255}
-        };
-
-        public void InvokeTrigger()
-        {
-            lock (_triggerLock)
-            {
-                _stream.RequestStream.WriteAsync(_requestBuffer);
-            }
-        }
-
-        public void DestroyTrigger()
-        {
-            lock (_triggerLock)
-            {
-                _stream.RequestStream.CompleteAsync().Wait();
-            }
-        }
-
-        public CameraControllerTrigger(AsyncDuplexStreamingCall<ArmTriggerRequest, ArmTriggerResponse> stream)
-        {
-            _stream = stream;
-            Task.Run(() => HandleResponse());
-        }
-
-        private async void HandleResponse()
-        {
-            try
-            {
-                while (await _stream.ResponseStream.MoveNext(CancellationToken.None))
-                {
-                    var current = _stream.ResponseStream.Current;
-                    if (current.Error != null)
-                    {
-                        OnError?.Invoke(this, new OnErrorArgs() {Message = current.Error.Message});
-                    }
-
-                    if (current.TriggerAutoDisarmed)
-                    {
-                        OnError?.Invoke(this,
-                            new OnErrorArgs() {Message = "Laser not reset. Check the wiring to the camera"});
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                OnError?.Invoke(this, new OnErrorArgs() {Message = e.Message});
-            }
-        }
-
-        public event ErrorEvent OnError;
-    }
-
-
     public interface ISerialService
     {
         /// <summary>
@@ -86,13 +18,13 @@ namespace MicroVision.Services
         /// </summary>
         /// <param name="s"> com port name</param>
         /// <returns>whether the port is connected successfully</returns>
-        bool Connect(string s);
+        void Connect(string s);
 
         /// <summary>
         /// Disconnect from the current port
         /// </summary>
         /// <returns>whether the port is disconnected successfully</returns>
-        bool Disconnect();
+        void Disconnect();
 
         Object DispatchCommand(SerialCommand serialCommand);
 
@@ -166,11 +98,12 @@ namespace MicroVision.Services
         /// <param name="connectionExceptionPrompt"></param>
         /// <param name="rethrow"></param>
         /// <param name="checkError"></param>
+        /// <param name="notifyError">when the error is insiginficant it may not be notified</param>
         /// <param name="onError"></param>
         /// <returns></returns>
         private TReturnType TryInvoke<TReturnType>([NotNull] Func<TReturnType> func,
             string runtimeExceptionPrompt, string connectionExceptionPrompt = CameraControllerConnectionErrorPrompt,
-            bool rethrow = false, bool checkError = true, Action<string> onError = null)
+            bool rethrow = false, bool checkError = true, bool notifyError = true, Action<string> onError = null)
         {
             var ret = default(TReturnType);
             try
@@ -211,7 +144,10 @@ namespace MicroVision.Services
 
             if (ret == null || hasError)
             {
-                _eventAggregator.GetEvent<ExceptionEvent>()
+                onError?.Invoke(error?.Message);
+
+                if (notifyError)
+                    _eventAggregator.GetEvent<ExceptionEvent>()
                     .Publish(new Exception($"{runtimeExceptionPrompt} {error?.Message}"));
             }
 
@@ -248,13 +184,10 @@ namespace MicroVision.Services
         /// Connect to the serial port
         /// </summary>
         /// <param name="s"> com port name</param>
-        /// <returns>whether the port is connected successfully</returns>
-        public bool Connect(string s)
+        public void Connect(string s)
         {
             var ret = TryInvoke(() => _rpcService.CameraControllerClient.RequestConnectToPort(
                 new ConnectionRequest() {ComPort = s, Connect = true}), $"Failed to connect to {s}");
-
-            if (ret == null || ret?.Error != null) return false;
 
             if (!ret.IsConnected)
             {
@@ -266,8 +199,6 @@ namespace MicroVision.Services
                 _eventAggregator.GetEvent<ComConnectedEvent>().Publish();
                 _eventAggregator.GetEvent<NotifyOperationEvent>().Publish($"{s} successfully connected");
             }
-
-            return true;
         }
 
         /// <summary>
