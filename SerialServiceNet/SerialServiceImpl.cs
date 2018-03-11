@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -28,9 +29,18 @@ namespace SerialServiceNet
         private Task _dataListener;
         private bool captureMonopoly = false;
 
+#if DEBUG
+        private SerialConversationLogger _conversationLogger;
+        private FileStream _conversationFileStream;
+#endif
         public SerialSericeImpl()
         {
             _serialPort = new SerialPortStream();
+
+#if DEBUG
+            _conversationFileStream = new FileStream("conversation_log.txt", FileMode.Create);
+            _conversationLogger = new SerialConversationLogger(_conversationFileStream);
+#endif
         }
 
         private void ReadStreamListener()
@@ -42,6 +52,9 @@ namespace SerialServiceNet
                 {
                     var line = _serialPort.ReadLine();
                     _resp.FeedMessage(line);
+#if DEBUG
+                    _conversationLogger.ReceivedBySerial(line);
+#endif
                 }
                 catch (Exception)
                 {
@@ -96,17 +109,17 @@ namespace SerialServiceNet
             response.Error = InvokeCommand("P", new[] {laserConfiguration.Intensity.ToString()}, true);
             if (response.Error != null) goto exit;
 
-            response.Error = InvokeCommand("D", new[] { laserConfiguration.DurationUs.ToString() }, true);
+            response.Error = InvokeCommand("D", new[] {laserConfiguration.DurationUs.ToString()}, true);
             if (response.Error != null) goto exit;
 
-            response.Error = InvokeCommand("M", new[] { request.MaxTriggerTimeUs.ToString() }, true);
+            response.Error = InvokeCommand("M", new[] {request.MaxTriggerTimeUs.ToString()}, true);
             if (response.Error != null) goto exit;
 
             response.TriggerAutoDisarmed = false;
             if (request.ArmTrigger)
             {
                 string outString = "";
-                response.Error = InvokeCommandWithResponse("B", null, ref outString, calledByArmTrigger:true);
+                response.Error = InvokeCommandWithResponse("B", null, ref outString, calledByArmTrigger: true);
                 if (response.Error != null) goto exit;
 
                 response.TriggerAutoDisarmed = outString == "1";
@@ -368,7 +381,8 @@ namespace SerialServiceNet
             return Task.FromResult(powerStatusResponse);
         }
 
-        public override async Task StreamRequestArmTrigger(IAsyncStreamReader<ArmTriggerRequest> requestStream, IServerStreamWriter<ArmTriggerResponse> responseStream, ServerCallContext context)
+        public override async Task StreamRequestArmTrigger(IAsyncStreamReader<ArmTriggerRequest> requestStream,
+            IServerStreamWriter<ArmTriggerResponse> responseStream, ServerCallContext context)
         {
             while (await requestStream.MoveNext())
             {

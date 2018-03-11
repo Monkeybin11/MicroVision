@@ -9,10 +9,10 @@ using static Services.ServiceHelper;
 
 namespace SerialServiceNet
 {
-    public partial class SerialSericeImpl : CameraController.CameraControllerBase
+    public partial class SerialSericeImpl
     {
         private Object _invokeLock = new Object();
-
+        
         private Error InvokeCommand(string command, string[] param, bool calledByArmTrigger = false)
         {
             string tmp = "";
@@ -44,7 +44,7 @@ namespace SerialServiceNet
                 : command + "\n";
             try
             {
-                Task<string> responseTask = null;
+                ResponseDispatcher.QueuedResponseHandler item = null;
                 lock (_invokeLock)
                 {
                     if (timeout != 0)
@@ -52,7 +52,7 @@ namespace SerialServiceNet
                         // deprecated return GetImmediateResponse(ref response, timeout);
                         try
                         {
-                            responseTask = _resp.WaitForResultAsync(command, timeout);
+                            item = _resp.RegisterAwaiter(command);
                         }
                         catch (Exception e)
                         {
@@ -61,12 +61,14 @@ namespace SerialServiceNet
                     }
 
                     _serialPort.Write(stringToSend);
+#if DEBUG
+                    _conversationLogger.WrittenToSerial(stringToSend);
+#endif
                 }
 
-                if (responseTask != null)
+                if (item != null)
                 {
-                    responseTask.Wait();
-                    response = responseTask.Result;
+                    response = _resp.WaitForResultAsync(item).Result;
                 }
             }
             catch (Exception e)

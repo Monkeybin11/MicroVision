@@ -10,7 +10,7 @@ namespace SerialServiceNet
 {
     public class ResponseDispatcher
     {
-        private class QueuedResponseHandler
+        public class QueuedResponseHandler
         {
             public string Identifier = null;
             public ManualResetEvent Signal = new ManualResetEvent(false);
@@ -48,7 +48,10 @@ namespace SerialServiceNet
                 {
                     foundItem = _pool.Where(handler => handler.Identifier == prefix).First();
                 }
-                catch (Exception e){}
+                catch (Exception e)
+                {
+                    // ignored
+                }
 
                 if (foundItem != null)
                 {
@@ -59,20 +62,30 @@ namespace SerialServiceNet
             }
         }
 
-        public Task<string> WaitForResultAsync(string responsePrefix, int timeout = 1000)
+        /// <summary>
+        /// This sync function ensure the message is successfully queued into the buffer
+        /// </summary>
+        /// <param name="responsePrefix"></param>
+        /// <param name="timeout"></param>
+        public QueuedResponseHandler RegisterAwaiter(string responsePrefix)
+        {
+            var item = new QueuedResponseHandler()
+            {
+                Identifier = responsePrefix,
+                Signal = new ManualResetEvent(false)
+            };
+            lock (_poolLock)
+            {
+                _pool.Add(item);
+            }
+
+            return item;
+        }
+
+        public Task<string> WaitForResultAsync(QueuedResponseHandler item,int timeout = 1000)
         {
             return Task.Run(() =>
             {
-                var item = new QueuedResponseHandler()
-                {
-                    Identifier = responsePrefix,
-                    Signal = new ManualResetEvent(false)
-                };
-                lock (_poolLock)
-                {   
-                    _pool.Add(item);
-                }
-
                 var triggered = item.Signal.WaitOne(timeout);
 
                 lock (_poolLock)
@@ -80,7 +93,7 @@ namespace SerialServiceNet
                     _pool.Remove(item);
                 }
 
-                if (!triggered) throw new TimeoutException($"Wait for result of command {responsePrefix} time out");
+                if (!triggered) throw new TimeoutException($"Wait for result of command {item.Identifier} time out");
                 return Task.FromResult(item.MessageBody);
                 
             });
@@ -89,7 +102,8 @@ namespace SerialServiceNet
 
         public string WaitForResult(string responsePrefix, int timeout = 1000)
         {
-            var task = WaitForResultAsync(responsePrefix, timeout);
+            var item = RegisterAwaiter(responsePrefix);
+            var task = WaitForResultAsync(item, timeout);
             task.Wait();
             return task.Result;
         }
