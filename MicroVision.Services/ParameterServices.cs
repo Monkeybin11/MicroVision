@@ -78,8 +78,8 @@ namespace MicroVision.Services
         private FieldParameter<string> _outputDirectory =
             new FieldParameter<string> {Label = "Output directory", Value = @"C:\"};
 
-        private SelectionParameter<string> _comSelection = new SelectionParameter<string> { Label = "COM" };
-        private SelectionParameter<string> _vimbaSelection = new SelectionParameter<string> { Label = "Camera" };
+        private SelectionParameter<string> _comSelection = new SelectionParameter<string> {Label = "COM"};
+        private SelectionParameter<string> _vimbaSelection = new SelectionParameter<string> {Label = "Camera"};
 
         private CheckParameter _manualPowerCheck =
             new CheckParameter {Label = "Manual", Value = false, Enabled = false};
@@ -204,6 +204,13 @@ namespace MicroVision.Services
                 var serializer = new JsonSerializer();
                 serializer.Serialize(file, this);
             }
+        }
+
+        /// <summary>
+        /// Parameterless constructor for json serialziation
+        /// </summary>
+        public ParameterServices()
+        {
         }
 
         /// <summary>

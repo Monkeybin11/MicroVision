@@ -18,11 +18,6 @@ namespace MicroVision.Services
 {
     public class CaptureService : ICaptureService
     {
-        private readonly ISerialService _serialService;
-        private readonly ICameraService _cameraService;
-        private readonly IEventAggregator _eventAggregator;
-        private readonly IParameterServices _parameterService;
-
         public CaptureService(ISerialService serialService, ICameraService cameraService, IEventAggregator eventAggregator, IParameterServices parameterService)
         {
             _serialService = serialService;
@@ -34,12 +29,44 @@ namespace MicroVision.Services
 
             _triggerTimer = new Timer();
             _triggerTimer.Elapsed += TriggerTimerOnElapsed;
+
+            ConfigureParameterChangeHandler();
+
         }
+
+        private readonly ISerialService _serialService;
+        private readonly ICameraService _cameraService;
+        private readonly IEventAggregator _eventAggregator;
+        private readonly IParameterServices _parameterService;
+
+        private bool _capturing;
+        private Timer _triggerTimer = null;
+        private CameraControllerTrigger _streamCameraControllerTrigger;
+        private CameraTrigger _streamImage;
+
+        private int _remains = 0;
+
+        private object _configurationLock = new object();
 
         private void Dispose()
         {
             Stop();
             _triggerTimer.Dispose();
+        }
+
+        public void Capture(int interval, int count)
+        {
+            _capturing = true;
+            _streamCameraControllerTrigger = _serialService.StreamTrigger();
+            _streamImage = _cameraService.StreamAcquisition();
+
+            _streamImage.OnError += CameraTriggerError;
+            _streamCameraControllerTrigger.OnError += CameraControllerTriggerOnError;
+            
+            _triggerTimer.Interval = interval;
+            _remains = count;
+            _triggerTimer.Start();
+            _cameraService.ConfigureCamera(new CameraParametersRequest() { Params = new CameraParameters() { NumFrames = 1, ExposureTime = 45, FrameRate = 390, Gain = 0 }, Write = true });
         }
 
         private void TriggerTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
@@ -58,27 +85,44 @@ namespace MicroVision.Services
             }
         }
 
-        private bool _capturing;
-        private Timer _triggerTimer = null;
-        private CameraControllerTrigger _streamCameraControllerTrigger;
-        private CameraTrigger _streamImage;
-
-        private int _remains = 0;
-
-        public void Capture(int interval, int count)
+        private void ConfigureParameterChangeHandler()
         {
-            _capturing = true;
-            _streamCameraControllerTrigger = _serialService.StreamTrigger();
-            _streamImage = _cameraService.StreamAcquisition();
+            _parameterService.Gain.PropertyChanged += CameraPropertyChangedHandler;
+            _parameterService.ExposureTime.PropertyChanged += CameraPropertyChangedHandler;
 
-            _streamImage.OnError += CameraTriggerError;
-            _streamCameraControllerTrigger.OnError += CameraControllerTriggerOnError;
-            
-            _triggerTimer.Interval = interval;
-            _remains = count;
-            _triggerTimer.Start();
-            _cameraService.ConfigureCamera(new CameraParametersRequest() { Params = new CameraParameters() { NumFrames = 1, ExposureTime = 45, FrameRate = 30, Gain = 10 }, Write = true });
+            _parameterService.LaserDuration.PropertyChanged += LaserPropertyChangedHandler;
         }
+
+
+
+        #region Parameter changed monitor
+        private void CameraPropertyChangedHandler(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            lock (_configurationLock)
+            {
+                _cameraService.ConfigureCamera(new CameraParametersRequest()
+                {
+                    Params = new CameraParameters()
+                    {
+                        NumFrames = 1,
+                        ExposureTime = _parameterService.ExposureTime.Value,
+                        Gain = _parameterService.Gain.Value,
+                        FrameRate = 390
+                    },
+                    Write = true
+                });
+            }
+        }
+
+        private void LaserPropertyChangedHandler(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            lock (_configurationLock)
+            {
+                _streamCameraControllerTrigger.SetLaserDuration(_parameterService.LaserDuration.Value);
+            }
+        }
+
+        #endregion
 
         private void CameraControllerTriggerOnError(object sender, OnErrorArgs args)
         {

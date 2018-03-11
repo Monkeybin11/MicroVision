@@ -29,11 +29,23 @@ namespace MicroVision.Services
             }
         }
 
+        public void SetLaserDuration(int duration)
+        {
+            _requestBuffer.LaserConfiguration.DurationUs = duration;
+        }
         public void DestroyTrigger()
         {
             lock (_triggerLock)
             {
-                _stream.RequestStream.CompleteAsync().Wait();
+                try
+                {
+                    _stream.RequestStream.CompleteAsync().Wait();
+                }
+                catch (Exception)
+                {
+
+                    // ignored
+                }
             }
         }
 
