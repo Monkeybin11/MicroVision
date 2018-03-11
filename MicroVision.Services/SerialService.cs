@@ -14,7 +14,7 @@ using Services;
 
 namespace MicroVision.Services
 {
-    public partial class CameraControllerTrigger : ITrigger
+    public class CameraControllerTrigger : ITrigger
     {
         public delegate void ErrorEvent(object sender, OnErrorArgs args);
 

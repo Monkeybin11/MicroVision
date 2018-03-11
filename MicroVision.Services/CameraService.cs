@@ -22,6 +22,7 @@ namespace MicroVision.Services
     public class CameraTrigger : ITrigger
     {
         private AsyncDuplexStreamingCall<CameraAcquisitionRequest, BufferedFramesResponse> _stream = null;
+        private readonly CameraService _srv;
         private CameraAcquisitionRequest _buf = new CameraAcquisitionRequest();
         private object _lock = new object();
         private async void HandleResponse()
@@ -41,6 +42,10 @@ namespace MicroVision.Services
                         OnError?.Invoke(this,
                             new OnErrorArgs() { Message = "Failed to acquire image" });
                     }
+                    else
+                    {
+                        _srv.Image = current.Images[0].ToByteArray();
+                    }
                     
                 }
             }
@@ -49,9 +54,11 @@ namespace MicroVision.Services
                 OnError?.Invoke(this, new OnErrorArgs() { Message = e.Message });
             }
         }
-        public CameraTrigger(AsyncDuplexStreamingCall<CameraAcquisitionRequest, BufferedFramesResponse> stream)
+        public CameraTrigger(AsyncDuplexStreamingCall<CameraAcquisitionRequest, BufferedFramesResponse> stream, CameraService srv)
         {
             _stream = stream;
+            _srv = srv;
+            Task.Run(()=>HandleResponse());
         }
 
         public void InvokeTrigger()
@@ -81,6 +88,7 @@ namespace MicroVision.Services
         double GetTemperature();
         CameraTrigger StreamAcquisition();
         byte[] Image { get; set; }
+        void ConfigureCamera(CameraParametersRequest param);
     }
 
     public class CameraService : ICameraService, INotifyPropertyChanged
@@ -106,20 +114,6 @@ namespace MicroVision.Services
 
 
             _eventAggregator.GetEvent<ShutDownEvent>().Subscribe(RestoreCameraRpcStatus);
-
-            var timer = new Timer(5000);
-            timer.Elapsed += test;
-            timer.Start();
-        }
-
-        private void test(object sender, ElapsedEventArgs e)
-        {
-            using (var fs = File.OpenRead(@"C:\Users\wuyua\imgoutput\2018_02_06_17_24_49_435033.png"))
-            {
-                var buf = new byte[fs.Length];
-                fs.Read(buf, 0, (int) fs.Length);
-                Image = buf;
-            }
         }
 
         private void RestoreCameraRpcStatus()
@@ -189,6 +183,10 @@ namespace MicroVision.Services
         }
         #region Service methods
 
+        public void ConfigureCamera(CameraParametersRequest param)
+        {
+            var ret = TryInvoke(() => _rpcService.CameraClient.RequestCameraParameters(param), "Failed to update camera list");
+        }
         public List<string> CameraUpdateList()
         {
             var ret = TryInvoke(() => _rpcService.CameraClient.RequestCameraList(new CameraListRequest()), "Failed to update camera list");
@@ -245,7 +243,7 @@ namespace MicroVision.Services
 
         public CameraTrigger StreamAcquisition()
         {
-            return new  CameraTrigger(_rpcService.CameraClient.RequestFrameStream());
+            return new  CameraTrigger(_rpcService.CameraClient.RequestFrameStream(), this);
         }
 
         #endregion
