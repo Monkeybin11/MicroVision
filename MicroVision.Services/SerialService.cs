@@ -24,7 +24,7 @@ namespace MicroVision.Services
         private ArmTriggerRequest _requestBuffer = new ArmTriggerRequest()
         {
             ArmTrigger = true,
-            MaxTriggerTimeUs = 10000,
+            MaxTriggerTimeUs = 100000,
             LaserConfiguration = new LaserStatusRequest() {DurationUs = 30, Intensity = 255}
         };
 

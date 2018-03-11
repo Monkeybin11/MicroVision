@@ -63,7 +63,7 @@ namespace MicroVision.Services
             _capturing = true;
             _streamCameraControllerTrigger = _serialService.StreamTrigger();
             _streamImage = _cameraService.StreamAcquisition();
-            _cameraService.ConfigureCamera(new CameraParametersRequest(){Params = new CameraParameters(){NumFrames = 1, ExposureTime = 1000, FrameRate = 30, Gain = 20}, Write = true});
+            _cameraService.ConfigureCamera(new CameraParametersRequest(){Params = new CameraParameters(){NumFrames = 1, ExposureTime = 45, FrameRate = 30, Gain = 10}, Write = true});
             
             _triggerTimer.Interval = interval;
             _remains = count;
