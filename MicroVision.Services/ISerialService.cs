@@ -19,8 +19,6 @@ namespace MicroVision.Services
         /// <returns>whether the port is disconnected successfully</returns>
         void Disconnect();
 
-        Object DispatchCommand(SerialCommand serialCommand);
-
         /// <summary>
         /// get the com list
         /// </summary>

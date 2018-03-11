@@ -11,63 +11,6 @@ using Services;
 
 namespace MicroVision.Services
 {
-    public interface ISerialService
-    {
-        /// <summary>
-        /// Connect to the serial port
-        /// </summary>
-        /// <param name="s"> com port name</param>
-        /// <returns>whether the port is connected successfully</returns>
-        void Connect(string s);
-
-        /// <summary>
-        /// Disconnect from the current port
-        /// </summary>
-        /// <returns>whether the port is disconnected successfully</returns>
-        void Disconnect();
-
-        Object DispatchCommand(SerialCommand serialCommand);
-
-        /// <summary>
-        /// get the com list
-        /// </summary>
-        /// <returns>null for failure</returns>
-        List<string> UpdateComList();
-
-        /// <summary>
-        /// Assert if serial port is already connected
-        /// </summary>
-        /// <returns></returns>
-        bool IsConnected();
-
-        /// <summary>
-        /// Control the power configuration.
-        /// </summary>
-        /// <param name="master">Master power</param>
-        /// <param name="fan">Fan power</param>
-        /// <param name="motor">Motor power</param>
-        /// <param name="laser">Laser power</param>
-        void ControlPower(bool master, bool fan, bool motor, bool laser);
-
-        /// <summary>
-        /// Read the power code. Throw ComRunTimeException if error occured.
-        /// </summary>
-        /// <returns>power code</returns>
-        int ReadPower();
-
-        /// <summary>
-        /// Control the focus motor
-        /// </summary>
-        /// <param name="steps">Movement steps</param>
-        /// <param name="slowdown">Slow down factor</param>
-        /// <param name="autoPower">Always true</param>
-        /// <param name="driverPower">Always true</param>
-        void ControlFocus(int steps, int slowdown = 1000, bool autoPower = true, bool driverPower = true);
-
-        double GetCurrent();
-        CameraControllerTrigger StreamTrigger();
-    }
-
     public class SerialService : ISerialService
     {
         private const string CameraControllerConnectionErrorPrompt =
@@ -170,8 +113,6 @@ namespace MicroVision.Services
 
         public static void ParsePowerCode(int powerCode, out bool master, out bool fan, out bool motor, out bool laser)
         {
-            //int powerCode = Convert.ToInt32(master) << 0 | Convert.ToInt32(laser) << 1 | Convert.ToInt32(motor) << 2 |
-            //                Convert.ToInt32(fan) << 3;
             master = Convert.ToBoolean(powerCode & (1 << 0));
             laser = Convert.ToBoolean(powerCode & (1 << 1));
             motor = Convert.ToBoolean(powerCode & (1 << 2));
@@ -205,76 +146,13 @@ namespace MicroVision.Services
         /// Disconnect from the current port
         /// </summary>
         /// <returns>whether the port is disconnected successfully</returns>
-        public bool Disconnect()
+        public void Disconnect()
         {
             var ret = TryInvoke(() => _rpcService.CameraControllerClient.RequestConnectToPort(
                 new ConnectionRequest() {Connect = false}), "Failed to disconnect");
-            if (ret?.Error != null || ret == null) return false;
+            if (ret?.Error != null || ret == null) return;
             _eventAggregator.GetEvent<ComDisconnectedEvent>().Publish(true);
             _eventAggregator.GetEvent<NotifyOperationEvent>().Publish("COM port successfully closed");
-            return true;
-        }
-
-
-        public Object DispatchCommand(SerialCommand serialCommand)
-        {
-            object ret = null;
-            var failedPrompt = $"Failed to invoke {serialCommand.Command.ToString()}";
-            switch (serialCommand.Command)
-            {
-                case SerialCommand.RpcSerialCommand.GetInfo:
-                    ret = TryInvoke(() => _rpcService.CameraControllerClient.GetInfo(new Empty()),
-                        failedPrompt);
-                    break;
-                case SerialCommand.RpcSerialCommand.IsConnected:
-                    ret = TryInvoke(() => _rpcService.CameraControllerClient.IsConnected(new Empty()),
-                        failedPrompt);
-                    break;
-
-                case SerialCommand.RpcSerialCommand.RequestPowerStatus:
-                    ret = !(serialCommand.Argument is PowerStatusRequest powerStatusRequest)
-                        ? null
-                        : TryInvoke(() => _rpcService.CameraControllerClient.RequestPowerStatus(powerStatusRequest),
-                            failedPrompt);
-                    break;
-
-                case SerialCommand.RpcSerialCommand.RequestCurrentStatus:
-                    ret = TryInvoke(
-                        () => _rpcService.CameraControllerClient.RequestCurrentStatus(new CurrentStatusRequest()),
-                        failedPrompt);
-                    break;
-
-                case SerialCommand.RpcSerialCommand.RequestFocusStatus:
-                    ret = !(serialCommand.Argument is FocusStatusRequest focusStatusRequest)
-                        ? null
-                        : TryInvoke(() => _rpcService.CameraControllerClient.RequestFocusStatus(focusStatusRequest),
-                            failedPrompt);
-                    break;
-
-                case SerialCommand.RpcSerialCommand.RequestLaserStatus:
-                    ret = !(serialCommand.Argument is LaserStatusRequest laserStatusRequest)
-                        ? null
-                        : TryInvoke(() => _rpcService.CameraControllerClient.RequestLaserStatus(laserStatusRequest),
-                            failedPrompt);
-                    break;
-
-                case SerialCommand.RpcSerialCommand.RequestArmTrigger:
-                    ret = !(serialCommand.Argument is ArmTriggerRequest armTriggerRequest)
-                        ? null
-                        : TryInvoke(() => _rpcService.CameraControllerClient.RequestArmTrigger(armTriggerRequest),
-                            failedPrompt);
-                    break;
-
-                case SerialCommand.RpcSerialCommand.RequestSoftwareReset:
-                    ret = TryInvoke(() => _rpcService.CameraControllerClient.RequestSoftwareReset(new Empty()),
-                        failedPrompt);
-                    break;
-
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-
-            return ret;
         }
 
         /// <summary>
@@ -294,17 +172,15 @@ namespace MicroVision.Services
             return new CameraControllerTrigger(trigger);
         }
 
-        #region Invocation helpers
-
         /// <summary>
-        /// Assert if serial port is already connected
+        /// Assert if serial port is already connected. <remarks>This service method will throw to interrupt the routine of code.</remarks> 
         /// </summary>
         /// <returns></returns>
         public bool IsConnected()
         {
-            var ret =
-                DispatchCommand(new SerialCommand() {Command = SerialCommand.RpcSerialCommand.IsConnected}) as
-                    ConnectionResponse;
+            var ret = TryInvoke(() => _rpcService.CameraControllerClient.IsConnected(new Empty()),
+                "Failed to query COM connection status");
+
             if (ret == null || ret?.Error != null) throw new ComRuntimeException("Cannot get connection status");
             return ret.IsConnected;
         }
@@ -320,29 +196,22 @@ namespace MicroVision.Services
         {
             int powerCode = Convert.ToInt32(master) << 0 | Convert.ToInt32(laser) << 1 | Convert.ToInt32(motor) << 2 |
                             Convert.ToInt32(fan) << 3;
-            var ret =
-                DispatchCommand(new SerialCommand()
-                    {
-                        Command = SerialCommand.RpcSerialCommand.RequestPowerStatus,
-                        Argument = new PowerStatusRequest() {PowerCode = powerCode, Write = true}
-                    }) as
-                    PowerStatusResponse;
-            if (ret == null || ret?.Error != null) throw new ComRuntimeException("Cannot control power");
+            TryInvoke(() =>
+                _rpcService.CameraControllerClient.RequestPowerStatus(
+                    new PowerStatusRequest() {PowerCode = powerCode, Write = true}),
+                "Failed to set the power configuration");
         }
 
         /// <summary>
         /// Read the power code. Throw ComRunTimeException if error occured.
+        /// <remarks>TODO: make it slient </remarks>
         /// </summary>
         /// <returns>power code</returns>
         public int ReadPower()
         {
-            var ret = DispatchCommand(new SerialCommand()
-            {
-                Command = SerialCommand.RpcSerialCommand.RequestPowerStatus,
-                Argument = new PowerStatusRequest() {Write = false}
-            }) as PowerStatusResponse;
+            var ret = TryInvoke(() =>
+                _rpcService.CameraControllerClient.RequestPowerStatus(new PowerStatusRequest() {Write = false}), "Failed to read the power configuration");
             if (ret == null || ret?.Error != null) throw new ComRuntimeException("Cannot get power code");
-
             return ret.PowerCode;
         }
 
@@ -356,31 +225,26 @@ namespace MicroVision.Services
         public void ControlFocus(int steps, int slowdown = 1000, bool autoPower = true, bool driverPower = true)
         {
             if (steps == 0) return;
-            var ret = DispatchCommand(new SerialCommand()
+            var ret = TryInvoke(() => _rpcService.CameraControllerClient.RequestFocusStatus(new FocusStatusRequest()
             {
-                Command = SerialCommand.RpcSerialCommand.RequestFocusStatus,
-                Argument = new FocusStatusRequest()
-                {
-                    Steps = steps,
-                    SlowdownFactor = slowdown,
-                    DriverPower = driverPower,
-                    AutoPower = autoPower
-                }
-            }) as FocusStatusResponse;
-            if (ret == null || ret?.Error != null) throw new ComRuntimeException("Cannot control focus");
+                Steps = steps,
+                SlowdownFactor = slowdown,
+                DriverPower = driverPower,
+                AutoPower = autoPower
+            }), "Failed to control the focus motor");
         }
 
+        /// <summary>
+        /// Read current
+        /// </summary>
+        /// <returns></returns>
         public double GetCurrent()
         {
-            var ret = DispatchCommand(new SerialCommand()
-            {
-                Command = SerialCommand.RpcSerialCommand.RequestCurrentStatus
-            }) as CurrentStatusResponse;
-            if (ret == null || ret?.Error != null) throw new ComRuntimeException("Cannot get current");
+            var ret = TryInvoke(
+                () => _rpcService.CameraControllerClient.RequestCurrentStatus(new CurrentStatusRequest()),
+                "Failed to read the current");
             return ret.Current;
         }
-
-        #endregion
 
         #endregion
     }
