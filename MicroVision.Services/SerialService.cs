@@ -50,10 +50,6 @@ namespace MicroVision.Services
 
             _eventAggregator = eventAggregator;
             _rpcService = rpcService;
-            //_eventAggregator.GetEvent<ComListUpdateRequestedEvent>().Subscribe(UpdateComList);
-            //_eventAggregator.GetEvent<ComCommandDispatchedEvent>().Subscribe(DispatchCommand);
-            //_eventAggregator.GetEvent<ComConnectionRequestedEvent>().Subscribe(Connect);
-            //_eventAggregator.GetEvent<ComDisconnectionRequestedEvent>().Subscribe(Disconnect);
             _eventAggregator.GetEvent<ShutDownEvent>().Subscribe(RestoreRpcStatus);
         }
 
