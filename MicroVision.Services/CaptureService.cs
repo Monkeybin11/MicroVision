@@ -6,7 +6,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Media.Imaging;
+using MicroVision.Core.Events;
+using MicroVision.Core.Exceptions;
 using MicroVision.Services.GrpcReference;
+using Prism.Events;
 using Services;
 using Timer = System.Timers.Timer;
 
@@ -26,13 +29,24 @@ namespace MicroVision.Services
     {
         private readonly ISerialService _serialService;
         private readonly ICameraService _cameraService;
+        private readonly IEventAggregator _eventAggregator;
 
-        public CaptureService(ISerialService serialService, ICameraService cameraService)
+        public CaptureService(ISerialService serialService, ICameraService cameraService, IEventAggregator eventAggregator)
         {
             _serialService = serialService;
             _cameraService = cameraService;
+            _eventAggregator = eventAggregator;
+
+            _eventAggregator.GetEvent<ShutDownEvent>().Subscribe(Dispose);
+
             _triggerTimer = new Timer();
             _triggerTimer.Elapsed += TriggerTimerOnElapsed;
+        }
+
+        private void Dispose()
+        {
+            Stop();
+            _triggerTimer.Dispose();
         }
 
         private void TriggerTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
@@ -63,11 +77,26 @@ namespace MicroVision.Services
             _capturing = true;
             _streamCameraControllerTrigger = _serialService.StreamTrigger();
             _streamImage = _cameraService.StreamAcquisition();
+
+            _streamImage.OnError += CameraTriggerError;
+            _streamCameraControllerTrigger.OnError += CameraControllerTriggerOnError;
+
             _cameraService.ConfigureCamera(new CameraParametersRequest(){Params = new CameraParameters(){NumFrames = 1, ExposureTime = 45, FrameRate = 30, Gain = 10}, Write = true});
             
             _triggerTimer.Interval = interval;
             _remains = count;
             _triggerTimer.Start();
+        }
+
+        private void CameraControllerTriggerOnError(object sender, OnErrorArgs args)
+        {
+            _eventAggregator.GetEvent<ExceptionEvent>().Publish(new ComRuntimeException(args.Message));
+
+        }
+
+        private void CameraTriggerError(object sender, OnErrorArgs args)
+        {
+            _eventAggregator.GetEvent<ExceptionEvent>().Publish(new CameraRuntimeException(args.Message));
         }
 
         public BitmapImage CurrentBitmapImage { get; set; }
@@ -78,7 +107,23 @@ namespace MicroVision.Services
         {
             _capturing = false;
             _triggerTimer.Stop();
-            _streamCameraControllerTrigger.DestroyTrigger();
+            try
+            {
+                _streamCameraControllerTrigger?.DestroyTrigger();
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
+            try
+            {
+                _streamImage?.DestroyTrigger();
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
         }
     }
 }

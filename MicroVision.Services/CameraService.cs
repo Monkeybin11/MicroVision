@@ -37,11 +37,6 @@ namespace MicroVision.Services
                         OnError?.Invoke(this, new OnErrorArgs() { Message = current.Error.Message });
                     }
 
-                    if (current.Error != null)
-                    {
-                        OnError?.Invoke(this,
-                            new OnErrorArgs() { Message = "Failed to acquire image" });
-                    }
                     else
                     {
                         _srv.Image = current.Images[0].ToByteArray();
