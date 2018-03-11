@@ -39,6 +39,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converter\InvertBooleanConverter.cs" />
+    <Compile Include="Events\CaptureEvents.cs" />
     <Compile Include="Events\ExceptionEvents.cs" />
     <Compile Include="Events\NotifyOperationEvents.cs" />
     <Compile Include="Events\ParameterEvents.cs" />
@@ -46,6 +48,7 @@
     <Compile Include="Events\SerialEvents.cs" />
     <Compile Include="Events\SystemEvents.cs" />
     <Compile Include="Events\VimbaEvents.cs" />
+    <Compile Include="Exceptions\CameraExceptions.cs" />
     <Compile Include="Exceptions\RpcExceptions.cs" />
     <Compile Include="Exceptions\SerialExceptions.cs" />
     <Compile Include="Models\ConnectionStatus.cs" />

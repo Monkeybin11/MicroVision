@@ -2,7 +2,7 @@
 using Microsoft.Practices.Unity;
 using Prism.Unity;
 using System.Windows;
-
+using MicroVision.Modules.ImagePanel;
 using MicroVision.Modules.Menu;
 using MicroVision.Modules.Menu.Views;
 using MicroVision.Modules.ParameterPanel;
@@ -42,10 +42,11 @@ namespace MicroVision
             Container.RegisterType<IStatusServices, StatusServices>(new ContainerControlledLifetimeManager());
 
             Container.RegisterType<ISerialService, SerialService>(new ContainerControlledLifetimeManager());
+            Container.RegisterType<ICameraService, CameraService>(new ContainerControlledLifetimeManager());
             Container.RegisterType<IMenuServices, MenuServices>(new ContainerControlledLifetimeManager());
 
             Container.RegisterType<IRpcService, RpcService>(new ContainerControlledLifetimeManager());
-
+            Container.RegisterType<ICaptureService, CaptureService>();
             // initialize background services
             Container.Resolve<ISerialService>();
             Container.Resolve<IRpcService>();
@@ -61,6 +62,7 @@ namespace MicroVision
             catalog.AddModule(typeof(StatusPanelModule));
             catalog.AddModule(typeof(MenuModule));
             catalog.AddModule(typeof(StatusbarModule));
+            catalog.AddModule(typeof(ImagePanelModule));
         }
     }
 }

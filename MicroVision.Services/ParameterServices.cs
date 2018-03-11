@@ -82,18 +82,18 @@ namespace MicroVision.Services
         private SelectionParameter<string> _vimbaSelection = new SelectionParameter<string> { Label = "Camera" };
 
         private CheckParameter _manualPowerCheck =
-            new CheckParameter {Label = "Manual", Value = false, IsEnabled = true};
+            new CheckParameter {Label = "Manual", Value = false, Enabled = false};
 
         private CheckParameter _masterPowerCheck =
-            new CheckParameter {Label = "Master", Value = false, IsEnabled = false};
+            new CheckParameter {Label = "Master", Value = false, Enabled = true};
 
-        private CheckParameter _fanPowerCheck = new CheckParameter {Label = "Fan", Value = false, IsEnabled = false};
+        private CheckParameter _fanPowerCheck = new CheckParameter {Label = "Fan", Value = false, Enabled = true};
 
         private CheckParameter _laserPowerCheck =
-            new CheckParameter {Label = "Laser", Value = false, IsEnabled = false};
+            new CheckParameter {Label = "Laser", Value = false, Enabled = true};
 
         private CheckParameter _motorPowerCheck =
-            new CheckParameter {Label = "Motor", Value = false, IsEnabled = false};
+            new CheckParameter {Label = "Motor", Value = false, Enabled = true};
 
         #endregion
 
@@ -257,14 +257,6 @@ namespace MicroVision.Services
                 // first execution, generate the configuration file
                 Serialize();
             }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

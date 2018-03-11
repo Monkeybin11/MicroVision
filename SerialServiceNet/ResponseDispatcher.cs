@@ -10,30 +10,23 @@ namespace SerialServiceNet
 {
     public class ResponseDispatcher
     {
-        private class SignalDictItem
+        private class QueuedResponseHandler
         {
+            public string Identifier = null;
             public ManualResetEvent Signal = new ManualResetEvent(false);
             public string MessageBody = null;
         }
 
-        private Dictionary<string, SignalDictItem> _pool = new Dictionary<string, SignalDictItem>();
+        private List<QueuedResponseHandler> _pool = new List<QueuedResponseHandler>();
         private Dictionary<string, object> _lock = new Dictionary<string, object>();
 
-        private Dictionary<string, SignalDictItem> Pool
-        {
-            get
-            {
-                lock (_poolLock)
-                {
-                    return _pool;
-                }
-            }
-        }
 
         private object _poolLock = new object();
-        private object _lockProt = new object();
 
-        // some function that accept the stream in, and get the prefix, and return the corresponding waiting thread
+        /// <summary>
+        /// Called by serial receive dispatcher and resolve the waiting items
+        /// </summary>
+        /// <param name="message"></param>
         public void FeedMessage(string message)
         {
             //separate the prefix
@@ -50,10 +43,18 @@ namespace SerialServiceNet
 
             lock (_poolLock)
             {
-                if (Pool.ContainsKey(prefix))
+                QueuedResponseHandler foundItem = null;
+                try
                 {
-                    Pool[prefix].MessageBody = msgbody;
-                    Pool[prefix].Signal.Set();
+                    foundItem = _pool.Where(handler => handler.Identifier == prefix).First();
+                }
+                catch (Exception e){}
+
+                if (foundItem != null)
+                {
+                    // resolve the target
+                    foundItem.MessageBody = msgbody;
+                    foundItem.Signal.Set();
                 }
             }
         }
@@ -62,32 +63,26 @@ namespace SerialServiceNet
         {
             return Task.Run(() =>
             {
-                lock (_lockProt)
+                var item = new QueuedResponseHandler()
                 {
-                    if (!_lock.ContainsKey(responsePrefix))
-                    {
-                        _lock[responsePrefix] = new object();
-                    }
+                    Identifier = responsePrefix,
+                    Signal = new ManualResetEvent(false)
+                };
+                lock (_poolLock)
+                {   
+                    _pool.Add(item);
                 }
 
-                lock (_lock[responsePrefix])
+                var triggered = item.Signal.WaitOne(timeout);
+
+                lock (_poolLock)
                 {
-                    var signalDictItem = new SignalDictItem();
-                    lock (_poolLock)
-                    {
-                        signalDictItem.Signal.Reset();
-                        Pool[responsePrefix] = signalDictItem;
-                    }
-
-                    var triggered = signalDictItem.Signal.WaitOne(timeout);
-                    lock (_poolLock)
-                    {
-                        Pool.Remove(responsePrefix);
-                    }
-
-                    if (!triggered) throw new TimeoutException("Wait for result time out");
-                    return signalDictItem.MessageBody;
+                    _pool.Remove(item);
                 }
+
+                if (!triggered) throw new TimeoutException($"Wait for result of command {responsePrefix} time out");
+                return Task.FromResult(item.MessageBody);
+                
             });
             
         }

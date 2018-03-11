@@ -23,7 +23,7 @@ namespace CameraServiceTest
     {
         private VimbaCamera.VimbaCameraClient _client;
         private Channel _channel;
-        private string _cameraId = "DEV_1AB22800055C";
+        public const string CameraId = "DEV_1AB22800055C";
 
         public delegate void InsertRunnable();
 
@@ -104,13 +104,13 @@ namespace CameraServiceTest
             StartVimbaAndShutDown(() =>
             {
                 var response = _client.RequestCameraConnection(
-                    new CameraConnectionRequest() {CameraID = _cameraId, Command = ConnectionCommands.Connect});
+                    new CameraConnectionRequest() {CameraID = CameraId, Command = ConnectionCommands.Connect});
 
                 Assert.IsNull(response.Error);
                 Assert.IsTrue(response.IsConnected);
 
                 response = _client.RequestCameraConnection(
-                    new CameraConnectionRequest() {CameraID = _cameraId, Command = ConnectionCommands.Disconnect});
+                    new CameraConnectionRequest() {CameraID = CameraId, Command = ConnectionCommands.Disconnect});
                 Assert.IsNull(response.Error);
                 Assert.IsFalse(response.IsConnected);
             });
@@ -127,7 +127,7 @@ namespace CameraServiceTest
             StartVimbaAndShutDown(() =>
             {
                 _client.RequestCameraConnection(
-                    new CameraConnectionRequest() {CameraID = _cameraId, Command = ConnectionCommands.Connect});
+                    new CameraConnectionRequest() {CameraID = CameraId, Command = ConnectionCommands.Connect});
 
                 var response = _client.RequestCameraParameters(new CameraParametersRequest()
                 {
@@ -159,7 +159,7 @@ namespace CameraServiceTest
             {
                 _client.RequestCameraConnection(new CameraConnectionRequest()
                 {
-                    CameraID = _cameraId,
+                    CameraID = CameraId,
                     Command = ConnectionCommands.Connect
                 });
 
@@ -177,7 +177,7 @@ namespace CameraServiceTest
                 _client.RequestCameraConnection(new CameraConnectionRequest()
                 {
                     Command = ConnectionCommands.Connect,
-                    CameraID = _cameraId
+                    CameraID = CameraId
                 });
                 var response = _client.RequestCameraAcquisition(new CameraAcquisitionRequest());
                 Assert.IsNull(response.Error);
@@ -210,11 +210,12 @@ namespace CameraServiceTest
                 _client.RequestCameraConnection(new CameraConnectionRequest()
                 {
                     Command = ConnectionCommands.Connect,
-                    CameraID = _cameraId
+                    CameraID = CameraId
                 });
                 var response = _client.RequestReset(new ResetRequest());
                 Assert.IsNull(response.Error);
             });
         }
+
     } // test class 
 }

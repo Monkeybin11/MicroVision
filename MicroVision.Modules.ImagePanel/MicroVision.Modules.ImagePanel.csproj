@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{048CA23A-2141-4E31-8393-99AD1F639844}</ProjectGuid>
+    <ProjectGuid>{0E73ABBB-C5DC-4CEE-9E47-39EC5DDCB2D8}</ProjectGuid>
     <OutputType>library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MicroVision.Modules.Statusbar</RootNamespace>
-    <AssemblyName>MicroVision.Modules.Statusbar</AssemblyName>
+    <RootNamespace>MicroVision.Modules.ImagePanel</RootNamespace>
+    <AssemblyName>MicroVision.Modules.ImagePanel</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -36,8 +36,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -52,10 +50,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\StatusEntry.cs" />
-    <Compile Include="Notifications\StatusLogNotification.cs" />
-    <Compile Include="SampleData\StatusLogSampleDataSource.cs" />
-    <Compile Include="StatusbarModule.cs" />
+    <Compile Include="ImagePanelModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -69,13 +64,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="ViewModels\StatusBarViewModel.cs" />
-    <Compile Include="ViewModels\StatusLogViewModel.cs" />
-    <Compile Include="Views\StatusBar.xaml.cs">
-      <DependentUpon>StatusBar.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\StatusLog.xaml.cs">
-      <DependentUpon>StatusLog.xaml</DependentUpon>
+    <Compile Include="ViewModels\ImagePanelViewModel.cs" />
+    <Compile Include="Views\ImagePanel.xaml.cs">
+      <DependentUpon>ImagePanel.xaml</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -88,13 +79,15 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Views\StatusBar.xaml">
+    <ProjectReference Include="..\MicroVision.Services\MicroVision.Services.csproj">
+      <Project>{c2ab6a15-51b1-41fe-8fe5-d61f1dafbe90}</Project>
+      <Name>MicroVision.Services</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Views\ImagePanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\StatusLog.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -108,12 +101,6 @@
     <PackageReference Include="Prism.Wpf">
       <Version>6.3.0</Version>
     </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MicroVision.Core\MicroVision.Core.csproj">
-      <Project>{d282d7e2-e6bf-4208-bc87-283d836e94ad}</Project>
-      <Name>MicroVision.Core</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

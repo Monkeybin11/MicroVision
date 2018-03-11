@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RateLimiter;
 using Services;
 using static Services.ServiceHelper;
 
@@ -12,10 +13,10 @@ namespace SerialServiceNet
     {
         private Object _invokeLock = new Object();
 
-        private Error InvokeCommand(string command, string[] param)
+        private Error InvokeCommand(string command, string[] param, bool calledByArmTrigger = false)
         {
             string tmp = "";
-            return InvokeCommandWithResponse(command, param, ref tmp, 0);
+            return InvokeCommandWithResponse(command, param, ref tmp, 0, calledByArmTrigger);
         }
 
         /// <summary>
@@ -27,8 +28,12 @@ namespace SerialServiceNet
         /// <param name="response">immediate response after the command is sent</param>
         /// <param name="timeout">wait for milliseconds before LF arrives. negative is infinite and 0 for no response</param>
         /// <returns></returns>
-        private Error InvokeCommandWithResponse(string command, string[] param, ref string response, int timeout = 1000)
+        private Error InvokeCommandWithResponse(string command, string[] param, ref string response, int timeout = 1000, bool calledByArmTrigger = false)
         {
+            if (captureMonopoly && !calledByArmTrigger)
+            {
+                return BuildError("Hardware accessing is disabled during capture", Error.Types.Level.Warning);
+            }
             if (!IsSerialPortAvailable())
             {
                 return BuildError("COM Port not available", Error.Types.Level.Error);
@@ -39,22 +44,29 @@ namespace SerialServiceNet
                 : command + "\n";
             try
             {
+                Task<string> responseTask = null;
                 lock (_invokeLock)
                 {
+                    if (timeout != 0)
+                    {
+                        // deprecated return GetImmediateResponse(ref response, timeout);
+                        try
+                        {
+                            responseTask = _resp.WaitForResultAsync(command, timeout);
+                        }
+                        catch (Exception e)
+                        {
+                            return BuildError(e, Error.Types.Level.Error);
+                        }
+                    }
+
                     _serialPort.Write(stringToSend);
                 }
 
-                if (timeout != 0)
+                if (responseTask != null)
                 {
-                    // deprecated return GetImmediateResponse(ref response, timeout);
-                    try
-                    {
-                        response = _resp.WaitForResult(command, timeout);
-                    }
-                    catch (Exception e)
-                    {
-                        return BuildError(e, Error.Types.Level.Error);
-                    }
+                    responseTask.Wait();
+                    response = responseTask.Result;
                 }
             }
             catch (Exception e)

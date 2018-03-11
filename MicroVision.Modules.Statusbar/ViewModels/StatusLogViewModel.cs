@@ -2,6 +2,7 @@
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using MicroVision.Modules.Statusbar.Models;
 using MicroVision.Modules.Statusbar.Notifications;
@@ -11,8 +12,8 @@ namespace MicroVision.Modules.Statusbar.ViewModels
 {
     public class StatusLogViewModel : BindableBase, IInteractionRequestAware
     {
-        private List<StatusEntry> _statusItems;
-        public List<StatusEntry> StatusItems
+        private ObservableCollection<StatusEntry> _statusItems;
+        public ObservableCollection<StatusEntry> StatusItems
         {
             get { return _statusItems; }
             set { SetProperty(ref _statusItems, value); }
@@ -25,7 +26,7 @@ namespace MicroVision.Modules.Statusbar.ViewModels
             set
             {
                 SetProperty(ref _notification, (IStatusLogNotification) value);
-                StatusItems = _notification.Logs;
+                StatusItems = new ObservableCollection<StatusEntry>(_notification.Logs);;
             }
         }
 

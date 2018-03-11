@@ -50,8 +50,8 @@ namespace MicroVision.Modules.Statusbar.ViewModels
         public StatusBarViewModel(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
-            _eventAggregator.GetEvent<ExceptionEvent>().Subscribe(NotifyException);
-            _eventAggregator.GetEvent<NotifyOperationEvent>().Subscribe(NotifyOperation);
+            _eventAggregator.GetEvent<ExceptionEvent>().Subscribe(NotifyException, ThreadOption.UIThread);
+            _eventAggregator.GetEvent<NotifyOperationEvent>().Subscribe(NotifyOperation, ThreadOption.UIThread);
 
             InitializeStatus();
         }

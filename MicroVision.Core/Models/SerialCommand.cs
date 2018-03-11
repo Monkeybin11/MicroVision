@@ -8,13 +8,19 @@ namespace MicroVision.Core.Models
 {
     public class SerialCommand
     {
-        public enum SerialCommands
+        public enum RpcSerialCommand
         {
             GetInfo,
-            SoftwareReset,
-            PowerStatus,
+            RequestPowerStatus,
             IsConnected,
-
+            RequestCurrentStatus,
+            RequestFocusStatus,
+            RequestLaserStatus,
+            RequestArmTrigger,
+            RequestSoftwareReset,
         }
+        public RpcSerialCommand Command { get; set; }
+
+        public object Argument { get; set; }
     }
 }

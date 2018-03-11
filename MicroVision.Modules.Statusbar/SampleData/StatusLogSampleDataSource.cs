@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ namespace MicroVision.Modules.Statusbar.SampleData
     {
         public StatusLogSampleDataSource()
         {
-            StatusItems = new List<StatusEntry>
+            StatusItems = new ObservableCollection<StatusEntry>
             {
                 new StatusEntry(DateTime.Now, "Error, please restart"),
                 new StatusEntry(DateTime.Now, "short one"),

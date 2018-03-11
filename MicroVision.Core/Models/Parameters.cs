@@ -13,21 +13,21 @@ namespace MicroVision.Core.Models
     [JsonObject(MemberSerialization.OptIn)]
     public abstract class Parameter<T> : BindableBase
     {
-        private bool _isEnabled;
+        private bool _enabled;
         public string Label { get; set; }
         [JsonProperty]
         public abstract T Value { get; set; }
 
-        public bool IsEnabled
+        public bool Enabled
         {
-            get => _isEnabled;
-            set => SetProperty(ref _isEnabled, value);
+            get => _enabled;
+            set => SetProperty(ref _enabled, !value);
         }
 
         public Parameter(string label, bool isEnabled = true)
         {
             Label = label;
-            IsEnabled = isEnabled;
+            Enabled = !isEnabled;
         }
     }
 

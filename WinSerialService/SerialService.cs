@@ -19,6 +19,11 @@ namespace WinSerialService
             InitializeComponent();
         }
 
+        public void OnDebug()
+        {
+            OnStart(null);
+        }
+
         protected override void OnStart(string[] args)
         {
             _server = SerialServiceNet.ServerConsole.CreateServer();
