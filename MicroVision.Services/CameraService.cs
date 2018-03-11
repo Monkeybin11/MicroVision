@@ -13,6 +13,7 @@ using MicroVision.Core.Events;
 using MicroVision.Core.Exceptions;
 using MicroVision.Services.Annotations;
 using MicroVision.Services.GrpcReference;
+using MicroVision.Services.Models;
 using Prism.Events;
 using Prism.Mvvm;
 using Services;

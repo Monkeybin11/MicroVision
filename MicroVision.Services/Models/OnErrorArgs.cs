@@ -1,4 +1,4 @@
-﻿namespace MicroVision.Services
+﻿namespace MicroVision.Services.Models
 {
     public class OnErrorArgs
     {

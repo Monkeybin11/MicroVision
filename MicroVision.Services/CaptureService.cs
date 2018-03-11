@@ -9,33 +9,26 @@ using System.Windows.Media.Imaging;
 using MicroVision.Core.Events;
 using MicroVision.Core.Exceptions;
 using MicroVision.Services.GrpcReference;
+using MicroVision.Services.Models;
 using Prism.Events;
 using Services;
 using Timer = System.Timers.Timer;
 
 namespace MicroVision.Services
 {
-    public interface ICaptureService
-    {
-        void Capture(int interval, int count);
-        
-        BitmapImage CurrentBitmapImage { get; set; }
-        bool Capturing { get; }
-
-        void Stop();
-    }
-
     public class CaptureService : ICaptureService
     {
         private readonly ISerialService _serialService;
         private readonly ICameraService _cameraService;
         private readonly IEventAggregator _eventAggregator;
+        private readonly IParameterServices _parameterService;
 
-        public CaptureService(ISerialService serialService, ICameraService cameraService, IEventAggregator eventAggregator)
+        public CaptureService(ISerialService serialService, ICameraService cameraService, IEventAggregator eventAggregator, IParameterServices parameterService)
         {
             _serialService = serialService;
             _cameraService = cameraService;
             _eventAggregator = eventAggregator;
+            _parameterService = parameterService;
 
             _eventAggregator.GetEvent<ShutDownEvent>().Subscribe(Dispose);
 
@@ -80,12 +73,11 @@ namespace MicroVision.Services
 
             _streamImage.OnError += CameraTriggerError;
             _streamCameraControllerTrigger.OnError += CameraControllerTriggerOnError;
-
-            _cameraService.ConfigureCamera(new CameraParametersRequest(){Params = new CameraParameters(){NumFrames = 1, ExposureTime = 45, FrameRate = 30, Gain = 10}, Write = true});
             
             _triggerTimer.Interval = interval;
             _remains = count;
             _triggerTimer.Start();
+            _cameraService.ConfigureCamera(new CameraParametersRequest() { Params = new CameraParameters() { NumFrames = 1, ExposureTime = 45, FrameRate = 30, Gain = 10 }, Write = true });
         }
 
         private void CameraControllerTriggerOnError(object sender, OnErrorArgs args)
@@ -98,8 +90,6 @@ namespace MicroVision.Services
         {
             _eventAggregator.GetEvent<ExceptionEvent>().Publish(new CameraRuntimeException(args.Message));
         }
-
-        public BitmapImage CurrentBitmapImage { get; set; }
 
         public bool Capturing => _capturing;
 

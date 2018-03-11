@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Grpc.Core;
+using MicroVision.Services.Models;
 using Services;
 
 namespace MicroVision.Services

@@ -177,13 +177,6 @@ namespace MicroVision.Services
         private readonly IEventAggregator _eventAggregator;
         private const string DefaultFileName = "settings.json";
 
-        /// <summary>
-        /// Parameterless constructor for xml serialziation
-        /// </summary>
-        public ParameterServices()
-        {
-        }
-
         public ParameterServices(ILogService log, IEventAggregator eventAggregator)
         {
             _log = log;
@@ -192,8 +185,12 @@ namespace MicroVision.Services
 
             ConfigurationEventHandler();
             ConfigurationInitialization();
+            ConfigureParameterChangeNotification();
         }
 
+        /// <summary>
+        /// Configure load save saveas events
+        /// </summary>
         private void ConfigurationEventHandler()
         {
             _eventAggregator.GetEvent<SaveAsEvent>().Subscribe(filename => Serialize(filename));
@@ -201,6 +198,26 @@ namespace MicroVision.Services
             _eventAggregator.GetEvent<LoadEvent>().Subscribe(filename => Load(filename));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        private void ConfigureParameterChangeNotification()
+        {
+            Gain.PropertyChanged += (sender, args) => NotifyCaptureParameterChanged();
+            ExposureTime.PropertyChanged += (sender, args) => NotifyCaptureParameterChanged();
+            CaptureInterval.PropertyChanged += (sender, args) => NotifyCaptureParameterChanged();
+            LaserDuration.PropertyChanged += (sender, args) => NotifyLaserParameterChanged()
+        }
+        private void NotifyCaptureParameterChanged()
+        {
+            _eventAggregator.GetEvent<CaptureParameterChangedEvent>().Publish();
+        }
+
+        private void NotifyLaserParameterChanged()
+        {
+            _eventAggregator.GetEvent<LaserParmaeterChangedEvent>().Publish();
+        }
+ 
         public void Serialize(string filename = DefaultFileName)
         {
             using (var file = File.CreateText(filename))

@@ -125,6 +125,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ICaptureService.cs" />
     <Compile Include="ISerialService.cs" />
     <Compile Include="Models\CameraControllerTrigger.cs" />
     <Compile Include="CameraService.cs" />
@@ -136,7 +137,7 @@
     <Compile Include="GrpcReference\CameraServiceGrpc.cs" />
     <Compile Include="Models\GrpcConnectionEstablisher.cs" />
     <Compile Include="Models\ITrigger.cs" />
-    <Compile Include="OnErrorArgs.cs" />
+    <Compile Include="Models\OnErrorArgs.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="RpcService.cs" />
     <Compile Include="LogService.cs" />

@@ -11,4 +11,6 @@ namespace MicroVision.Core.Events
     public class SaveEvent : PubSubEvent { }
 
     public class SaveAsEvent : PubSubEvent<string> { }
+    public class CaptureParameterChangedEvent : PubSubEvent { }
+    public class LaserParmaeterChangedEvent : PubSubEvent { }
 }
