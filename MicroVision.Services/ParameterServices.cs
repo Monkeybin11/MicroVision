@@ -185,7 +185,6 @@ namespace MicroVision.Services
 
             ConfigurationEventHandler();
             ConfigurationInitialization();
-            ConfigureParameterChangeNotification();
         }
 
         /// <summary>
@@ -198,26 +197,6 @@ namespace MicroVision.Services
             _eventAggregator.GetEvent<LoadEvent>().Subscribe(filename => Load(filename));
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private void ConfigureParameterChangeNotification()
-        {
-            Gain.PropertyChanged += (sender, args) => NotifyCaptureParameterChanged();
-            ExposureTime.PropertyChanged += (sender, args) => NotifyCaptureParameterChanged();
-            CaptureInterval.PropertyChanged += (sender, args) => NotifyCaptureParameterChanged();
-            LaserDuration.PropertyChanged += (sender, args) => NotifyLaserParameterChanged()
-        }
-        private void NotifyCaptureParameterChanged()
-        {
-            _eventAggregator.GetEvent<CaptureParameterChangedEvent>().Publish();
-        }
-
-        private void NotifyLaserParameterChanged()
-        {
-            _eventAggregator.GetEvent<LaserParmaeterChangedEvent>().Publish();
-        }
- 
         public void Serialize(string filename = DefaultFileName)
         {
             using (var file = File.CreateText(filename))
